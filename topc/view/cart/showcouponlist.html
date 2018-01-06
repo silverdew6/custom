@@ -1,0 +1,32 @@
+<div id="privilege" style="bottom: 100px;">
+	<div class="privilege-1" id="privilegeContent">
+		<{if ($shopCouponCount>0 && $shopCouponList)}>
+			<h5>
+				<span style="float:left;margin-left:10px;"><a href="<{url action=topc_ctl_member_coupon@couponList}>"  title="查看我领取的券" target="_blank">所有券</a></span>
+				<b>领取优惠券</b>
+				<a href="javascript:void(0)" title="关闭" onclick="selfCouponFun.hide()" style="float:right;margin-right:1em;">关闭</a>
+			</h5>
+			<ul><{foreach from=$shopCouponList item=coupon key=icopk}>
+					 <li class="privilege-1-li">
+					 	<div>
+				    		<dl class="privilege-1-dl">
+				    			<dt><{$coupon.deduct_money|cur}></dt>
+				    			<dd class="dd-one"><{$coupon.coupon_desc}></dd>
+				    			<dd>有效期  <{$coupon.canuse_start_time|cdate:'FDATE'}> 至 <{$coupon.canuse_end_time|cdate:'FDATE'}></dd>
+				    		</dl>
+				    	</div>
+				    	<div>
+				    		<{if (isset($coupon.coupon_id) && array_key_exists($coupon.coupon_id,$userCoupids) )}>
+				    		 	<span class="no-re">已领取</span>
+				    		<{else}>
+				    			<a href="javascript:void(0);" onclick="selfCouponFun.ajaxGetHandler(this,<{$coupon.shop_id|default:0}>,'<{$coupon.coupon_id}>')">立即领取</a>
+				    		<{/if}>
+				    	</div>
+				    </li>
+				<{/foreach}></ul>
+		<{else}>
+			<div style="text-align:center;line-height:2em;padding:5px 10px;"><p>暂无优惠券</p></div>
+		<{/if}>
+	</div> 
+	<div id="showResult_msg" class="" onclick="selfCouponFun.hide()"></div> 
+</div>

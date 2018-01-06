@@ -1,0 +1,95 @@
+<style type="text/css">
+.address-edit .main ul li input{border:1px solid #EEE;text-indent: 1em;}
+.address-edit .main ul li .form-label { display: inline-block; width: 5em;text-align: right;}
+.address-edit .main ul li .require-ii{font-size:1em; padding:3px ;color:red;}
+
+</style>
+<div class="address-edit">
+  <header>
+    <div class="list-hd">
+      <div class="backto icon-back ">
+        <input type="button" name="returnBcak" onclick="history.back()">
+      </div>
+      <div class="tit">我的收货地址</div>
+    </div>
+  </header>
+  <div class="main" id="main">
+    <form action="<{url action=topm_ctl_cart@saveAddress}>" method="post" id="form_address">
+      <input type="hidden" name="addr_id" value="<{$addrInfo.addr_id}>">
+      <ul>
+        <li class="form-row">
+          <label for="" class="form-label"><i class="require-ii">*</i>收货人</label>
+          <span class="form-act">
+            <input class="input-ln" type="text" placeholder="收货人真实姓名" name="name" value="<{$addrInfo.name}>" id="name" required data-caution="请填写收货人">
+          </span>
+        </li>
+        <li class="form-row">
+          <label for="" class="form-label"><i class="require-ii">*</i>手机号码</label>
+          <span class="form-act">
+            <input class="input-ln" type="text" placeholder="收货人手机号码" name="mobile" required data-validate="mobile" data-caution="请填写手机号&&手机格式不正确" value="<{$addrInfo.mobile}>" id="mobile">
+          </span>
+        </li>
+		<li class="form-row">
+          <label for="" class="form-label"><{if ($isRequireId)}><i class="require-ii">*</i><{/if}>身份证</label>
+          <span class="form-act">
+            <input class="input-ln" type="text" placeholder="收货人身份证号（收货人姓名与身份证号真实有效）" name="card_id" <{if ($isRequireId)}>required<{/if}>  value="<{$addrInfo.card_id}>" id="card_id">
+          </span>
+        </li>
+        <li class="form-row">
+          <label for="" class="form-label">邮政编码</label>
+          <span class="form-act">
+            <input class="input-ln" placeholder="邮政编码   （如深圳：518000）" type="text" name="zip" id="zip" value="<{$addrInfo.zip}>" data-validate="zip" maxlength="6" data-caution="邮政编码格式错误">
+          </span>
+        </li>
+        <li class="form-row area">
+          <label for="" class="form-label"><i class="require-ii">*</i>所在地区</label>
+          <span class="form-act">
+            <span class="area" id="area" data-validate="area"></span>
+          </span>
+        </li>
+        <li class="form-row">
+          <label for="" class="form-label">详细地址</label>
+          <span class="form-act">
+            <input class="input-ln" type="text" placeholder="详细地址  （XX街 XX号） " name="addr" value="<{$addrInfo.addr}>" id="addr" required data-caution="请填写详细地址">
+          </span>
+        </li>
+      </ul>
+      <div class="set-defualt">
+        <input type="checkbox" id="defualt" name="def_addr" value="1">
+        <label for="defualt">&nbsp;设为默认地址</label>
+      </div>
+      <div class="save-action">
+        <button type="submit" class="ui-btn-warning">保 存</button>
+        <{if $addrInfo.addr_id}>
+        <a href="<{url action=topm_ctl_cart@delAddr addr_id=$addrInfo.addr_id}>" class="icon icon-recycle action-delete" rel="_request"></a>
+        <{/if}>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script type="text/javascript">
+new AreaWidget({
+    dataUrl:"<{$env.base_url}>/app/ectools/statics/scripts/region.json",
+    select:$('#area'),
+    initData:'<{$addrInfo.region_id}>'
+});
+
+$('.set-defualt label').click(function(){
+  $(this).toggleClass('checked');
+});
+
+$('.action-delete').on('click', function (e) {
+    if(!confirm('确认删除当前地址吗？')) {
+        e.stopPropagation();
+        return false;
+    }
+})
+<{if ($isRequireId)}>
+var cardObj = $("input[name=card_id]");
+if("undefined" != typeof(cardObj) && null !=cardObj){
+	cardObj.focus();
+}
+<{/if}>
+</script>
+

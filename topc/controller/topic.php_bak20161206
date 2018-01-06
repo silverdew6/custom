@@ -1,0 +1,47 @@
+<?php
+class topc_ctl_topic extends topc_controller{
+	
+	
+	/**
+	 * 每页搜索多少个商品
+	 */
+	public $limit = 20;
+	
+	/**
+	 * 最多搜索前100页的商品
+	 */
+	public $maxPages = 100;
+	
+	
+
+    public function __construct($app)
+    {
+        parent::__construct();
+        //$this->setLayoutFlag('item');
+    }
+	/**
+	 * 专题页面定义 ；； 使用格式有：
+	 * 1、 /topic-（专题名称）.html  （优先使用这个）
+	 * 2、 /topic/（专题名称）.html
+	 * 3、 /topic/index.html?tname=专题名称（如 ： lingshi_m）
+	 * 	  说明： 模板目录位置：topc/common/topic/（下面放置手机端的专题页面）
+	 */
+    function index($tName){
+    	$getdata = input::get();
+    	if(!isset($tName) || trim($tName)==""){
+    		$tName = isset($getdata["tname"])? trim($getdata["tname"]): "index"; //默认用index
+    	}
+    	/*自定义的专题 暂时不用获取动态产品数据；到时需要时再添加*/
+    	$pagedata["template_name"]= $tName;
+        $pagedata['site_url'] = url::route('topm'); //根目录；
+    	switch ( $tName ) {
+			case "index":　break;
+			
+			default: break;
+		}
+        /* 选择相对应的产品模板；位置   */
+        $template_dir = "topc/common/topic/{$tName}.html";
+        //调用 模板        
+        return $this->page($template_dir, $pagedata);
+    }
+}

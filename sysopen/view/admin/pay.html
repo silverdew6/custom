@@ -1,0 +1,110 @@
+<div class=''>
+    <form id='create-open-key' action='?app=sysopen&ctl=admin_pay&act=toEdit' method='post'>
+        <!--<{$shop_pay.pay_id}>-->
+
+        <table>
+            <{if !empty($shop_pay.pay_id)}>
+            <tr>
+                <th>
+                    <label> 支付企业id: </label>
+                </th>
+                <td>
+                    <input type='text' name="pay[pay_id]" id='pay_id' readonly='readonly' value='<{$shop_pay.pay_id}>'>
+                </td>
+            </tr>
+            <{/if}>
+            <tr>
+                <th>
+                    <label> 企业组织机构代码: </label>
+                </th>
+                <td>
+                    <input type='text' name="pay[OrgCode]" id='OrgCode' required  <{if !empty($shop_pay.OrgCode)}> value='<{$shop_pay.OrgCode}>' <{/if}>>
+                </td>
+            </tr>
+
+            <tr>
+                <th>
+                    <label> 企业海关注册码: </label>
+                </th>
+                <td>
+                    <input type='text'  name="pay[CopCode]" id='CopCode' required  <{if !empty($shop_pay.CopCode)}> value='<{$shop_pay.CopCode}>' <{/if}>>
+                </td>
+            </tr>
+
+            <tr>
+                <th>
+                    <label> 企业海关注册名称: </label>
+                </th>
+                <td>
+                    <input type='text' name="pay[CopName]" id='CopName' required  <{if !empty($shop_pay.CopName)}> value='<{$shop_pay.CopName}>' <{/if}>>
+                </td>
+            </tr>
+
+            <tr>
+                <th>
+                    <label> 发送方: </label>
+                </th>
+                <td>
+                    <input type='text' name="pay[SenderID]" id='SenderID' required placeholder="发送方" <{if !empty($shop_pay.SenderID)}> value='<{$shop_pay.SenderID}>' <{/if}>>
+                </td>
+            </tr>
+
+            <tr>
+                <th>
+                    <label> 接收部门: </label>
+                </th>
+                <td>
+                    <input type='text' name="pay[ReceiverDepartment]" id='ReceiverDepartment' required  <{if !empty($shop_pay.ReceiverDepartment)}> value='<{$shop_pay.ReceiverDepartment}>' <{/if}>>
+                </td>
+            </tr>
+
+            <tr>
+                <th>
+                    <label> 海关注册登记编号: </label>
+                </th>
+                <td>
+                    <input type='text' name="pay[payCode]" id='payCode' required  <{if !empty($shop_pay.payCode)}> value='<{$shop_pay.payCode}>' <{/if}>>
+                </td>
+            </tr>
+
+            <tr>
+                <th>
+                    <label> 海关注册登记名称: </label>
+                </th>
+                <td>
+                    <input type='text'  name="pay[payName]" id='payName' required  <{if !empty($shop_pay.payName)}> value='<{$shop_pay.payName}>' <{/if}>>
+                </td>
+            </tr>
+
+            <tr>
+                <th>
+                    <label> 报送类型: </label>
+                </th>
+                <td>
+                    <input type='text' name="pay[appType]" id='appType' required  <{if !empty($shop_pay.appType)}> value='<{$shop_pay.appType}>' <{/if}>>
+                </td>
+            </tr>
+            <tr><td>&nbsp;&nbsp;</td><td><label class="label_club">(1-新增 2-变更,默认为1)</label></td></tr>
+
+            <tr>
+                <th>
+                    <label> 业务状态: </label>
+                </th>
+                <td>
+                    <input type='text' name="pay[appStatus]" id='appStatus' required  <{if !empty($shop_pay.appStatus)}> value='<{$shop_pay.appStatus}>' <{/if}>>
+                </td>
+            </tr>
+            <tr><td>&nbsp;&nbsp;</td><td><label class="label_club">(1-暂存，2-申报，默认为2)</label></td></tr>
+            <tr>
+                <td colspan='2'>
+                    <div class="table-action">
+                        <!--<{button id='not-allow-pass' type="button"  label="禁止通过"}>-->
+                        <input type="submit" name="sb" value="确定">
+                        <!--<{button id='submit-create-open-key' type="submit" label="确定"}>-->
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </form>
+</div>
+

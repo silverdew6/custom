@@ -1,0 +1,246 @@
+<div class="panel-heading">
+  <div class="clearfix">
+    <div class="pull-left">
+      <h2 class="panel-title">选择商品</h2>
+    </div>
+    <div class="pull-right">
+      <button id="choose_goods" type="button" class="btn btn-primary action-save">确定</button>
+      <button type="button" class="btn btn-default action-cancel" data-dismiss="modal">取消</button>
+    </div>
+  </div>
+</div>
+<div class="panel-body">
+  <div class="goods-condition clearfix">
+    <!-- 排序：
+    <span class="time active" data-order="last_modified" data-sort="desc"><i class="glyphicon glyphicon-arrow-down"></i>时间</span>
+    <span data-order="image_name asc"><i class="glyphicon glyphicon-sort-by-alphabet"></i>名称</span> -->
+    <div id="goods_tax" class="goods-category filter-option" default_treg = "<{if ($default_taxregion)}><{$default_taxregion}><{/if}>">
+		 <{if ($taxList.taxs)}>
+		 <div class="filters-list">
+		 	<ul>
+		 		<{foreach from=$taxList.taxs item=jtax key=jtid}>
+		 			<li>
+		 				<span><{$jtax}> <{if $taxList.taxregs[$jtid]}> <i class="fa fa-chevron-right"></i><{/if}></span>
+		 				<div class="child-list">
+		 					<ul>
+				                <{foreach from=$taxList.taxregs[$jtid] item=taxreg}>
+				                	<li data-tax="<{$jtid}>" data-regid="<{$taxreg.id}>" data-taxname="<{$jtax}>"><span><{$taxreg.name}></span> </li>
+				                <{/foreach}>
+				            </ul>
+		 				</div>
+		 			</li>
+              	<{/foreach}>
+		 	</ul>
+		 </div>
+		 <{/if}>
+		 <span class="filter-name"><{if ($default_taxregion)}><{$default_taxregion}><{else}>完税商品<{/if}></span><i class="fa fa-sort-desc"></i>
+	</div>   
+    <div id="goods_category" class="goods-category filter-option">
+      <span class="filter-name">分类</span> <i class="fa fa-sort-desc"></i>
+      <div class="filters-list">
+        <div class="arrow"></div>
+        <ul>
+          <{foreach from=$shopCatList item=catlist}>
+          <li>
+            <span><{$catlist.cat_name}> <{if $catlist.lv2}> <i class="fa fa-chevron-right"></i><{/if}></span>
+            <{if $catlist.lv2}>
+            <div class="child-list">
+              <ul>
+                <{foreach from=$catlist.lv2 item=lv2list}>
+                <li>
+                  <span><{$lv2list.cat_name}> <{if $lv2list.lv3}><i class="fa fa-chevron-right"></i><{/if}></span>
+                  <{if $lv2list.lv3}>
+                  <div class="child-list">
+                    <ul>
+                      <{foreach from=$lv2list.lv3 item=lv3list}>
+                        <li data-val="<{$lv3list.cat_id}>"><span><{$lv3list.cat_name}></span></li>
+                      <{/foreach}>
+                    </ul>
+                  </div>
+                  <{/if}>
+                </li>
+                <{/foreach}>
+              </ul>
+            </div>
+            <{/if}>
+          </li>
+          <{/foreach}>
+        </ul>
+      </div>
+    </div>
+    <div id="goods_brand" class="goods-brands" data-remote="<{url action=topshop_ctl_selector_item@getBrandList}>">
+      <span class="filter-name">品牌</span> <i class="fa fa-sort-desc"></i>
+      <div class="filters-list">
+        <div class="arrow"></div>
+        <ul id="brand_list" class="clearfix">
+        </ul>
+      </div>
+    </div>
+    <div class="goods-search"><input type="text" name="image_name" value="" id="goods-search-key" class="form-control input-sm"></div>
+    <button id="search_goods" type="button" class="btn btn-warning btn-sm" data-remote="<{url action=topshop_ctl_selector_item@searchItem}>">搜索</button>
+     &nbsp; <a id="clear_brand" href="#">清空品牌</a>
+     &nbsp; <a id="clear_filter" href="#">清空所有</a>
+  </div>
+  <div class="row goods-list">
+    <div id="goods_list">
+    </div>
+  </div>
+</div>
+<script>
+
+  // var show_target, textcol, view;
+
+  // $('#goods_modal').on('shown.bs.modal', function (event) {
+  //   show_target = $(event.relatedTarget);
+  //   textcol = show_target.attr('data-textcol');
+  //   view = show_target.attr('data-view');
+  // }).on('hidden.bs.modal', function () {
+  //   getPro();
+  // })
+  
+  // $('.goods-list').on('click', 'li', function(event) {
+  //     event.preventDefault();
+  //     $(this).toggleClass('checked');
+  // });
+
+  // $('.goods-modal-content').on('click','.pagination li a',function(e){
+  //   e.preventDefault();
+  //   var urlData = $(this).attr('href');
+  //   $.post(urlData, function(data) {
+  //     $('.goods-modal-content').empty().append(data);
+  //   });
+  // })
+
+  // $('#goods_modal').on('click', '.act-goods', function (e) {
+  //   var type = $('.goods-modal-tabs .active').attr('data-type');
+
+  //   if( type != 'other'){
+  //     var url = "<{url action=toputil_ctl_image@uploadImages from=shop}>&type=" + type;
+  //     $('#goods_modal').find('.action-file-input').attr('data-remote',url)
+  //   }
+  // })
+
+  // $('.note-image-dialog').on('click', '.act-goods', function (e) {
+  //   var type = $('.goods-modal-tabs .active').attr('data-type');
+
+  //   if( type != 'other'){
+  //     var url = "<{url action=toputil_ctl_image@uploadImages from=shop}>&type=" + type;
+  //     $('.note-image-dialog').find('.action-file-input').attr('data-remote',url)
+  //   }
+  // })
+
+  // $('.goods-category').mouseover(function(){
+  //   $(this).find('.category-level-1').show();
+  // }).mouseout(function(){
+  //   $(this).find('.category-level-1').hide();
+  // });
+
+  // $('.category-level-1 > ul > li').mouseover(function() {
+  //   $(this).find('.category-level-2').show();
+  // }).mouseout(function() {
+  //   $(this).find('.category-level-2').hide();
+  // });
+
+  // $('.category-level-2 > ul > li').mouseover(function() {
+  //   $(this).find('.category-level-3').show();
+  // }).mouseout(function() {
+  //   $(this).find('.category-level-3').hide();
+  // });
+
+  // $('.category-level-3 li').click(function(){
+  //   var name = $(this).find('span').text();
+  //   var value = $(this).attr('data-val')
+  //   $(this).parents('.goods-category').find('.category-name').text(name);
+  //   $('.category-level-1').hide();
+  //   $('.brands-name').text('品牌');
+  //   getBrand(value)
+  //   $('#category-value').val(value);
+  // })
+
+  // $('.brands-list').on('click',' li', function(){
+  //   var name = $(this).text();
+  //   var value = $(this).attr('data-val')
+  //   $('.brands-name').text(name);
+  //   $(this).parents('.brands-list').hide();
+  //   $('#brands-value').val(value);
+  // })
+
+  // $('.goods-brands').mouseover(function(){
+  //   $(this).find('.brands-list').show();
+  // }).mouseout(function(){
+  //   $(this).find('.brands-list').hide();
+  // });
+  
+  // $('#choose-goods').click(function(){
+  //   var selected_goods = $("#goods_modal").find('.checked');
+  //   if(selected_goods.length == 0){
+  //     $('#messagebox').message('请选择商品');
+  //     return false;
+  //   }
+  //   var goods_ids = [];
+  //   $(selected_goods).each(function(index, el) {
+  //     goods_ids.push($(el).attr('data-id'));
+  //   });
+  //   $.ajax({
+  //     url: '<{url action=topshop_ctl_selector_item@formatSelectedGoodsRow}>',
+  //     type: 'POST',
+  //     dataType: 'html',
+  //     data: {
+  //       'item_id': goods_ids,
+  //       'textcol': textcol,
+  //       'view': view
+  //     },
+  //     success: function(data){
+  //       if(data){
+  //         $('.selected-goods-list').empty().html(data);
+  //         $('#goods_modal').modal('hide');
+  //       }
+  //     }
+  //   })
+  // })
+
+  // function getBrand(catId) {
+  //   if(catId!=''){
+  //     $.ajax({
+  //       url: '<{url action=topshop_ctl_selector_item@getBrandList}>',
+  //       type: 'POST',
+  //       dataType: 'json',
+  //       data: {
+  //         "catId": catId
+  //       },
+  //       success: function(data){
+  //         if(data){
+  //           var result = '';
+  //           for (var i = 0; i < data.length; i++) {
+  //             result += '<li data-val="'+ data[i].brand_id +'">'+ data[i].brand_name +'</li>';
+  //           };
+  //           $('#brand-list').empty().append(result);
+  //         }
+  //       }
+  //     });
+  //   }
+  // }
+
+  // function getPro(catId, brandId, name) {
+  //   $.ajax({
+  //     url: '<{url action=topshop_ctl_selector_item@searchItem}>',
+  //     type: 'POST',
+  //     dataType: 'html',
+  //     data: {
+  //       "searchname": name,
+  //       "catId": catId,
+  //       "brandId": brandId
+  //     },
+  //     success: function(rs){
+  //       $('#goods-list').html(rs);
+  //     }
+  //   });
+  // }
+
+  // $('#search-goods').click(function(){
+  //   var catId = $('#category-value').val();
+  //   var brandId = $('#brands-value').val();
+  //   var name = $('#goods-name').val();
+  //   getPro(catId,brandId,name);
+  // })
+</script>

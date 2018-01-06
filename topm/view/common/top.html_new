@@ -1,0 +1,88 @@
+<header style="margin-top:3em;position: inherit;margin-bottom: -3em;">
+  <div class="list-hd" style="color:#444;background:#FFF;border-bottom:1px solid #EDEDED;">
+    <div class="backto icon-back ">
+      <input type="button" name="returnBcak" onclick="history.back()">
+    </div>
+    <div class="tit"><{$title}></div>
+    <div class="menu">
+      <button class="btn icon-more" id="menu"></button>
+    </div>
+  </div>
+</header>
+
+<script type="text/javascript">
+  /* 把当前提取到header里头 $('#menu').dropmenu({
+    content:
+    [
+  {
+    text: '首页',
+  icon: 'home',
+  href: '<{url action=topm_ctl_default@index}>'
+  },
+
+  {
+    text: '商品类目',
+  icon: 'catalog',
+  href: '<{url action=topm_ctl_category@index}>'
+  },
+
+  {
+    text: '购物车',
+  icon: 'barrow',
+  href: '<{url action=topm_ctl_cart@index}>'
+  },
+
+  {
+    text: '会员中心',
+    icon: 'man',
+  href: '<{url action=topm_ctl_member@index}>'
+  },
+  ]
+  });
+
+  $(window).scroll(function(){
+    if(! $('.ui-dropmenu.ui-in').length == 0 ){
+      $('.ui-dropmenu').removeClass('ui-in');
+    }
+  });*/
+</script>
+<{if ($offer_coupon_sendsuccess)}>
+<link rel="stylesheet" href="/images/layer/skin/layer.css" media="all">
+<style type="text/css">
+.layui-layer {margin: 0 auto;left:0;right:0;top:0;bottom:0;position:fixed!important;max-width: 361px;background-color:transparent!important;}
+.layui-colose-btn {z-index: 9999999;position: absolute; margin-right: 3px;  top: 5%;  right: 9%;  width: 38px;  background: url(http://www.mjm.net/themes/wapmall/images/coupon_show_bg.gif) -493px -69px no-repeat; height: 36px; cursor: pointer; }
+.layui-seecoupn-btn {position: absolute;  margin-right: 3px;  bottom: 8%; right: 16%;   width: 244px;  background: eddd;  height: 65px; cursor: pointer; border: 0px solid #FFF; }
+.layui-layer .showimg {width:360px;overflow: hidden;}
+.layui-layer .showimg img.bg{width:100%!important;}
+</style>
+<script type="text/javascript">
+jQuery = $;
+var colseLayer = function(e){
+			 var dd = $(e).parents(".layui-layer");
+			 var dsd = document.getElementById("layui-layer1");
+			 var dsd_sha = document.getElementById("layui-layer-shade1");
+			 dsd.style.display='none';
+			 dsd_sha.style.display='none';
+		};
+var goon_OffURL = function (e){
+	colseLayer(e);
+	location.href="<{url action=topm_ctl_member_coupon@couponList is_valid=offen}>";
+}
+</script>
+<script src="/images/layer/layer.js?v=2.4"></script>
+ 	<!--显示领取优惠券的层 -->
+	<script type="text/javascript">
+		var htmlchar = '<div class="showimg"> <img  class="bg" src ="images/coupon_show.png"  /><a href="javascript:void(0);colseLayer(this);" class="layui-colose-btn"> </a><a href="javascript:void(0);" onclick="goon_OffURL(this);" class="layui-seecoupn-btn"> </a><\/div>';
+		//页面层-显示领取操作
+		layer.open({
+		  type: 1,
+		  title: false,
+		  closeBtn: 0,
+		  shadeClose: false,
+		  skin: 'yourclass',
+		  time:1,
+		  content: htmlchar
+		});
+</script>
+<{/if}>
+

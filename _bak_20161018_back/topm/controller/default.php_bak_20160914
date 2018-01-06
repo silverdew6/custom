@@ -1,0 +1,79 @@
+<?php
+/**
+ * ShopEx licence
+ *
+ * @copyright  Copyright (c) 2005-2012 ShopEx Technologies Inc. (http://www.shopex.cn)
+ * @license  http://ecos.shopex.cn/ ShopEx License
+ */
+
+class topm_ctl_default extends topm_controller
+{
+	//下面这个构造方法是雷成德临时加进去的，由于对时间比较紧张，后面再优化2015.11.19。
+	public function __construct()
+	{	
+		parent::__construct();
+
+		 $appid="wxe55aa19f35f85ca7"; 
+		$secret ="9878c9dfda0535f9a29737d1bf6a1e55";
+	//		$appid="wx5a57eec0db20dff5";
+	//		$secret ="c5cce06c1030b60c7c88e09f0c0b8626";
+        $code = $_GET['code'];
+        if(isset($code)&&!empty($code)){
+        kernel::single('base_session')->start();
+        $url="https://api.weixin.qq.com/sns/oauth2/access_token?appid={$appid}&secret={$secret}&code={$code}&grant_type=authorization_code";
+        $acc_token = $this->getSslPage($url);
+        $acc_token2 = json_decode($acc_token,true);
+        $openid  = $acc_token2['openid'];
+        //获取access_token
+        $access_url ="https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid={$appid}&secret={$secret}";
+        $ken = $this->getSslPage($access_url);  //全局token
+        $ken = json_decode($ken,true);
+        $access_token = $ken['access_token'];
+        $userinfo ="https://api.weixin.qq.com/cgi-bin/user/info?access_token={$access_token}&openid={$openid}";
+        $userinfo = $this->getSslPage($userinfo);
+        $userinfo = json_decode($userinfo,true);
+		//$nickname   = $userinfo['nickname'];
+	   //$nickname   = "weixin".rand(11,99).$userinfo['nickname'];
+		$openid     = trim($userinfo['openid']);
+		$fields = "user_id,mobile,email,login_account";
+		$filter = ['openid' => $openid];
+		if ($data = app::get('sysuser')->model('account')->getRow($fields, $filter))
+		{
+			userAuth::login($data['user_id'], $data['login_account']);
+		}
+		else{
+			$_SESSION['openid'] = $openid;  //存进seeion
+
+	}
+        }
+		
+	}
+	
+	//这个是我手写的一个方法，专门负责接收发发送微信端的接口值2015.11.19
+	function getSslPage($url) {
+		$ch = curl_init();
+		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
+		curl_setopt($ch, CURLOPT_HEADER, false);
+		curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+		curl_setopt($ch, CURLOPT_URL, $url);
+		curl_setopt($ch, CURLOPT_REFERER, $url);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+		$result = curl_exec($ch);
+		curl_close($ch);
+		return $result;
+	}
+
+
+    public function index()
+    {
+        $GLOBALS['runtime']['path'][] = array('title'=>app::get('topm')->_('首页〉'),'link'=>kernel::base_url(1));
+        $this->setLayoutFlag('index');
+        return $this->page();
+    }
+
+    public function switchToPc()
+    {
+        setcookie('browse', 'pc');
+        return redirect::route('topc');
+    }
+}

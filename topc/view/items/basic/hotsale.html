@@ -1,0 +1,24 @@
+<!-- 展示相对应的商品列表信息 Start-->
+<div class="hot-product">
+	<div class="hot-txt"><{$showProjectName|default:'商品列表'}></div>
+	<div class="hot-pic">
+		<{if ($projectItems)}>
+			<ul style="width:99%;">
+				<{foreach from=$projectItems.list item=project key=pks}>
+					<li style="margin-bottom:0">
+						<dl class="hot-pic-dl" style="border-bottom:5px solid #f3f3f3;">
+							<dt style="border-bottom:1px dotted #DDD;position: relative;">
+								<a class="jmalltax_<{$project.tax|default:'1'}>" href="<{url action=topc_ctl_item@index item_id=$project.item_id}>">
+									<img src="<{$project.image_default_id|storager:'t'}>" /></a></dt>
+							<dd class="hot-pic-d1"><a href="<{url action=topc_ctl_shopcenter@index shop_id=$item.shop_id}>" title="<{$project.title}>"><{$project.title}></a></dd>
+							<dd class="hot-pic-d2"><{$project.price|cur}></dd>
+						</dl>
+					</li>
+				<{/foreach}>
+			</ul>
+		<{else}>
+			<div style="padding:5px 10px;text-align:center">暂无相关内容 </div>
+		<{/if}>
+	</div>
+</div>
+<!-- 展示相对应的商品列表信息 END-->

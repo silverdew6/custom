@@ -1,0 +1,738 @@
+<style type="text/css">
+.item-table .col-operate{border-right:1px solid #DDD;}
+.tipmsg_cart{background: rgba(252, 144, 47, 0.12);   padding: 1em 2em; border-radius: 0.1em;}
+.item-table .goods-discount {border: 1px solid red;border-left: 1px dotted red; border-right: 1px dotted red; padding: 1px 5px;   line-height: 1em; height: 22px;}
+.item-table .order-discount {margin-right:2em; color:red;}
+.item-table .cart-row .not-active{display: block; color: #fc902f; border: 1px dotted #CCC; width: 8em; padding: 0.2em 1em; background: #FFF;}
+.item-table .order-discount i {font-size:1em; font-weight:bold;}
+.item-table .error_ordermsg{float: right;  border: 1px dotted #de7706; padding: 2px 5px; color: red; background: #f3e4e4;}
+.item-table .label-danger2 {background: #FFF; color: red; border: 1px dotted red;}
+.item-table .order-minlus {height: 1.9em; background: #f3f3f3; padding-top: 2px;;display:inline-block;margin-right:2em;float:right;}
+.grayB {line-height:1.6em;}
+.item-table .can-usecoupon{margin-top: -2em;color: #FFF; border: 1px dotted #e81328; background: red;  padding: 1px 3px; float: right;}
+/* coupon 领取*/
+#privilege{width: 450px ;margin-bottom: 2px;background: #fff;bottom: -110px;z-index: 1000;}
+.privilege-1{width: 100%;padding-top: 8px;}
+.privilege-1 ul{width: 96%;margin: 0 auto;text-align: center;padding:4px;}
+.privilege-1 li{height: 70px;margin-bottom: 3px;}
+.privilege-1 li:last-child{border-bottom: 1px solid #D1D1D1;}
+.privilege-1 li:after{content: '.';height: 0;display: block;visibility: hidden;clear: both;}
+.privilege-1-li div:first-child{float: left;width: 75%;background: #FFF0F3; box-sizing: border-box;height:70px;border-top-right-radius: 8px;border-bottom-right-radius: 8px;border: 1px solid #cacaca;padding: 0 30px 0 10px;border-right: 1px dashed #888;}
+.privilege-1-li div:last-child{float: right;width: 25%;background: #FFF0F3; height: 70px;border: 1px solid #cacaca;box-sizing: border-box;border-top-left-radius: 8px;border-bottom-left-radius: 8px;border-left: none;}
+.privilege-1 h5{text-align: center;color: #ff6f06;font-family: "微软雅黑";    font-size: 1.3em;  font-weight: 100;}
+.privilege-1-li div a{color: #c53ee4;font-size: 1em;line-height: 65px;height: 70px;display: block;font-weight: bold;font-family: "微软雅黑";}
+.privilege-1-dl{text-align: left;font-size: 0.6em;height: 65px;}
+.privilege-1-dl dt{color: red;font-size: 1.6em;font-weight: bold;padding-top:5px;}
+.privilege-1-dl dd{padding: 1px;font-size:11px;color:#c1827c;font-family: "微软雅黑";}
+.privilege-1-dl dd.dd-one{margin-top: 4px; width:100%;height: 1.2em;    overflow: hidden;}
+.privilege-1-li div .no-re {line-height: 6em;  color: #999; font-weight: bold;}
+
+.jq_tips_info {max-width: 450px!important;}   
+.privilege-2{ font-weight: bold;text-align: left ;padding: 5px 0;border:1px dotted #f36b1b;  color: red ;background:#FFF; letter-spacing: 2px;margin-bottom:1px;text-indent: 2em;}
+.privilege-mask2{z-index: 999;position: fixed;left: 0px;top: 0px;right: 0px;bottom: 0px;display: none;background: rgba(0, 0, 0, 0.5);} 
+</style>
+<div class="wrap-lg">
+    <div class="crumbs mod-bottom" style="padding-top: 1em;">
+      <em class="color1">您当前位置</em>
+      <span>>&nbsp;&nbsp;<a href="#">购物车</a></span>
+    </div>
+<div class="tipmsg tipmsg_cart mb10">
+    <s class="corner corner_bot"></s>
+    <label class="tip_label"><b>温馨提示</b></label><br/>
+    <span class="grayB">1、因涉及国家监管部门规定，需要对收货信息实名备案，本网站不会保留相关个人信息 ；<br/>
+    2、本网站商品分完税和直邮类，不同类型的商品下单之后的运费计算方式不同,具体以提交订单的运费为准；  <br/><!--根据海关规定，本商品适用税率为:增值税 【增值税率】，消费税 【消费税率】，下单后会有具体税率金额。受运费影响，以提交订单时计算的税额为准.<a href="javascript:void(0)" onclick="tax_info()">税额说明</a>-->
+    3、包邮活动：完税商品订单金额满50免运费，直邮商品满150或商品数量超过2件免运费，其它以实际计算运费为准。  <br/></span>
+</div>
+    <div class="mod-bottom" id="cart_main">
+      <{include file="topc/cart/cart_main.html"}>
+    </div>
+</div>
+<script>
+	/*
+	function  tax_info() {
+	 var dialog = new Dialog('<{url action=topc_ctl_list@tax_info}>', {
+	    width: 540,
+	    title: '购物须知',
+	    modal:true,
+	    async: 'ajax',
+	    component: {
+	      container: 'dialog takegoods-dialog'
+	    },
+	    asyncOptions: {
+	      type: 'post',
+	    }
+	  });
+	}*/
+	/* coupon 领取弹层 */
+	var selfCouponFun={
+		  DURATION:100,//保存动画的总时间
+		  /*显示Tip跟弹出层信息*/
+		  commonTips:function($targetDom , custConfig, isunbind ){
+					var defaultConfig = {
+							  msg: "没有信息显示",   	//你的提示消息  必填
+							  side:2,			//提示窗显示位置  1，2，3，4 分别代表 上右下左 默认为1（上） 可选
+							  color:'#333333', 	//提示文字色 默认为白色 可选
+							  bg:'#FFFFFF',		//提示窗背景色 默认为红色 可选
+							  bgtip:'#999999',		//提示窗三角色 默认为红色 可选
+							  time:0,	//自动关闭时间 默认2秒 设置0则不自动关闭 可选
+							  x:0,		//横向偏移  正数向右偏移 负数向左偏移 默认为0 可选
+							  y:0,		//纵向偏移  正数向下偏移 负数向上偏移 默认为0 可选
+		 				};
+					var useConfig = $.extend(defaultConfig,custConfig);
+					$targetDom.tips(useConfig); //selector 为jquery选择器
+					
+					//对弹出层解除点击窗口关闭事件
+					if(null != isunbind && isunbind == "1"){
+						$('.jq_tips_box').unbind();
+					}
+		  },
+		  hide:function(ty){ //关闭 默认关闭当前弹出层，1 －关闭消息
+		     if(ty=="1"){
+		     	$("#showResult_msg").html("");
+		  		$("#showResult_msg").removeClass("privilege-2");
+		     }else{
+		     	$('.jq_tips_box').remove();
+		     	$('.privilege-2').remove();
+		     }
+		  },
+		  showResultMsg:function(htmlcode){
+		  	$("#showResult_msg").html(htmlcode);
+		  	$("#showResult_msg").addClass("privilege-2");
+		  	setTimeout("selfCouponFun.hide(1)",2000);
+		  },
+		  ajaxGetHandler:function(thisobj,currShopId,ccid){
+		  	if(null !=ccid && "NaN"!= Number(ccid) && Number(ccid)>0){
+				$.post('<{url action=topm_ctl_shopcenter@getCouponCode}>',{"shop_id":currShopId,"coupon_id" : ccid},
+					function(rs) {
+						if(rs.success){
+							if(null != rs.redirect  && "" != $.trim(rs.redirect)){
+								$(thisobj).parent().html('已领取<a href = "'+ rs.redirect +'" target="_blank" title="查看优惠券"> 查看</a>');
+							}
+							return selfCouponFun.showResultMsg('<font color="green" > ' + rs.message + '</font>');//获取数据成功
+						}else{
+							return selfCouponFun.showResultMsg('<font color="red" > ' + rs.message + '</font>');//获取数据fail
+						}
+			    });
+			}else{
+				return Message.error('参数错误');
+			}
+		  }
+	};
+	
+	
+(function(){
+    var checkCart = {
+        updateItem : function(el){
+            var data = $('#cart_main .cart-submit-form').serialize();
+	
+            // var cartRow = $(el).parents('.cart-row-num'),
+            //     cartId = cartRow.find('.check-item'),
+            //     cartCheckedId = cartRow.find('.cart-checked-item'),
+            //     cartNum = cartRow.find('.cart-num'),
+            //     cartDiscount = cartRow.find('.goods-discount'),
+            //     checked = cartRow.find('.check-item').prop('checked');
+
+            // var form_cartId = cartId.attr('name') + '=' + cartId.val();
+            // var form_cartDiscount = '&' + cartDiscount.attr('name') + '=' + cartDiscount.val();
+            // var form_cartNum = '&' + cartNum.attr('name') + '=' + cartNum.val();
+
+            // if(cartCheckedId.prop('checked')){
+            //     var form_cartCheckedId = '&' + cartCheckedId.attr('name') + '=1';
+            // }else{
+            //     var form_cartCheckedId = '&' + cartCheckedId.attr('name') + '=0';
+            // }
+            $.ajax({
+                url:'<{url action=topc_ctl_cart@updateCart}>',
+                type:'POST',
+                data: data,
+                success:function(re) {
+                    if(re){
+                        if(re.success){
+                            $('#cart_main').html(re.message);
+                            updateCartNumber();
+                            // cartRow.html(re.message);
+                            // if(checked){
+                            //     cartRow.find('.cart-checked-item').prop('checked',true);
+                            //     checkCart.updateAll();
+                            // }
+                        }else{
+                          $(el).val($(el).attr('value'));
+                          Message.error(re.message);
+                        }
+                    }
+                }
+            });
+        },
+        updateAll : function(){
+            var data = $('#cart_main .cart-submit-form').serialize();
+            $.ajax({
+                url:'<{url action=topc_ctl_cart@ajaxBasicCart}>',
+                type:'POST',
+                data:data,
+                success:function(rs){
+                    $('#cart_main').html(rs.message);
+                }
+            });
+        },
+        deleteItem : function(id){
+            if(id){
+                $.ajax({
+                    url:'<{url action=topc_ctl_cart@removeCart}>',
+                    type:'POST',
+                    data:'cart_id['+id+']=1',
+                    success:function(rs){
+                        if(rs.error) Message.error(rs.message);
+                        if(rs.success){
+                            $('.cart-row[data-cart-id='+id+']').remove();
+                            checkCart.updateAll();
+                        }
+                        if(rs.redirect)
+                        {
+                            location.href = rs.redirect;
+                        }
+                    }
+                });
+            }else{
+                var data = $('#cart_main .cart-submit-form').serialize();
+                $.ajax({
+                    url:'<{url action=topc_ctl_cart@removeCart}>',
+                    type:'POST',
+                    data:data,
+                    success:function(rs){
+                        if(rs.error) Message.error(rs.message);
+                        if(rs.success){
+                            $('.cart-checked-item').filter(function(){
+                                  var tmp = $(this);
+                                  if(tmp.prop('checked')){
+                                      tmp.parents('.cart-row').remove();
+                                  }
+                            });
+                        }
+                        if(rs.redirect)
+                        {
+                            location.href = rs.redirect;
+                        }
+                    }
+                });
+            }
+        }
+    };
+
+    $(function(){
+        $('.decrease').each(function(index, el) {
+            var el = $(el),
+            min = el.data('min'),
+            input = $(el.next('input')),
+            value = input.val() - 0;
+            if(value == min){
+                el.addClass('disabled');
+            }
+        });
+
+        $('.increase').each(function(index, el) {
+            var el = $(el),
+            max = el.data('max'),
+            input = $(el.prev('input')),
+            value = input.val() - 0;
+            if(value == max){
+                el.addClass('disabled');
+            }
+        });
+    })
+
+    $('#cart_main').on('click','.decrease',function(e){//点击--的情况
+        var el = $(this),
+            min = el.data('min'),
+            input = $(el.next('input'))
+            cart_id = el.data('cart-id'),
+            value = input.val() - 0;
+        if(value > min){
+            input.val(value - 1);
+			//--开始处理屏蔽
+			var ontax=$(this).attr('data-taxid');
+			var datav=$(this).attr('data-selectid');
+			if(ontax==1){	
+				//总的复选框，因为状态为1涉及到所有的,是完税情况
+				$('.cart').find('.check-shop-all2').filter(function(){
+					var tmp = $(this);
+					var tax=$(this).attr('data-taxides');
+					var tax_val=$(this).val();
+					var datatax=$(this).attr('data-selectid');
+					if(tax==1){
+						tmp.removeAttr("disabled");
+						$('input[name="p_cart_shop['+datatax+']"]').val(0);	
+						$('tr[name="tr_name'+datatax+'"]').find('.decrease').removeAttr("disabled")
+						.end().find('.cart-num').removeAttr("disabled").end().find('.increase').removeAttr("disabled");
+					}else{	
+						//当前的+-和下拉属性
+						$('tr[name="tr_name'+datatax+'"]').find('.decrease').attr('disabled', 'disabled')
+						.end().find('.cart-num').attr('disabled', 'disabled').end().find('.increase').attr('disabled', 'disabled');	
+						$('input[name="p_cart_shop['+datatax+']"]').val(1);	
+					}
+				});
+			}
+			if(ontax==2||ontax==3){
+				 $('.cart').find('.check-shop-all2').filter(function(){
+				 var tmp = $(this);
+				 var datatax=$(this).attr('data-selectid');
+				 if(datav==datatax){
+						tmp.removeAttr("disabled");//取消屏蔽
+						$('tr[name="tr_name'+datatax+'"]').find('.decrease').removeAttr("disabled")
+						.end().find('.cart-num').removeAttr("disabled").end().find('.increase').removeAttr("disabled");
+						$('input[name="p_cart_shop['+datatax+']"]').val(0);	
+					  }else{
+						$('tr[name="tr_name'+datatax+'"]').find('.decrease').attr('disabled', 'disabled')
+						.end().find('.cart-num').attr('disabled', 'disabled').end().find('.increase').attr('disabled', 'disabled');
+						$('input[name="p_cart_shop['+datatax+']"]').val(1);			
+					  }
+				});
+			}
+			//--完毕
+            checkCart.updateItem(el);
+            el.removeClass('disabled');
+        }else{
+            el.addClass('disabled');
+        }
+
+    }).on('click','.increase',function(e){//点击++数量的情况
+        var el = $(this),
+            max = el.data('max'),
+            input = $(el.prev('input')),
+            cart_id = el.data('cart-id'),
+            value = input.val() - 0;
+			if(value < max){
+				input.val(value + 1);
+				//开始++
+				var ontax=$(this).attr('data-taxid');
+				var datav=$(this).attr('data-selectid');
+				if(ontax==1){	
+					//总的复选框，因为状态为1涉及到所有的,是完税情况
+					$('.cart').find('.check-shop-all2').filter(function(){
+						var tmp = $(this);
+						var tax=$(this).attr('data-taxides');
+						var tax_val=$(this).val();
+						var datatax=$(this).attr('data-selectid');
+						if(tax==1){
+							tmp.removeAttr("disabled");
+							$('input[name="p_cart_shop['+datatax+']"]').val(0);	
+							$('tr[name="tr_name'+datatax+'"]').find('.decrease').removeAttr("disabled")
+							.end().find('.cart-num').removeAttr("disabled").end().find('.increase').removeAttr("disabled");
+						}else{	
+							//当前的+-和下拉属性
+							$('tr[name="tr_name'+datatax+'"]').find('.decrease').attr('disabled', 'disabled')
+							.end().find('.cart-num').attr('disabled', 'disabled').end().find('.increase').attr('disabled', 'disabled');	
+							$('input[name="p_cart_shop['+datatax+']"]').val(1);	
+						}
+					});
+				}
+			    if(ontax==2||ontax==3){
+					$('.cart').find('.check-shop-all2').filter(function(){
+						var tmp = $(this);
+						var datatax=$(this).attr('data-selectid');
+						if(datav==datatax){
+							tmp.removeAttr("disabled");//取消屏蔽
+							$('tr[name="tr_name'+datatax+'"]').find('.decrease').removeAttr("disabled")
+							.end().find('.cart-num').removeAttr("disabled").end().find('.increase').removeAttr("disabled");
+							$('input[name="p_cart_shop['+datatax+']"]').val(0);	
+						}else{
+							$('tr[name="tr_name'+datatax+'"]').find('.decrease').attr('disabled', 'disabled')
+							.end().find('.cart-num').attr('disabled', 'disabled').end().find('.increase').attr('disabled', 'disabled');
+							$('input[name="p_cart_shop['+datatax+']"]').val(1);			
+						}
+					});
+				}
+				//++完毕
+				checkCart.updateItem(el);
+				el.removeClass('disabled');
+			}else{
+				el.addClass('disabled');
+			}
+    }).on('change','.cart-num',function(e){ //下拉和上拉的功能
+		//--开始点击上拉和下拉
+		var ontax=$(this).attr('data-taxid');
+		var datav=$(this).attr('data-selectid');
+		if(ontax==1){	
+			//总的复选框，因为状态为1涉及到所有的,是完税情况
+			$('.cart').find('.check-shop-all2').filter(function(){
+			    var tmp = $(this);
+			    var tax=$(this).attr('data-taxides');
+			    var tax_val=$(this).val();
+			    var datatax=$(this).attr('data-selectid');
+			    if(tax==1){
+					tmp.removeAttr("disabled");
+					$('input[name="p_cart_shop['+datatax+']"]').val(0);	
+					$('tr[name="tr_name'+datatax+'"]').find('.decrease').removeAttr("disabled")
+					.end().find('.cart-num').removeAttr("disabled").end().find('.increase').removeAttr("disabled");
+				}else{	
+					//当前的+-和下拉属性
+					$('tr[name="tr_name'+datatax+'"]').find('.decrease').attr('disabled', 'disabled')
+					.end().find('.cart-num').attr('disabled', 'disabled').end().find('.increase').attr('disabled', 'disabled');	
+					$('input[name="p_cart_shop['+datatax+']"]').val(1);	
+				}
+            });
+		}
+		if(ontax==2||ontax==3){
+		  	$('.cart').find('.check-shop-all2').filter(function(){
+				var tmp = $(this);
+				var datatax=$(this).attr('data-selectid');
+				if(datav==datatax){
+					tmp.removeAttr("disabled");//取消屏蔽
+					$('tr[name="tr_name'+datatax+'"]').find('.decrease').removeAttr("disabled")
+				   .end().find('.cart-num').removeAttr("disabled").end().find('.increase').removeAttr("disabled");
+					$('input[name="p_cart_shop['+datatax+']"]').val(0);	
+				}else{
+					$('tr[name="tr_name'+datatax+'"]').find('.decrease').attr('disabled', 'disabled')
+				   .end().find('.cart-num').attr('disabled', 'disabled').end().find('.increase').attr('disabled', 'disabled');
+					$('input[name="p_cart_shop['+datatax+']"]').val(1);			
+				}
+			});
+		}
+		//--下拉和上拉完毕
+		checkCart.updateItem(this);
+    }).on('change','.check-all',function(e){
+        checkAll($(this), $('.check-shop-all, .check-all, .cart-checked-item'));
+        $('.check-item').prop('checked', !$(this).prop('checked'));
+        checkCart.updateItem();
+    }).on('change','.goods-discount',function(e){
+        checkCart.updateItem(this);
+    }).on('click','.can-usecoupon',function(e){
+    	var showTipC = '<font color="red"><b>温馨提示</b></font>：<br>订单中的这个商品可以支持使用优惠券，只要满足优惠券的使用条件即可以在提交订单时自动结算。<br>注：优惠券只能用于支持优惠券的商品，每个店铺的一个订单（店铺内自拆单算一个总订单） 只能使用一张优惠券，与其它优惠共存。详情请了解<a href="javascript:void(0);" target="_blank" style="margin-left:10px;">优惠券使用规则</a></div>';
+		var tconf = { time:3,color:'#333333',side:3, msg : showTipC };
+		selfCouponFun.commonTips($(this), tconf , 0);
+		
+    }).on('click','a.get-coupon',function(e){
+    	//获取当前店铺可用的优惠券列表信息；
+    	var currShopId = $(this).data("shopid");
+    	var thisobj = $(this);
+    	if(null != currShopId && parseInt(currShopId)>0){
+    		$.get('<{url action=topc_ctl_shopcenter@shopCouponList}>',{"shop_id":currShopId,"rethtml":"html"},function(rems){
+    			console.dir(rems);
+    			//var showTipC = '<div id="privilege" style="bottom: 100px;"><div class="privilege-1" id="privilegeContent"><h5>领取优惠券</h5> <ul>	<li class="privilege-1-li"><div> <dl class="privilege-1-dl"> <dt>￥30.00</dt> <dd class="dd-one">满100减30－针对店内部分商品</dd> <dd>有效期  2016-12-29 至 12-30</dd>	</dl> </div> <div> <a href="javascript:void(0);" onclick="selfCouponFun.ajaxGetHandler(this,1,19)">立即领取</a> </div> </li> </ul> </div> <div class="privilege-2" onclick="selfCouponFun.hide()"> 关闭 </div> </div>';
+    			if(rems.success){ //获取数据成功
+    				var custconf = { time:50,color:'red',side:2 , msg : rems.message };
+					selfCouponFun.commonTips(thisobj , custconf , 1);
+				}else{
+					return Message.error(rems.message);
+				}
+    		});
+    	}else{
+    		return Message.error('参数异常，请重新刷新页面再试');
+    	}
+    }).on('change','.check-shop-all2',function(e){
+		//开始父项选择开始，雷成德2016/3/30，多么复杂和伟大的工程，后续可以优化，这里是开始
+		 var el = $(this);
+		 var tax=$(this).attr('data-selectid');
+		 var taxid=$(this).attr('data-taxides');
+		 var vv=$(this).val();
+		 if(vv==1){el.val(0);}
+	     if(vv==0){el.val(1);}
+         if(el.prop('checked')){
+		 	$('input[name="f_cart_shop['+tax+']"]').val(1);	  //当前父项是勾选
+            $('tr[name="tr_name'+tax+'"]').find('.cart-checked-item').prop('checked', true)
+            .end().find('.check-item').prop('checked', false);
+
+        }else{
+			$('input[name="f_cart_shop['+tax+']"]').val(0);	 //当前父项是没有勾选
+            $('tr[name="tr_name'+tax+'"]').find('.cart-checked-item').prop('checked', false)
+            .end().find('.check-item').prop('checked', true);
+        }
+		//判断父项的复选框
+ 		$('.cart').find('.check-shop-all2').filter(function(){
+              var tmp = $(this);
+			  var datav = $(this).attr('data-selectid');
+
+/*
+			  //选择完税
+			  if(taxid==1){
+				 	if(tmp.attr('data-taxides')==1){
+					    tmp.removeAttr("disabled");
+						$('tr[name="tr_name'+datav+'"]').find('.decrease').removeAttr("disabled")
+				   .end().find('.cart-num').removeAttr("disabled").end().find('.increase').removeAttr("disabled");
+					  	$('input[name="p_cart_shop['+datav+']"]').val(0);		
+					}else{
+						$('tr[name="tr_name'+datav+'"]').find('.cart-checked-item').prop('checked', false).prop('disabled', 'disabled')
+				     .end().find('.check-item').prop('checked', true).prop('disabled', 'disabled');
+					 	//当前的+-和下拉属性
+					 	$('tr[name="tr_name'+datav+'"]').find('.decrease').attr('disabled', 'disabled')
+				   .end().find('.cart-num').attr('disabled', 'disabled').end().find('.increase').attr('disabled', 'disabled');
+					  	$('input[name="p_cart_shop['+datav+']"]').val(1);		
+						tmp.attr("disabled","disabled");
+				   }
+			  }
+			  //选择直邮  taxid==3
+			  
+			  if(taxid==3){
+			  		//if  原来的条件是datav==tax 表示直邮只能同一个店铺的数据
+				  if(tmp.attr('data-taxides')==3){
+				  		tmp.removeAttr("disabled");//取消屏蔽
+				  		$('tr[name="tr_name'+datav+'"]').find('.decrease').removeAttr("disabled")
+			   .end().find('.cart-num').removeAttr("disabled").end().find('.increase').removeAttr("disabled");
+				  	  	$('input[name="p_cart_shop['+datav+']"]').val(0);	
+				  }else{
+					 	tmp.attr("disabled","disabled");
+					 	$('tr[name="tr_name'+datav+'"]').find('.cart-checked-item').prop('checked', false).prop('disabled', 'disabled')
+			     .end().find('.check-item').prop('checked', true).prop('disabled', 'disabled');
+			 			//当前的+-和下拉属性
+				 		$('tr[name="tr_name'+datav+'"]').find('.decrease').attr('disabled', 'disabled')
+			   .end().find('.cart-num').attr('disabled', 'disabled').end().find('.increase').attr('disabled', 'disabled');
+				  		$('input[name="p_cart_shop['+datav+']"]').val(1);		
+				  }
+			  }	
+*/
+
+
+  			//全部取消，不勾选的情况
+        	var checkeds_num = $('.cart').find('.cart-checked-item').filter(function(){
+                	var tmps = $(this);
+                    if(tmps.prop('checked')){
+                           return this;
+                    }
+                  });
+		  	if(checkeds_num.length==0){
+		       	 $('.cart').find('.cart-checked-item').filter(function(){
+		                          var tmp = $(this);
+								     tmp.prop('checked',false)
+									 tmp.removeAttr("disabled");
+		                  });
+				 $('.cart').find('.check-shop-all2').filter(function(){
+		                           var tmp = $(this);
+								    tmp.prop('checked',false)
+		                          var datatax=$(this).attr('data-selectid');
+									$('input[name="f_cart_shop['+datatax+']"]').val(0);	
+									$('input[name="p_cart_shop['+datatax+']"]').val(0);	
+									tmp.removeAttr("disabled");
+			  	$('tr[name="tr_name'+datatax+'"]').find('.decrease').removeAttr("disabled")
+		   .end().find('.cart-num').removeAttr("disabled").end().find('.increase').removeAttr("disabled");
+                  });
+  			}
+     });
+
+        checkCart.updateItem();
+		//父项选择结束，雷成德2016/3/30，多么复杂和伟大的工程，后续可以优化，这里是结束
+    }).on('change','.cart-checked-item',function(e){
+		//开始子项选择结束，相当于单选，雷成德2016/3/30，多么复杂和伟大的工程，后续可以优化，这里是开始
+		var datatax=$(this).attr('data-selectid');
+		var ontax=$(this).attr('data-taxid');
+     if(ontax==1){
+		//总的复选框，因为状态为1涉及到所有的,是完税情况
+	 	$('.cart').find('.check-shop-all2').filter(function(){
+				//针对父亲】项
+                           var tmp = $(this);
+                           var tax=$(this).attr('data-taxides');
+						   var tax_val=$(this).val();
+						   var datatax=$(this).attr('data-selectid');
+                            if(tax==1){
+							  if(tax_val==1){
+							  tmp.prop('checked',true)
+							  }else{
+						    tmp.removeAttr("disabled");
+                             tmp.prop('checked',false)
+							$('input[name="f_cart_shop['+datatax+']"]').val(0);	
+							$('input[name="p_cart_shop['+datatax+']"]').val(0);	
+							}
+			$('tr[name="tr_name'+datatax+'"]').find('.decrease').removeAttr("disabled")
+   .end().find('.cart-num').removeAttr("disabled").end().find('.increase').removeAttr("disabled");			
+							}else{
+								
+	//当前的+-和下拉属性
+	 	$('tr[name="tr_name'+datatax+'"]').find('.decrease').attr('disabled', 'disabled')
+   .end().find('.cart-num').attr('disabled', 'disabled').end().find('.increase').attr('disabled', 'disabled');		
+							$('input[name="f_cart_shop['+datatax+']"]').val(0);	
+							$('input[name="p_cart_shop['+datatax+']"]').val(1);	
+							$(this).attr("disabled","disabled");
+							}
+                  });
+             $('.cart').find('.cart-checked-item').filter(function(){
+                          var tmp = $(this);
+						  var carttax=$(this).attr('data-taxid');
+						  if(carttax>1){
+						  $(this).prop('checked', false);
+						  $(this).attr("disabled","disabled");
+						  }
+                  });
+			 $('.cart').find('.check-item').filter(function(){
+                          var tmp = $(this);
+						  var carttax=$(this).attr('data-taxid');
+						  if(carttax>1){
+						  $(this).prop('checked', false);
+						  $(this).attr("disabled","disabled");
+						  }
+                  });
+				  //当前业务模式的勾选的上一级复选框全选的情况
+		         var checkeds = $('tr[name="tr_name'+datatax+'"]').find('.cart-checked-item').filter(function(){
+                       var tmps = $(this);
+                        if(tmps.prop('checked')){
+                            return this;
+                        }
+                  });
+				  //当前业务下面，如果全选，那么父项就勾上，否则就不勾
+    if(checkeds.length==$('tr[name="tr_name'+datatax+'"]').find('.cart-checked-item').length){
+    $('input[name="cart_shop['+datatax+']"]').prop('checked', true);
+	$('input[name="cart_shop['+datatax+']"]').val(1);	
+	$('input[name="f_cart_shop['+datatax+']"]').val(1);	
+     }else{
+	 $('input[name="cart_shop['+datatax+']"]').val(0);
+	 $('input[name="f_cart_shop['+datatax+']"]').val(0);
+	 $('input[name="cart_shop['+datatax+']"]').prop('checked', false);
+	 } 
+      }
+	  //保税和直邮的情况
+	 if(ontax==2||ontax==3){
+	 $('.cart').find('.check-shop-all2').filter(function(){
+                     var tmp = $(this);
+					 var datataxes=$(this).attr('data-selectid');
+
+                    if(datatax!=datataxes){
+				        	$('input[name="f_cart_shop['+datataxes+']"]').val(0);	 //不勾选
+							$('input[name="p_cart_shop['+datataxes+']"]').val(1);	//屏蔽
+							$(this).attr("disabled","disabled");
+							 //屏蔽子项
+                          $('tr[name="tr_name'+datataxes+'"]').find('.cart-checked-item').prop('checked', false).prop('disabled', 'disabled')
+                         .end().find('.check-item').prop('checked', true).prop('disabled', 'disabled');
+			//屏蔽当前的+-和下拉属性
+	 	 $('tr[name="tr_name'+datataxes+'"]').find('.decrease').attr('disabled', 'disabled')
+         .end().find('.cart-num').attr('disabled', 'disabled').end().find('.increase').attr('disabled', 'disabled');		
+							//相同的情况，也就是当前自己复选框里面
+							}else{
+							
+						 //当前业务模式的勾选的上一级复选框全选的情况
+		         var checkeds = $('tr[name="tr_name'+datataxes+'"]').find('.cart-checked-item').filter(function(){
+                       var tmps = $(this);
+                        if(tmps.prop('checked')){
+                            return this;
+                        }
+                  });
+    if(checkeds.length==$('tr[name="tr_name'+datataxes+'"]').find('.cart-checked-item').length){
+    $('input[name="cart_shop['+datataxes+']"]').prop('checked', true);
+	$('input[name="cart_shop['+datataxes+']"]').val(1);	
+	$('input[name="f_cart_shop['+datataxes+']"]').val(1);	
+     }else{
+	 $('input[name="cart_shop['+datataxes+']"]').val(0);
+	 $('input[name="f_cart_shop['+datataxes+']"]').val(0);
+	 $('input[name="cart_shop['+datataxes+']"]').prop('checked', false);
+	 } 
+	 //移除下拉的屏蔽
+	 	$('tr[name="tr_name'+datataxes+'"]').find('.decrease').removeAttr("disabled")
+   .end().find('.cart-num').removeAttr("disabled").end().find('.increase').removeAttr("disabled");	
+	}
+
+                  });
+
+		 }
+		 
+	//全部取消，不勾选的情况
+        var checkeds_num = $('.cart').find('.cart-checked-item').filter(function(){
+                       var tmps = $(this);
+                        if(tmps.prop('checked')){
+                            return this;
+                        }
+                  });
+  if(checkeds_num.length==0){
+       $('.cart').find('.cart-checked-item').filter(function(){
+                          var tmp = $(this);
+						     tmp.prop('checked',false)
+							 tmp.removeAttr("disabled");
+                  });
+		 $('.cart').find('.check-shop-all2').filter(function(){
+	
+                           var tmp = $(this);
+						    tmp.prop('checked',false)
+							tmp.removeAttr("disabled");
+                          var datatax=$(this).attr('data-selectid');
+							$('input[name="f_cart_shop['+datatax+']"]').val(0);	
+							$('input[name="p_cart_shop['+datatax+']"]').val(0);	
+								 //移除下拉的屏蔽
+	 	$('tr[name="tr_name'+datatax+'"]').find('.decrease').removeAttr("disabled")
+   .end().find('.cart-num').removeAttr("disabled").end().find('.increase').removeAttr("disabled");	
+							
+                  });
+
+  }
+//结束子项选择结束，相当于单选，雷成德2016/3/30，多么复杂和伟大的工程，后续可以优化，这里是结束
+        $(this).parent().find('.check-item').prop('checked', !this.checked);
+        // var el = $(this),
+        //     items = el.parents('.cart-table').find('.cart-checked-item');
+        // var checked = items.filter(function(){
+        //                 var tmp = $(this);
+        //                 if(tmp.prop('checked')){
+        //                     return this;
+        //                 }
+        //           });
+        // if(checked.length == items.length){
+        //     el.parents('.cart-table').find('.check-shop-all').prop('checked',true).trigger('change');
+        // }else if(checked.length == 0){
+        //     el.parents('.cart-table').find('.check-shop-all').prop('checked',false).trigger('change');
+        // }else if(el.prop('checked')){
+        //     var cartId = el.parents('.cart-row').data('cart-id');
+        // }else{
+        //     el.parents('.cart-table').find('.check-shop-all').prop('checked', false);
+        // }
+        checkCart.updateItem(this);
+        // checkCart.updateAll();
+    }).on('click','.delete-item',function(e){
+        e.preventDefault();
+        if(confirm('你确定要删除吗？')){
+            var el = $(this),
+                cartId = el.data('cart-id');
+            checkCart.deleteItem(cartId);
+        }
+    }).on('click','.delete-all',function(e){
+        e.preventDefault();
+        var checked = $('.cart-checked-item').filter(function(){
+            var tmp = $(this);
+            if(tmp.prop('checked')){
+                return this;
+            }
+        });
+        if(checked.length == 0){
+            Message.error('请选择需要删除的商品');
+        }else{
+            if(confirm('你确定要删除选中的商品吗？')){
+                checkCart.deleteItem();
+                checkCart.updateAll();
+            }
+        }
+    }).on('click','.submit-cart',function(e){
+
+     //          var n     =$('#cartnumber').val();//购买数量
+	//	       var p     =$('#totaltaxprice').val();
+			   var total=$('#totalFirstDiscount').val();
+			   var tax=$('#totaltax').val();
+        var checked = $('.cart-checked-item').filter(function(){
+          var tmp = $(this);
+            if(tmp.prop('checked')){
+                return this;
+            }
+        });
+
+        if(checked.length == 0){
+            return Message.error('请先勾选需要购买的商品');
+        }
+		if(tax>1){   //保税和直邮的情况
+			if(total>2000){
+              alert('应海关要求，购买跨境电商商品单笔订单商品金额不能超过2000元。');
+             return false;
+			}
+		}
+    });
+
+    $('.coupons-select').click(function(e){
+        e.stopPropagation();
+        var that = $(this);
+        that.parent().find('.coupons-option').toggle();
+    });
+    $(document).click(function(e){
+        target = e.target;
+        while(target && !$(target).hasClass('coupons-option') && target.nodeName != 'BODY'){
+            target = target.parentNode;
+        }
+        target = $(target);
+        if(!target.hasClass('coupons-option')){
+            $('.coupons-option').hide();
+        }
+    });
+    /*$('.get-coupon').click(function(){
+        $(this).hide().parent().find('.disabled').show();
+    })*/
+})();
+</script>

@@ -1,0 +1,46 @@
+<script type="text/javascript">
+	
+</script>
+<div class=''>
+    <form id='create-open-key' action='?app=sysopen&ctl=admin_sign&act=toEdit' method='post'>
+        <!--<{$shop_pay.pay_id}>-->
+
+        <table>
+            <{if !empty($shop_sign.sign_id)}>
+            <tr>
+                <th>
+                    <label> 支付企业id: </label>
+                </th>
+                <td>
+                    <input type='text' name="sign[sign_id]" id='sign_id' readonly='readonly' value='<{$shop_sign.sign_id}>'>
+                </td>
+            </tr>
+            <{/if}>
+            <tr>
+                <th>
+                    <label> 承运企业代码: </label>
+                </th>
+                <td>
+                    <input type='text' name="sign[signCompany]" id='signCompany' required  <{if !empty($shop_sign.signCompany)}> value='<{$shop_sign.signCompany}>' <{/if}>>
+                </td>
+            </tr>
+
+            <tr>
+                <th>
+                    <label> 承运企业名称: </label>
+                </th>
+                <td>
+                    <input type='text'  name="sign[signCompanyName]" id='signCompanyName' required  <{if !empty($shop_sign.signCompanyName)}> value='<{$shop_sign.signCompanyName}>' <{/if}>>
+                </td>
+            </tr>
+            <tr>
+                <td colspan='2'>
+                    <div class="table-action">
+                        <input type="submit" name="sb" value="确定"/>
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </form>
+</div>
+

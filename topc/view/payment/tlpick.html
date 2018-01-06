@@ -1,0 +1,59 @@
+<div id="header" class="header">
+  <div class="wrap-lg">
+    <div class="row">
+      <div class="col-lg-4 header-left">
+
+      </div>
+      <div class="col-lg-6 header-title">
+        订单支付
+      </div>
+      <div class="header-right">
+        <div class="status-bar2">
+          <div >
+            <div class="bg"><span class="number">1</span></div>
+            <div class="txt">提交订单</div>
+          </div>
+          <div class="on">
+            <div class="bg"><span class="number">2</span></div>
+            <div class="txt">线上付款</div>
+          </div>
+          <div  >
+            <div class="bg"><span class="number">3</span></div>
+            <div class="txt">订单完成</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- main container -->
+<div id="main" class="main">
+  <div class="wrap-lg">
+    <!--登录支付平台弹框-->
+
+
+<div class="payment mod-bottom">
+  <{if $payment_type}>
+  <div class="payment-info">
+    <div class="col-lg-6 success-info">
+      <div class="success-info-l1"><i class="icon icon-checkmark-c"></i>下单成功，我们会尽快为您发货！</div>
+      <div class="payment-line">付款金额：<span class="price"><{$money}></span></div>
+      <div class="payment-line">您可以：<a href="<{url action=topc_ctl_member_trade@tradeList}>">查看我的订单</a></div>
+    </div>
+  </div>
+  <{else}>
+  <div class="payment-info">
+    <div class="col-lg-6 success-info">
+      <div class="success-info-l1"><i class="icon icon-checkmark-c"></i><b><{if $type eq A01}>支付宝<{else}>微信<{/if}></b>&nbsp;扫码，请您尽快支付！</div>
+      <div class="success-info-l2"></div>
+      <div class="payment-line">应付金额：<span class="price"><{$money}></span></div>
+      <div class="payment-line"><img src="<{$url}>" alt="支付宝扫码支付"/></div>
+    </div>
+  </div>
+  <{/if}>
+</div></div></div>
+
+
+
+

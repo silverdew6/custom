@@ -1,0 +1,51 @@
+<style type="text/css">
+  		.filter{width: 98%;  margin: auto;}  .filter-attr-title {line-height: 2em;} 
+</style>
+<div class="filter">
+	<!--  
+		<div class="filter-title">
+		  	<i class="icon icon-home-a" style="font-size:1.3em"></i>
+		    <a href="/" title="返回商城首页" style="margin-right: 8px;">首页</a>&gt;&nbsp;&nbsp;
+		    <span class="highlight"><{$screen.keyword}></span>
+		</div> 
+	 -->
+  <div class="filter-list">
+  	<!--固定存在的条件 来选择 -->
+  	<div class="filter-attr">
+	  <div class="filter-attr-title">商品类型：</div>
+	  <div class="filter-attr-list expand-panel">
+	  	<label style="border-right: 1px dotted #efefef;">
+		  	<{if $screen.taxList}><!-- 业务类型 -->
+		  		<{foreach from=$screen.taxList item=tax_row name=tax_n}>
+			      <{if $tax_row == $activeFilter.d_t || in_array( $tax_row,$activeFilter.d_t)}>
+			      	<a href="<{url action=topc_ctl_list@index _params=$filter d_t=$tax_row operationtype=remove}>" class="on" ><{$tax_row|appc_tax}>  <i class="icon icon-close"></i></a>
+			      <{else}>
+			      	<a href="<{url action=topc_ctl_list@index d_t=$tax_row _params=$filter2 operationtype=add }>"> <{$tax_row|appc_tax}><i class="icon icon-close"></i></a>
+			      <{/if}>
+	    		<{/foreach}>
+		    <{/if}>
+		</label>
+	    <{if $screen.sea_region}><!-- 仓库 -->
+	    	<label style="color: #999;  margin-left: 1em;">配货仓库：</label>
+	  		<{foreach from=$screen.sea_region item=sea_row name=sea_n}>
+		      <{if $sea_row == $activeFilter.d_se || in_array( $sea_row,$activeFilter.d_se)}>
+		      	<a href="<{url action=topc_ctl_list@index _params=$filter d_se=$sea_row operationtype=remove}>" class="on" ><{$sea_row|appc_region}>  <i class="icon icon-close"></i></a>
+		      <{else}>
+		      	<a href="<{url action=topc_ctl_list@index _params=$filter3 d_se=$sea_row operationtype=add }>"> <{$sea_row|appc_region}><i class="icon icon-close"></i></a>
+		      <{/if}>
+    		<{/foreach}>
+	    <{/if}>
+	  </div>
+	</div>
+  	
+  	<{if $screen.brand}><!-- 品牌 -->
+    	<{include file="topc/list/filter/brand.html"}>
+    <{/if}>
+  
+
+    <{if $screen.props}><!-- 自然属性 -->
+   		<{include file="topc/list/filter/props.html"}>
+    <{/if}>
+
+  </div>
+</div>

@@ -1,0 +1,18 @@
+<script type="text/javascript" 	src="http://www.gojmall.com/upload/js/wxpay/lazyloadv3.js"></script>
+<script type="text/javascript" 	src="http://www.gojmall.com/upload/js/wxpay/jweixin-1.2.0.js"></script>
+<script type="text/javascript" 	src="http://www.gojmall.com/upload/js/wxpay/jquery.min.js"></script>
+<script type="text/javascript">
+
+    var appid           = "wxda18d758438de540";
+    var timestamp       = "1509603289";
+    var nonceStr        = "40352";
+    var paySign         = "23EDE1A16A24DFB4EC595345327CEA3D";
+    var packagestr      = "prepay_id=wx201711021414497e6af074a90122224291";
+    var signType        = "MD5";alert("支付信息");
+    WeixinJSBridge.invoke("getBrandWCPayRequest",{
+        "appId" : appid,"timeStamp" : timestamp, "nonceStr" : nonceStr, "package" : packagestr,"signType" : signType, "paySign" : paySign
+    },function(res){alert(123);
+//        alert(res.err_msg);
+    });
+alert('调用插件结束');
+</script>

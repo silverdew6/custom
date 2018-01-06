@@ -1,0 +1,60 @@
+<style type="text/css">
+	.itemslist {}
+	.itemslist li{float: left;width: 220px; height:330px;margin: 0px 9px;box-shadow: 0px 0px 2px #666666; margin-bottom: 5px;position: relative; }
+	.item .pic {margin: 0 auto; margin-top:3px;}
+	.item .name {text-indent: 10px;width: 95%; margin: 0 auto; }
+	.item .price {text-indent: 16px; }  
+	.bread-nav {    margin: 0;}  
+	#main .wrap-lg .row {padding:0px;}
+	
+	.itemslist li:hover {box-shadow: 0px 0px 5px #731585; }
+	.itemslist li:hover  .item .name{background: #731585;  color: #FFF; width: 100%;}
+	
+	/*** 2016-12-14 直邮/保税/完税标签样式 start  已经在index.css 样式中定义了 ***/
+	.jmalltax_1:after{border-top: solid 7px #FFF; border-right: solid 5px #e345e4; border-left: 0; border-bottom: 0; }
+	.jmalltax_2:after{border-top: solid 7px #FFF; border-right: solid 5px #f3a20b; border-left: 0; border-bottom: 0;}
+	.jmalltax_3:after{border-top: solid 7px #FFF; border-right: solid 5px #f12424; border-left: 0; border-bottom: 0;}
+	/*** 2016-12-14 直邮/保税/完税标签样式 end***/
+</style>
+
+<div class="row mod-bottom">
+  <div class="col-lg-16 box">
+    <{if $screen.shopInfo}>
+      <!--根据搜索条件推荐的店铺信息-->
+      <{include file="topc/list/shop.html"}>
+    <{/if}>
+    <!--头部面包屑-->
+    <{include file="topc/common/mbx_nav_tips.html"}>
+
+    <!--筛选条件-->
+    <div class="mod-bottom">
+      <{include file="topc/list/filter.html"}>
+    </div>
+
+    <!--排序-->
+    <div class="mod-bottom">
+      <{include file="topc/list/sortbar.html"}>
+    </div>
+
+    <!--显示搜索商品-->
+    <div class="mod-bottom">
+      <{include file="topc/list/item.html"}>
+    </div>
+    <{pagers data=$pagers}>
+  </div>
+</div>
+<!----搜索关键字显示 ---->
+<{if $screen}>
+	<script type="text/javascript">
+		var domm = $("#goods_search_input");
+		var keyword = '<{$screen.keyword}>';
+		var keyword_cid  = '<{$screen.cat_id|default:0}>';
+		if("undefined" != typeof(domm) &&  domm){
+			if(keyword_cid && parseInt(keyword_cid) >0 ){
+				$("#goods_search .icon-search").html('<i style="font-size: 12px;float: right;margin-top: 0.6em;">商品类别</i>');
+				domm.attr("style",'background: #ecefc8;text-indent: 80px;')
+			}domm.val(keyword);
+		}
+	</script>
+<{/if}>
+

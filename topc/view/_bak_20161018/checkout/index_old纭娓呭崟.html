@@ -1,0 +1,148 @@
+ <thead>
+                      <tr>
+                      	<td colspan="9" style="border-bottom: 1px solid #DDD;"><{$cart.cartCount.tax|appc_tax}>&nbsp;(<{$cart.cartCount.sea_region|appc_region}>)</td> 
+					  </tr>
+                  	</thead>
+                    <tbody>
+                      <tr>
+                        <td>商品</td>
+                        <td>标题 </td>		
+                        <td><div class="price">总价</div></td>
+                        <td>单价 </td>
+                        <td>数量 </td>
+						<td><span>增值税</span></td>
+						<!--<td><span>消费税</span></td>-->
+                        <td class="td-last">库存</td>
+                      </tr>
+                      <!--遍历所有商品 start-->
+                      <{foreach from=$cart.object item=goods name=checkoutItemList}>
+                      <{if $goods.obj_type=='item'}>
+					  <input type="hidden" id="select_region<{$shop_id}>" value="<{$goods.sea_region}>">
+					  <input type="hidden" id="select_tax<{$shop_id}>" value="<{$goods.tax}>">
+                      <tr>
+                        <td >
+                          <div class="table-goods-pic"><a href="<{url action=topc_ctl_item@index item_id=$goods.item_id}>">
+                              <{if $goods.image_default_id}>
+                              <img width="64" height="64" src="<{$goods.image_default_id|storager:t}>"></a></div>
+                              <{else}>
+                              <img width="64" height="64" src="<{$defaultImageId.T.default_image}>">
+                              <{/if}>
+                        </td>
+                        <td>
+                          <a href="<{url action=topc_ctl_item@index item_id=$goods.item_id}>">
+                            <{if $goods.activityDetail}><span class="item-describe-tag">[<{$goods.activityDetail.activity_info.activity_tag}>]</span><{/if}><{$goods.title}> </br><{$goods.spec_info}>
+                          </a>
+                        </td>
+						<input type='hidden' name="tax_rate[]" value="<{$goods.tax_rate}>"/>
+						<input type='hidden' name="reg_rate[]" value="<{$goods.reg_rate}>"/>
+						<input type='hidden' name="price[]" value="<{$goods.price.price}>"/>
+						<input type='hidden' name="quantity[]" value="<{$goods.quantity}>"/>
+                        <td>
+                          <div class="price"><{$goods.price.price+$goods.price.tax_rate_price+$goods.price.reg_rate_price|cur}></div>
+                        </td>
+                        <td>
+                          ×<{$goods.price.price|cur}>
+                        </td>
+                        <td>
+                          ×<{$goods.quantity}>
+                        </td>
+						 <td>
+						 <span  data-name="post_fee_tax_rate_price[]"><{$goods.price.tax_rate_price|cur}></span>
+                        </td>
+						<!-- <td>
+						 <span  data-name="post_fee_reg_rate_price[]"><{$goods.price.reg_rate_price|cur}></span>
+                        </td>-->
+                        <td class="td-last">
+                          <{if $goods.store >0}> 有货  <{else}>  缺货  <{/if}>
+                        </td>
+                      </tr>
+                      <{/if}>
+                      <{if $goods.obj_type=='package'}>
+                      <tr>
+                        <td colspan="2">
+                          <span class="item-describe-tag">组合促销</span>
+                          <a href="<{url action=topc_ctl_item@index item_id=$goods.item_id}>">
+                            <{if $goods.activityDetail}><span class="item-describe-tag">[<{$goods.activityDetail.activity_info.activity_tag}>]</span><{/if}><{$goods.title}> </br><{$goods.spec_info}>
+                          </a>
+                        </td>
+                        <td>
+                          <div class="price"><{$goods.price.price|cur}></div>
+                        </td>
+                        <td>
+                          ×<{$goods.quantity}>
+                        </td>
+                        <td class="td-last">
+                          <{if $goods.store >0}>
+                          有货
+                          <{else}>
+                          缺货
+                          <{/if}>
+                        </td>
+                      </tr>
+                        <!-- 组合促销的商品-start -->
+                        <{foreach from=$goods.skuList item=skuList}>
+                        <tr>
+                          <td>
+                          </td>
+                          <td>
+                            <a href="<{url action=topc_ctl_item@index item_id=$skuList.item_id}>">
+                              <{$skuList.title}> </br><{$skuList.spec_info}>
+                            </a>
+                          </td>
+                          <td>
+                            <div class="price"><{$skuList.price.price|cur}>&nbsp;(<del><{$skuList.price.old_price|cur}></del>)</div>
+                          </td>
+                          <td>
+                          </td>
+                          <td class="td-last">
+                          </td>
+                        </tr>
+                        <{/foreach}>
+                      <{/if}>
+                      <{/foreach}>
+					  <!--遍历所有商品 END-->
+                      <tr>
+                      	<td colspan="7" class="tr-coupon-info" style="padding: 0px;">
+                      		 <!-- 优惠券 -->
+								            <div class="order-confirm-item coupon-item">
+								              <div class="order-confirm-item-bd" style="padding：0px;">
+								               <!-- 未选择优惠券条件判断开始 -->
+                               <div class="coupon-choose" data-shopid="<{$shop_id}>">
+								                  <i class="icon-add"></i>
+								                  使用优惠券
+								                </div>
+								                <!-- 未选择优惠券条件判断结束 -->
+																<!-- 已选择优惠券条件判断开始 -->
+			                          <div class="coupon-checked" style="display:none;">
+			                            <span class="checked-value"></span>
+			                            <input type="hidden" class="checked-coupon-id" value>
+			                            <button type="button" class="btn btn-cancel btn-sm coupon-change" data-shopid="<{$shop_id}>"><span><span>修改</span></span></button>
+			                          </div>
+			                          <!-- 已选择优惠券条件判断结束 -->
+
+								              </div>
+								            </div>
+							          		<!-- 订单备注 -->
+							              <div class="order-confirm-item">
+							                <div class="order-confirm-item-bd" style="padding: 0px;">订单备注
+							                  <input class="x-input col-8" name="mark[<{$shop_id}>]" maxlength="85" id="" placeholder="选填：本次交易的补充说明（所填内容建议已经和商家达成一致意见，85字以内）">
+							                  <span><b class="mark_count">0</b>/85</span>
+							                </div>
+							              </div>
+                      	</td>
+                      </tr>
+
+                      <tr>
+                        <td colspan="6" class="tr-last" style="font-size: 12px;">总重量：<span class="price"><{$cart.cartCount.total_weight}>kg </span>消费税：<span class="price" data-name="xiaofei[<{$cart.shop_id}>]"><{$cart.cartCount.tax_rate_price|cur}></span>
+						增值税：<span class="price" data-name="zengzhi[<{$cart.shop_id}>]">
+						<{$cart.cartCount.reg_rate_price|cur}>
+						</span>
+						店铺总计：<span class="price" data-name="zongji[<{$cart.shop_id}>]">
+					
+					</span>
+						（含运费：<span class="price" data-name="price[<{$cart.shop_id}>]">￥0</span>）<input type="hidden" name="zongji[<{$cart.shop_id}>]" value="<{$cart.cartCount.total_fee}>">
+						<input type="hidden" name="jinkou[<{$cart.shop_id}>]" value="<{$cart.cartCount.tax_price}>">
+						<input type="hidden" name="tax[<{$cart.shop_id}>]" value="<{$cart.cartCount.tax}>">
+						</td>
+                      </tr>
+                    </tbody>

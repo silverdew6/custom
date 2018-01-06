@@ -1,0 +1,20 @@
+<services>
+    <service id="desktop_finder.sysopen_mdl_keys">
+        <class>sysopen_finder_keys</class>
+    </service>
+    <service id="desktop_finder.sysshop_mdl_shop_pay">
+        <class>sysopen_finder_pay</class>
+    </service>
+    <service id="desktop_finder.sysshop_mdl_shop_log">
+        <class>sysopen_finder_log</class>
+    </service>
+    <service id="desktop_finder.sysshop_mdl_shop_import">
+        <class>sysopen_finder_import</class>
+    </service>
+	<service id="desktop_finder.sysshop_mdl_shop_sign">
+        <class>sysopen_finder_sign</class>
+    </service>
+	<service id="desktop_finder.sysshop_mdl_shop_other">
+        <class>sysopen_finder_ebp</class>
+    </service>
+</services>

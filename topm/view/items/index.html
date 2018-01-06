@@ -1,0 +1,802 @@
+<style type="text/css">
+	@media screen and (width: 320px){
+		.buy-bottom2 a:first-child{font-size: 1.1em;}.buy-bottom2 a:last-child{font-size: 1.1em;}.buy-bottom2 a{padding: 8px;}.newlist-hd .newlist-hd-div a span{font-size: 1em;line-height: 3em;}
+	}
+	@media screen and (width: 375px){
+		.buy-bottom2 a{padding: 11px 14px;}
+	}
+	@media screen and (width: 360px){
+		.buy-bottom2 a:first-child{font-size: 1.1em;}.buy-bottom2 a:last-child{font-size: 1.1em;}.buy-bottom2 a{padding: 11px 14px;}
+	}
+	.btn > span{
+		padding-left: 0;
+		border:none;
+	}
+	.collect-btnlay{display: inline-block;height: 40px;width: 40px;vertical-align: top;color: #A4A4A4;position: relative;top: -4px; }
+	.collect-btnlay .ico {display: block;width: 40px;height: 32px;}
+	.selectcart-btn{ display: inline-block;width:40px;height: 40px; background: url(../images/index/ico.png) no-repeat 0px -120px;background-size: 300px auto;vertical-align: top!important;position: relative;margin-top:5px; }
+	.selectcart-btn .shownumber {position: absolute;top: -3px;right:0;font-size: 12px;width: 17px;height: 16px;background: red;color: #fff;line-height: 15px;border-radius: 50%;text-align: center;}
+</style>
+
+
+<div class="prd-detail shop">
+  <!-- 顶部切换 start -->	
+  <header>
+    <div class="newlist-hd">
+      <div class="newlist-hd-div" onclick="history.back()" style="width: 14%;height: 100%;">
+      	<a href="##"><span class="backto icon-back "></span></a>
+      </div>
+      <div class="newlist-hd-div active-div"><a href="#top"><span class="active-span">基本信息</span></a></div>
+      <div class="newlist-hd-div"><a href="#product-all"><span>商品详情</span></a></div>
+      <div class="newlist-hd-div"><a href="#product-comment"><span>商品评价</span></a></div>
+      <div class="menu1 newlist-hd-div" style="width: 14%;">
+      	<a href="<{url action=topm_ctl_default@index}>"><span class="btn icon-home" style="font-size: 1.6em;line-height: 2em;padding-left: 16px;"></span></a>
+      </div>
+    </div>
+  </header>
+
+  
+  <div class="main" id="main" style="margin-top: 3.0em;background: #FFF;">
+  	<a name="top" id="top"></a>
+    <!-- slider图片切换 -->
+    <{include file="topm/items/pic.html"}>
+    <div class="price-area">
+      	<div class="price-info">
+	        <div class="price">
+	          <!-- 活动价，单品活动促销 -->
+	          <{if $activityDetail.activity_price}>
+	         	 <span class="sale action-update-price"><{$activityDetail.activity_price|cur}></span><br>
+	          <{else}>
+	          	 <span class="sale action-update-price"><{$item.price|cur}></span><br>
+	          <{/if}>
+	          
+	          <!-- 保税商品和税率  -->
+	          <div class="product-rate">
+	          	<i class="tax2">
+	          		<i class="icon icon-pin" style="font-size: 1.1em;margin-right: 5px;"></i><{$item.tax|appc_tax}>商品</i>
+			        <{if $item.tax eq '2'}>
+		          		<br/>综合税率：<i class="number"><{$item.zonghe_rate*100}>%</i>
+		          		<span><a href="javascript:void(0);" title="点击查看税">（税：<i class="number"><{$item.zonghe_rate_money|cur}></i> ）</a></span>
+			        <{else}>－ 免税商品  <{/if}>
+	          </div>
+	        </div>
+
+			<!-- 由于开始没有销量，暂时屏蔽2016/1/11 lcd
+	        <div class="purchase">
+	          <i><{$item.sold_quantity|default:'0'}></i>人购买
+	        </div>-->
+	        
+			<div class="purchase"><!-- 业务区域-->
+	        	<i><span class="tax-flag"><i class="icon icon-navigate-a" style="font-size: 1.3em;"></i> <{$item.name_region}></span></i><br/>
+	        	<!-- 原产地 -->
+	          	<{if $item.area_name}>
+		          	<span class="comefrom-area">
+		          		原产地：<i class="icon icon-location" style="font-size: 1.3em;margin-right: 5px;color: #6c1681;"></i>
+		          		<{$item.area_name}><{if $item.area_img }><img width="29" height="17" src="<{$item.area_img}>"><{/if}>
+		          	</span>
+	          	<{/if}>
+	        </div>
+      	</div>
+      	<div class="goods-info"><!-- 标题 -->
+	        <div class="goods-tit">
+			 	<{if $activityDetail}><span class="activity-tag"><{$activityDetail.activity_info.activity_tag}></span><{/if}><{$item.title}>
+	        </div>
+      	</div>
+    </div>
+    <!-- 引导栏目 end-->
+    <div class="otherinfo" id="product-comment">
+  		<span><i class="icon icon-collect" ></i><font color="red"><{$item.collect_count|default:0}></font>人收藏</span>
+    	<span><i class="icon icon-baoyou" ></i>满额包邮</span>
+    	<span><i class="icon icon-zhengping" ></i>正品行货</span>
+  	</div>
+  	<!-- 引导栏目 end-->
+
+    <!-- 促销区 -->
+    <{if $promotionDetail}>
+    <div class="goods-promotion">
+      <section class="promotion-list">
+        <div class="list-title">
+          <div>
+            <div class="promot-thumb">
+              <{foreach from=$promotionDetail item=promotionTag}>
+              <button type="button" class="ui-btn ui-btn-negative">
+                  <{$promotionTag.promotion_tag}>
+              </button>
+              <{/foreach}>
+              <span><{$promotion_count}>个</span>
+            </div>
+            <div class="promot-title">促销优惠</div>
+          </div>
+          <i id="icon_animation" class="icon icon-down"></i>
+        </div>
+        <div class="list-details">
+          <ul>
+            <{foreach from=$promotionDetail item=promotionDetail}>
+            <li>
+              <div>
+                <button type="button" class="ui-btn ui-btn-negative"><{$promotionDetail.promotion_tag}></button>
+                <a href="<{url action=topm_ctl_promotion@getPromotionItem promotion_id=$promotionDetail.promotion_id}>">
+                  <{$promotionDetail.promotion_name}>
+                </a>
+              </div>
+              <i class="icon icon-forward"></i>
+            </li>
+            <{/foreach}>
+          </ul>
+        </div>
+      </section>
+
+    </div>
+    <{/if}>
+    <form action="<{url action=topm_ctl_cart@add mode=fastbuy}>" method="post" id="form_items">
+      <!-- 活动优惠券区域 start -->
+      <div id="coupon">
+      	<p class="coupon-p" style="box-shadow: 0px -1px 2px #999;"><span>产品优惠及促销</span></p>
+      	
+      	<div class="coupon-b" style="border-bottom: 1px solid #ededed;">
+      		<div class="coupon-b-1" style="padding-top: 12px;"><span class="coupom-s">满免邮</span></div>
+      		<div class="coupon-b-2"><{if $zeropostfee_desc}><{$zeropostfee_desc}><{/if}></div>
+      	</div>
+      	<!-- 优惠券券领取 -->
+      	<{if $couponDetail}>
+	      	<div class="coupon-m">
+	      		<div class="coupon-m-1"><span class="coupom-s">优惠券</span></div>
+	      		<div class="coupon-m-2">
+	      			当前商品可以参与 
+	      			<{foreach from=$couponDetail item=coupoo key=ivk}>
+	      				<{if $coupoo.coupon_status eq 'agree'}><span class="cpu-quan"><{$coupoo.deduct_money|cur}>优惠券 (<i><{$coupoo.coupon_desc|cut:25}></i>)</span><{/if}>
+	      			<{/foreach}> 等优惠促销活动……
+	      		</div>
+	      		<div class="coupon-m-3">
+	      			<a href="javascript:void(0);" style="display: block;">
+	      				<i class="ico icon-arrow-right" style="font-size: 1.3em;color: #cecece;"></i>
+	      			</a>
+	      		</div>
+	      	</div>
+      	<{/if}>
+      	
+      	<div class="coupon-b" style="border-bottom: 1px solid #ededed;">
+      		<div class="coupon-b-1" style="padding-top: 12px;"><span class="coupom-s">返积分</span></div>
+      		<div class="coupon-b-2">购买此商品可获得 <i class="hight"><{$item.getpoint_count|default:0}></i> 积分。</div>
+      	</div>
+      </div>
+      <!-- 活动优惠券区域 end -->
+      	
+      <!-- slider商品规格 -->
+      <!-- <div class="comment-area detail">
+        <div class="hd">
+          <a href="comment.html"> 买家评论(<i class="n">15789</i>条)
+          <span class="icon icon-forward"></span>
+          </a>
+        </div>
+      	</div>
+    	</div> -->
+      <!-- 
+     	<div class="pic-area detail">
+        <div class="hd">
+          <a href="<{url action=topm_ctl_item@itemPic item_id=$item.item_id}>">  商品描述 <span class="icon icon-forward"></span> </a>
+        </div>
+      -->
+      
+      <!-- 展示店铺区域 start -->
+      <{if $shop}>
+	      <div class="shop-s">
+	      	<div style="border: 1px solid #DDD;padding: 5px 2px;  border-radius: 5px;">
+		      	<div class="shop-s1">
+		      		<div class="img-box">
+		      			<img src="./images/logo.png"/>
+		      		</div>
+		      		<div class="shop-txt">
+		      			<ul>
+		      				<li>
+		      					<div style="font-size:1.15em;"><b> <{$shop.shop_name}> </b></div>
+		      					<div><span style="border:1px solid #c53689;padding:2px;color:#fff;background:#c53689;border-radius: 3px;"><{$shop.shoptype}></span></div>
+		      				</li>
+		      				<li><{$shop.shop_descript}></li>
+		      			</ul>
+		      		</div>
+		      	</div>
+		      	<ul class="shop-s2">
+		      		<li>描述相符
+		      			<span class="red-1">5.0</span> <i class="ico icon-arrow-up-a red-2"></i>
+		      		</li>
+		      		<li>服务态度
+		      			<span class="blue-1">4.8</span> <i class="ico icon-remove blue-2"></i>
+		      		</li>
+		      		<li>发货速度
+		      			<span class="blue-1">4.8</span> <i class="ico icon-remove blue-2"></i>
+		      		</li>
+		      	</ul>
+		      	<div class="shop-s3">
+		  			<a href="javascript:void(0);">
+		  				<i class="ico icon-bag"></i> <span>全部商品</span>
+		  			</a>
+		  			<a href="javascript:void(0);">
+		  				<i class="ico icon-shop-flash"></i> <span>进入店铺</span>
+		  			</a>
+		      	</div>
+	      	</div>
+	      </div>
+      <{/if}>
+      <!-- 店铺区域 end -->
+      
+      <!-- 当前商品的优选的评论区域（只取其中一个） start -->
+      <div class="comment">
+      	<div class="comment-t">
+      		<div class="comment-t-1"><i class="icon icon-chatbubble-b"></i>&nbsp;&nbsp;小章章们说<span style="padding-left:7px;padding-right:1px;">100%</span>好评</div>
+      		<div class="comment-t-2">
+      			<a href="javascript:void(0);" style="color:#A5A5A5;">
+      				<span><{$itemComment.rate_good_count|default:0}></span>人评价<i class="ico  icon-arrow-right" style="font-size: 1em;padding-left: 3px;"></i>
+      			</a>
+      		</div>
+      	</div>
+      	<!--精选择一条好评显示在详情页面 Start -->
+		<{if ($itemComment.rate_good_count gt 0 && $itemComment.goodcomment) }>
+	      	<div class="comment-b">
+	      		<div class="comment-b-s">
+	      			<div class="comment-b-s1">
+	      				<div class="portrait"><img src="./images/2017-01-05_140851.png"/><a href="javascript:void(0);">Aaron</a></div>
+	      				<div class="mark-1"><img src="./images/2017-01-05_141002.png" /></div>
+	      			</div>
+	      			<p class="comment-b-s2"> 伊思能量10精华原液WR这个系列的精华还蛮多人用的， 注重紧致肌肤效果的可以用WR到Q10一起，效果更好！ </p>
+	      			<ul class="comment-b-s3">
+	      				<li><img src="./images/2017-01-05_172619.png"/> </li>
+	      				<li><img src="./images/2017-01-05_172619.png"/> </li>
+	      				<li><img src="./images/2017-01-05_172619.png"/> </li>
+	      			</ul>
+	      			<div class="comment-b-s4"><span>2017-01-05</span> <i class="icon icon-heart-a"></i> <span>32</span></div>
+	      		</div>
+	      	 </div>
+	    <{else}> <!--默认没有评论-->
+	    	<div class="empty-comment">宝贝还还没收任何评论 &nbsp;<i class="icon icon-chatbubble-a"></i></div>
+	    <{/if}>
+	    <!--精选择一条好评显示在详情页面 END-->
+      </div>      
+      <!-- 小评论区域 start -->
+      
+      <!-- 看了又看区域 start -->
+      <h3 class="look-more">
+      	<i class="icon icon-pulse" style="color: #e015aa;font-size: 1.5em;"></i>&nbsp;&nbsp; 
+      	看了又看 
+      	<label style="float:right;margin-right:1em;">
+      		所属：<a href="<{url action=topm_ctl_list@index cat_id=$secondSearchList.cat_id}>"><{$secondSearchList.cat_name}></a>
+      		<i class="ico  icon-arrow-right" style="font-size: 1em;padding-left: 3px;"></i>
+      	</label>
+      </h3>
+      <div class="swiper-container sec-wrap1" style="border-bottom: 1em solid #F0EFF5;">
+		 <ul class="swiper-wrapper">
+		 	<!-- 看了又看的商品列表 -->
+		 	<{foreach from=$secondSearchList.list item=secitem key=seit}>
+			 	<li class="swiper-slide">
+			 		<a href="<{url action=topm_ctl_item@index item_id=$secitem.item_id}>">
+			 			<img src="<{$secitem.image_default_id|default:$defaultImageId.S.default_image|storager:t}>" /></a>
+			 		<a href="<{url action=topm_ctl_item@index item_id=$secitem.item_id}>" title="<{$secitem.title}>"><h4><{$secitem.title|cut:20}></h4></a>
+			 		<p><{$secitem.price|cur}></p>
+			 	</li>
+		 	<{/foreach}>
+		 </ul>
+      </div>
+      <!-- 看了又看区域 end -->
+      
+      <!-- 拖动查看更多 start-->
+      <div class="look-all">
+		<a name="product-all" id="product-all"></a>
+      	<div><label style="">
+      		<i class="icon icon-chevron-up" style="position: relative;  top: -6px;  left:17px; font-size: 1.5em;"></i>
+      		<i class="icon   icon-chevron-down" style="position: relative;  bottom:-6px;  left: 0px; font-size: 1.5em;"></i></label>
+      		 &nbsp; 上下滑动，切换展示
+      	</div>
+      	<div id="target_feijie_line" style="border-bottom: 1px solid #DDD;" ></div>
+      </div>
+      <!-- 拖动查看更多 end-->
+      <div class="look-loading">正在加载中....</div>
+      <!-- 商品内容区域 start-->
+      <div class="content-more" style="display: none;">
+		  <!-- 商品说明/服务说明 start -->
+		  <div class="switchover">
+			<ul class="switchover-ul">
+				<li class="active-li"><a href="javascript:void(0);" class="active-s" data-cid="111">商品详细说明</a></li>
+				<li><a href="javascript:void(0);" data-cid="222">服务说明/F&Q</a></li>
+			</ul>
+		  </div>
+		  <!-- 商品说明/服务说明 end -->
+		  
+		  <!-- 商品页面描述信息start -->
+		  <div class="switchover_goods_desc" data-cid="111">
+			<div class="goods_params">
+				<table>
+					<tr><td>商品编号：</td><td><{$item.bn|default:'暂无编号'}></td></tr>
+					<tr><td>上架时间：</td><td><{$item.list_time|date:'Y-m-d'}></td></tr>
+					<tr><td>商品毛重：</td><td><{$item.weight|default:'0'}> kg</td></tr>
+					<tr><td>所属品牌：</td><td><{$item.brand_name|default:'未知'}> <{if $item.brand_alias}> －（<{$item.brand_alias|default:''}>）<{/if}> </td></tr>
+				</table>
+			</div>
+			<div class="desc_content">
+				<div class="bd"><{$item.wap_desc|default:'<p style="padding:15px 30px;">这家伙很懒，什么都没有</p>'}></div>
+			</div>
+		  </div>
+		  <!-- 商品页面描述信息 end -->
+		
+		  <!-- 服务说明 start -->
+		  <div class="switchover_goods_desc switchover_goods_desc-1" data-cid="222" style="display: none;" data-cid="222">
+				<section id="service-question" class="service" style="display: block;">
+				  <h2>精茂商城如何保证网站所售商品均为正品？</h2>
+				  <p>精茂商城所有商品均由正规渠道进货，全程政府监管，保证100%原装正品。我们有严格的供应商选择和监管系统，只有符合SFHT筛选规则的供应商才能成为我们的合作供货方。例如：针对供应商，我们会考核其公司年度报税记录，其它交易往来记录，相关货源进货凭证等文档信息。在下单前，我们还会有专人进行货源地实地考察，以确保货物品质。所以，在100%正品的精茂商城网站购物，会给您带来高性价比和无后顾之忧的超值体验。</p >
+				  <h2>保税仓、海外仓发货和海外直邮有什么区别？</h2>
+				  <p>精茂商城的直采自营模式对比传统的海淘模式，其优势在于由保税仓在国内设仓，在物流到货上有很大的时效优势，一般情况下3~5天便可到货；海外仓发货，一般情况下6~10天即可到货；海外直邮商品到货时间为15天以上。</p >
+				  <h2>下单后什么时候发货？大概多久可以收到商品？</h2>
+				  <p>通常情况下，您的订单将在24小时内完成订单审核并打包出库，转由海关清关，通常需要2-3工作日的时间完成。物流合计时间请参考02条所示的物流时效。</p >
+				  <h2>所售商品经由海关均会收取关税吗？</h2>
+				  <p>依据《中华人民共和国进境物品归类表》的规定，以商品实际销售价格作为完税价格，参照个人物品行邮税税率征收进境物品进口税。海外进口商品需要依法向海关申报及纳税，但精茂商城已为您缴纳了商品税费，您享受的一定是高性价比的购物体验。</p >
+				</section>
+		  </div>
+		  <!-- 服务说明 end -->
+      </div>
+      <!-- 商品内容区域 end-->
+      
+      <!-- 购买按钮区域 start 新版-->
+      <div class="buy-bottom">
+      	<div class="buy-bottom1">
+      		<input type="hidden" name="item[sku_id]" class="action-update-item" value="<{$item.default_sku_id}>" />
+	        <{if $nologin!=1}>
+		        <a href="<{url action=topm_ctl_passport@signin next_page=$next_page}>" class="save collect-btnlay"><i class="ico icon-star-a"></i>收藏 </a>
+	        <{else}>
+		        <a href="<{url action=topm_ctl_collect@ajaxFav}>" class="save collect-btnlay" data-ajax-data="item_id=<{$item.item_id}>" rel="_request" data-ajax-type="post" >
+		            <i class="ico icon-star-a"></i>收藏  </a>
+	        <{/if}>
+      		<a href="<{url action=topm_ctl_cart@index}>" class="btn selectcart-btn"> <span class="shownumber">0</span> </a>
+      	</div>
+      	<div class="buy-bottom2">
+      		<!--<a href="<{url action=topm_ctl_passport@signin next_page=$next_page}>" class="buy-now<{if !$item.valid}> hide<{/if}>">立即购买</a>
+      		<a href="<{url action=topm_ctl_cart@add}>" class="add-cart action-addtocart<{if !$item.valid}> hide<{/if}>" rel="_request"><i class="ico icon-cart-a"></i>加入购物车</a>-->
+      		
+      		<!--特殊商品, 配置业务类型和仓库数据不完整的 都是不销售状态， by xch-->
+	        <{if !$activityDetail && ($item.item_id eq '6388' or $item.item_id eq '6389')}>
+		    	<a href="javascript:void(0)" class="ui-btn buy-now ui-btn-warning" disbled>  暂不销售  </a>
+		    <{else}>
+		    	<{if ($item.tax>0 &&  $item.sea_region>0)}>
+			        <{if $item.realStore > 0}>
+			          <{if $nologin!=1}>
+			          	<a href="<{url action=topm_ctl_passport@signin next_page=$next_page}>" class="buy-now <{if !$item.valid}> hide<{/if}>">立即购买 </a>
+			          	<a href="<{url action=topm_ctl_passport@signin next_page=$next_page}>" class="add-cart<{if !$item.valid}> hide<{/if}>"><i class="ico icon-cart-a"></i>加入购物车 </a>
+			          <{else}>
+			         	<a href="javascript:void(0);" class="buy-now action-fastbuy<{if !$item.valid}> hide<{/if}>" rel="_request">立即购买 </a>
+			          	<a href="<{url action=topm_ctl_cart@add}>" class="add-cart action-addtocart<{if !$item.valid}> hide<{/if}>" rel="_request"><i class="ico icon-cart-a"></i>加入购物车</a>
+			          <{/if}>
+			        <{/if}>
+		        	<a href="javascript:void(0);" class="buy-now ui-btn-warning action-open-dialog <{if !$item.valid || $item.realStore > 0}> hide <{/if}>">到货通知 </a>
+		        <{else}>
+		        	<a href="javascript:void(0)" class="buy-now ui-btn-warning" disbled style="background: #eee;color: #ff6f06;">暂不销售 </a>
+		        <{/if}>
+		    <{/if}>
+      	</div>
+      </div>
+      <!-- 购买按钮区域 end -->
+      
+      <!-- 弹出确认框 start-->
+	  <!-- 展示加入到购物车的弹层选择   Start -->
+      <div class="buy-panel">
+        <div class="in-panel" style="bottom: 0px;border-radius: 5px;border:1px solid #efefef;border-top: 3px solid #cc69de;box-shadow: 0 0 2px 0 #f33cf3;">
+          <div class="close-btn-wrap">
+            <span class="close-btn"><i class="icon icon-close" style="cursor: pointer;"></i></span>
+          </div>
+          <!-- 商品标题 价格 -->
+          <div class="product1">
+          	<div class="product1-img">
+          		<img src="<{$item.image_default_id|storager:t}>">
+          	</div>
+          	<div class="product1-txt">
+					<p class="ui-name" style="padding:0 4% 0 0;"> <{$item.title}></p>
+					<{if $activityDetail.activity_price}>
+						<p class="action-update-price" style="color: #FE2E2C;"><{$activityDetail.activity_price|cur}></p>
+					<{else}>
+						<p class="action-update-price" style="color: #FE2E2C;"><{$item.price|cur}></p>
+					<{/if}>
+          	</div>
+          </div>
+          <!-- 规格显示 -->
+          <{include file="topm/items/itemspec.html"}>
+		  <!-- 购物数量确认 -->
+          <div class="buy-amount">
+            <span class="amount-tit">购买数量：</span>
+            <span class="number-increase-decrease">
+              <a href="javascript:void(0);" class="btn action-decrease">-</a>
+              <input type="number" name="item[quantity]" min="1" max="<{if $activityDetail.activity_info.buy_limit}><{$activityDetail.activity_info.buy_limit}><{else}><{$item.realStore}><{/if}>" value="1" class="action-quantity-input">
+              <a href="javascript:void(0);" class="btn action-increase">+</a>
+            </span>
+            <span class="number-stockout hide">库存：<i class="num action-update-quantity"><{$item.storealStorere}></i></span>
+          </div>
+          <div id="go-cart-layer" style="display:block;">
+          	<a href="###" class="go-add-into" rel="_request">确定</a>
+          </div>
+        </div>
+      </div>
+      <!-- 弹出确认框 end-->
+
+	  <!-- 展示  END-->
+	  
+      <div id="dialog" style="display:none;">
+        <div class="agreement">
+          <div >该货品暂时缺货，请在下面输入您的邮箱地址，当我们有现货供应时，我们会发送邮件通知您！</div>
+          <div><ul>
+              <li class="form-row u-line">
+                <label class="form-label"><em>*</em>邮箱地址</label>
+                <input type="text"  name="email"  value="" placeholder="邮箱地址" >
+              </li>
+            </ul></div>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script>
+  $('#dialog').dialog({
+      autoOpen: false,
+      closeBtn: false,
+      title:'到货通知',
+      buttons: {
+          '取消': function(){
+              this.close();
+          },
+          '确定': function(){
+              var email = $('input[name=email]').val();
+              if(confirm("确定要提交吗？")){
+                  var url = "<{url action=topm_ctl_memberItem@userNotifyItem}>";
+                  var shopId = "<{$item.shop_id}>";
+                  var item_id= "<{$item.item_id}>";
+                  var sku_id = $('input[name="item[sku_id]"]').val();
+                  var data = 'shop_id='+shopId+'&item_id='+item_id+'&sku_id='+sku_id+'&email='+email;
+                  console.log(data);
+                  $.post(url,data,function(rs){
+                    if(rs.error) {
+                      Message.error(rs.message);
+                    }else{
+                      Message.success(rs.message);
+                    }
+                  });
+              }
+          }
+      }
+  });
+  $('.action-open-dialog').click(function (e) {
+    e.preventDefault();
+    $('#dialog').dialog('open');
+  });
+  //创建slider组件
+  $('#slider').slider( { imgZoom: true });
+
+  //规格显示隐藏
+  $('.icon-close').click(function(){
+    	$('.buy-panel').removeClass('visible'); 
+   		clNum =0;
+    	isAddTocart = false;
+  });
+  var spec_select = $('#spec_select');
+  var specSkuJson = '<{$item.spec.specSku|json_encode}>';
+  var specSku = JSON.parse(specSkuJson);
+  var spec_size = spec_select.find('.parameter').length;
+  var Message = new gmu.Message();
+  spec_select.on('click', 'li', function (e) {
+    e.preventDefault();
+    var parent = $(this).parent('.parameter');
+    $(this).addClass('on').siblings('.on').removeClass('on');
+    var selected = spec_select.find('.on');
+    if(selected.length == spec_size) {
+      var key = [];
+      selected.each(function (i, spec) {
+        key.push(spec.querySelector('a').getAttribute('href'));
+      });
+      key = key.join('_');
+      var specinfo = specSku[key];
+      processSpec(specinfo);
+    }
+  });
+
+  function processSpec(rs) {
+	    $('.action-update-item').val(rs.sku_id);
+	    $('.action-update-price').text(Currency.format(rs.price));
+	    $('.action-update-quantity').text(rs.store);
+	
+	    var quantity = $('.action-quantity-input').attr('max', rs.store);
+	    if(quantity.val() > rs.store) {
+	      quantity.val(rs.store);
+	    }
+	    //console.log(rs);
+	    if(rs.valid && rs.store >>> 0) {
+	      $('.action-fastbuy, .action-addtocart').removeClass('hide');
+	      $('.action-notify').addClass('hide');
+	      $('.action-open-dialog').addClass('hide');
+	      // quantity.val(quantity.attr('min'));
+	    }else if(rs.valid && rs.store == 0)  {
+		    $('.action-fastbuy, .action-addtocart').addClass('hide');
+		    $('.action-notify').addClass('hide');
+		    $('.action-open-dialog').removeClass('hide');
+	    }else{
+	      $('.action-fastbuy, .action-addtocart').addClass('hide');
+	      $('.action-notify').addClass('hide');
+	      $('.action-notify').removeClass('hide');
+	    }
+  }
+  
+  bindQuantityEvent('#main', setQuantity);
+
+  //== 为数量选择框绑定事件
+  function bindQuantityEvent(elements, callback) {
+	    elements = $(elements);
+	    if(!elements && !elements.length) return;
+	    var value = '';
+	    //= 数量按钮
+	    elements.on('click', '.action-decrease,.action-increase', function (e) {
+	        var input = $(this).parent().find('.action-quantity-input');
+	        value = +input.val();
+	        input.val($(this).hasClass('action-decrease') ? value - 1 : value + 1);
+	        return callback && callback(input, value);
+	    })
+	    //= 数量输入框
+	    .on('focus', '.action-quantity-input', function(e){
+	        value = +this.value;
+	    })
+	    .on('change', '.action-quantity-input', function(e) {
+	        return callback && callback($(this), value);
+	    });
+  }
+
+  //== 获取商品数量值
+  function getQuantity(el) {
+    return el.parents('.buy-action').find('.action-update-quantity').val();
+  }
+
+  //== 设置商品数量
+  function setQuantity(input, value) {
+    return inputCheck(input, {min: input.attr('min'), max: input.attr('max'), 'default': value, store: getQuantity(input), callback: window.quantityCallback});
+  }
+  
+//JS获取Cookie里的数据；
+function getSelfCookie(name) {
+	var arr,reg=new RegExp("(^| )"+name+"=([^;]*)(;|$)");
+	if(arr=document.cookie.match(reg)) return unescape(arr[2]);
+	else return null;
+}
+//购物车的商品数量变更
+var flashCartNumber = function(type){
+	var number = 0;
+	$.get("<{url action=topm_ctl_cart@countcartNumber}>",{},function(result){
+		if(result.success){ number = parseInt(result.total)||0; }else{ number = 0 ; }
+		$('.buy-bottom .selectcart-btn .shownumber').text(number);
+	});
+}
+
+//== 商品数量输入框正确性检测
+  function inputCheck(input, options) {
+    if(!input && !input.length) return false;
+    options = options || {};
+    
+    if(isNaN(options.min)) options.min = 1;
+    if(isNaN(options.max)) options.max = 999999;
+    options['default'] = options['default'] || options.min;
+
+    var value = +input.val();
+    var pre = '';
+    var msg = '';
+    if(options.store && options.store - value <= 0) {
+      	pre = '库存有限，';
+    }
+
+    if(value <= options.min) {
+      	input.val(options.min);
+      	msg = '此商品最少购买' + options.min + '件';
+    }else if(value > options.max){
+      	input.val(options.max);
+      	msg = pre + '此商品最多只能购买' + options.max + '件';
+    }else if(isNaN(value)) {
+      	input.val(options['default']);
+      	msg = '只允许输入数字';
+    }
+    if (msg) {
+      	Message.error(msg);
+      	return false;
+    }
+    if(options.callback){
+      	options.callback(input, options['default']);
+      	return true;
+    }
+  }
+  
+  /**加入购物车，及立即购买 点击事件绑定操作
+  	 购物说明：
+    1、点击即显示弹出购物配置层；但还不提交表单，只展示出来。
+    2、再次点击再执行相应的操作；
+    	立即购买   =>   进入下一步确认订单操作；
+    	加入购物车  =>  添加到购物车提示成功，并显示查看已购商品；
+  */
+  var isAddTocart = false;
+  var isFastbuyFlag = false;
+  $('#main').on('click','.action-fastbuy, .action-addtocart', function(e){
+		e.preventDefault(); // 提交页面信息 ，
+		var com_href = '###';
+	  	if($(e.target).hasClass('action-addtocart')) { //是否为加入购物车操作
+	      	isAddTocart = true ;
+	      	isFastbuyFlag = false;
+	      	com_href = '<{url action=topm_ctl_cart@add}>';
+	  	}else if($(e.target).hasClass('action-fastbuy')) {
+	  		isAddTocart = false ;
+	  		isFastbuyFlag = true;
+	  		com_href = '<{url action=topm_ctl_cart@add mode='fastbuy'}>';
+	  	}else{
+	  	}
+	  	$('#go-cart-layer>a.go-add-into').attr("href", com_href);
+	    //展示层
+	    $('.buy-panel').addClass('visible'); 
+		//检查订单参数配置    
+	    if(spec_select && spec_select.find('.on').length < spec_size){ 
+	      	Message.error('请先选择完整规格。'); return false;	//显示错误
+	    }
+    	return false; //选择规格去开始购买
+  })
+  //== 点击加入购物车确认事件
+  .on("click","#go-cart-layer>a.go-add-into",function(e){
+		//确认点击菜单
+		e.preventDefault();		// 提交页面信息 
+		//检查订单参数配置
+	    if(spec_select && spec_select.find('.on').length < spec_size){ 
+	      	Message.error('请先选择完整规格。'); return false;	//显示错误
+	    }
+	    if(isFastbuyFlag) {   //如果直接是直接购买就 
+	    	  isAddTocart = false;
+			  $(e.target).data('ajaxConfig',{type:'POST', data: $('#form_items'),callback:function(re){
+			  		localStorage.setItem('_cart_params', 'mode=fastbuy');//回调写回
+			  } });
+		      /*$(e.target).data('ajaxCallback', function(rs, target) {
+			    	localStorage.setItem('_cart_params', 'mode=fastbuy');
+			  });*/
+			  return true; //转入购买确认页面；
+	    }
+	    //确认 ＝加入购物车
+	    if(isAddTocart) {   //如果直接是直接购买就 
+	    	  isFastbuyFlag = false;
+			  $(e.target).data('ajaxConfig',{type:'POST', data: $('#form_items'),callback:function(rs){
+			  		if(rs.success){
+			  			$('.buy-panel').removeClass('visible'); 
+			  			Message.success(rs.message); //显示错误
+			  			flashCartNumber(1); 			 // 更新购物车的数量显示
+			  		}else{
+			  			Message.error(rs.message); return false;//显示错误
+			  		}
+			  }});
+			  return true;
+	    }
+  });
+
+  /**
+	未知逻辑处理：
+	if(spec_select.find('.on').length < spec_size){
+	  	// location.href = '#standard';
+	  	Message.error('请先选择完整规格。');
+	  	return false;
+	}
+    
+  $('.action-fastbuy').data('ajaxCallback', function(rs, target) {
+  
+	localStorage.setItem('_cart_params', 'mode=fastbuy');
+  });
+  $('.action-addtocart').data('ajaxConfig', {
+	type: 'post',
+	data: $('#form_items')
+  });
+  */
+
+  //未知事件；
+  $('.list-title').tap(function(){
+    if($('#icon_animation').hasClass('icon-up')){
+      $('.promotion-list').removeClass('visible');
+      $('#icon_animation').addClass('icon-down').removeClass('icon-up');
+      $('.opp').addClass('class_name')
+      $('#icon_animation').on('transitionend',function(){
+        	$('#icon_animation').addClass('icon-down').removeClass('icon-up');
+      });
+    }else{
+      $('.promotion-list').addClass('visible');
+      $('#icon_animation').on('transitionend',function(){
+        $('#icon_animation').addClass('icon-up').removeClass('icon-down');
+      });
+    }
+  })
+  
+  /*说明-服务切换*/
+  $('.switchover-ul li>a').click(function(){
+  	$(this).addClass('active-s');
+  	$('.switchover-ul li>a').not(this).removeClass('active-s');
+  	$(this).parent().addClass('active-li');
+  	$('.switchover-ul li>a').not(this).parent().removeClass('active-li');
+  	var tag = $(this).data("cid");
+	$('div.switchover_goods_desc').not('div.switchover_goods_desc[data-cid="'+tag+'"]').css("display","none");
+	$('div.switchover_goods_desc[data-cid="'+tag+'"]').css("display","block");
+  });
+  /*顶部切换*/
+  $('.newlist-hd div').click(function(){
+  		$(this).children().children().addClass('active-span');
+  		$('.newlist-hd div').not(this).children().children().removeClass('active-span');
+  });
+
+  //看了又看区域滑动效果
+  var mySwiper = new Swiper('.swiper-container', {
+	 slidesPerView : 4,
+  });
+  
+  var stopWindow = function(){
+	  	$('body,html').css("overflow-y","auto");
+	  	$('.content-more').addClass("visible");
+	  	$(".look-loading").css("display","none");
+  }
+
+  //商品详情说明上移脚本
+  var gouptop =function (topvalue){
+	  	var topnav_h = $('.newlist-hd').height() ;
+	  	var targ_h = $("#target_feijie_line").offset().top - topnav_h;
+	  	 $("#target_feijie_line").addClass("show_detail");
+	    //选中状态
+	    $('.newlist-hd div>a>span').removeClass("active-span");
+	    $('.newlist-hd div>a>span').eq(2).addClass("active-span");
+	  	$('.content-more').css("display","block");
+	  	$(window).scrollTop(targ_h);
+	  	setTimeout("stopWindow()",500);
+  }
+  var up_sctop = 0;
+  var fangxiang = "down";
+  $(document).ready(function() {
+  	 $(window).scroll(function () {
+  	 	var s_top = $(window).scrollTop();
+  	 	var sctwtop = $(window).height()- $(".newlist-hd").height();;
+  	 	if(s_top-up_sctop >0 ){  
+  	 		fangxiang = "down"; 
+  	 	}else{ fangxiang = "up"; }
+  	 	up_sctop = s_top;
+  	 	var scroll_offset = $("#target_feijie_line").offset().top;
+  	 	var isshow = $("#target_feijie_line").hasClass("show_detail");
+  	 	//console.log("isshow="+isshow +"  fangxiang = " +  fangxiang +  "    s_top= " + s_top +  "   scroll_offset  =" + scroll_offset ); 
+  	 	//向下 显示图文
+        if (!isshow && fangxiang == "down" && s_top + sctwtop >=  scroll_offset ) { //滚动的高度〉=文档的高度-窗体的高度时；
+            $('body,html').css("overflow-y","hidden");
+            $(".look-loading").css("display","block");
+	   	    setTimeout("gouptop("+ s_top +")",50);
+        }else if(isshow  &&  fangxiang == "up" && s_top +sctwtop < scroll_offset){ //向上显示
+        	$("#target_feijie_line").removeClass("show_detail");
+        	$('.content-more').removeClass("visible");
+        	$('.content-more').css("display","none");
+        	//选中状态
+        	$('.newlist-hd div>a>span').removeClass("active-span");
+            $('.newlist-hd div>a>span').eq(1).addClass("active-span");
+        }
+    });
+    //显示详细页购物数量刷新的操作
+    flashCartNumber(1);
+  });
+  var oldJQuery = $;
+</script>
+<!-- 异步加载 -->
+<script src="http://www.gojmall.com/app/site/statics/scripts/lib/jquery.js?1487755770"></script>
+<script type="text/javascript" src="http://www.gojmall.com/themes/jmcmall/images/js/jquerylazyload.js"></script>
+<script type="text/javascript">
+	 var thisJQuery = $; //原来的$对象
+	 thisJQuery(document).ready(function() {
+	    //实现图片慢慢浮现出来的效果
+	    var descimages = thisJQuery(".desc_content .bd img");
+	    if("undefined" != descimages && descimages.length > 0){
+	    	//修改商品的图片地址；
+	    	descimages.each(function(vk,imgobj){
+	    		var cuhrc = $(imgobj).attr("src");
+	    		$(imgobj).attr("data-original",cuhrc);
+	    		$(imgobj).addClass("scrollLoading");
+	    		$(imgobj).attr("src","/themes/demo/images/descloading.png");
+	    	});
+	    }
+	    // 异步加载图片，实现逐屏加载图片    
+	    thisJQuery(".scrollLoading").lazyload({
+	     	placeholder : "/themes/demo/images/jmall_loading.png", //加载图片前的占位图片
+	     	effect      : "fadeIn" //加载图片使用的效果(淡入)
+		});
+	 });
+	//用完$对象还原当前对象
+	if("undefined"!= typeof(oldJQuery) && oldJQuery){ $ = oldJQuery; }
+</script>

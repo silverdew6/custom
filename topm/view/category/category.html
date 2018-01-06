@@ -1,0 +1,327 @@
+<style>
+	*{padding: 0;margin: 0;}
+	body{overflow: hidden;margin:0;}
+	a{text-decoration: none;color: inherit;display: block;}
+	ul li {list-style: none;}
+	.subject-r-bottom-ul li .default_img{height: 70px;width: 70px;background: url(images/jmall_loading.png) no-repeat center;  margin: 0 auto;  background-size: 62%;}
+    @media screen and (width: 320px){
+    	.subject-l-ul li a{font-size: 0.9em ; width:38px;}
+    	.subject-r,.subject-r-p{height: 410px;}
+    	.brand-txt div{font-size: 0.9em;}
+    	.subject-r-top p,.subject-r-botoom p{font-size: 0.7em;}
+    	.subject-r-bottom-ul li a:last-child{font-size: 0.9em; }
+    	.subject-r-top-ul li img, .subject-r-bottom-ul li img{height: 70px;}
+    }
+    @media screen and (width: 360px){
+    	.subject-r,.subject-r-p{height: 480px;}
+    	.subject-r-top-ul li img, .subject-r-bottom-ul li img{height: 70px}
+    }
+    @media screen and (width: 375px){
+    	.subject-l-ul li a{font-size: 1em;}
+    	.subject-r,.subject-r-p{height: 500px;}
+    	.brand-txt div{font-size: 1.1em;}
+    	.subject-r-top p,.subject-r-botoom p{font-size: 0.9em;}
+    	.subject-r-bottom-ul li a:last-child{font-size: 0.9em;}
+    	.subject-r-top-ul li img, .subject-r-bottom-ul li img{height: 93px}
+    	.subject-r-bottom-ul li .default_img{height: 93px;width: 93px;}
+    }
+    @media screen and (width: 414px){
+		.subject-r,.subject-r-p{height: 580px;}
+		.subject-r-top-ul li img, .subject-r-bottom-ul li img{height: 95px}
+		.subject-r-bottom-ul li .default_img{height: 95px;width:95px;}
+	}
+	@media screen and (width: 412px){
+		.subject-r,.subject-r-p{height: 490px;}
+		.subject-r-top-ul li img, .subject-r-bottom-ul li img{height: 93px}
+		.subject-r-bottom-ul li .default_img{height:93px;width:93px;}
+	}
+	@media screen and (width: 768px){
+		.subject-r,.subject-r-p{height: 850px;}
+		.subject-r-bottom-ul li .default_img{height:100px;width:100px;}
+	}
+    .lt{float: left;}
+	.active-1{background: #fff;border-left:5px solid #C19AD8 !important;}/*一级分类选中效果*/
+	.active-hover{background: #66546E !important;color: #fff !important;}/*分类品牌选中效果*/
+	.head{width: 100%;border-bottom: 1px solid #F0F0F0;}
+	.head-div{width: 90%;margin: 0 auto;text-align: center;height: 55px;line-height: 55px;}
+	.head-div input{border:1px solid #F0F0F0;height: 32px;line-height: 32px;width: 87%;margin: 0;padding: 0;position: relative;box-sizing: border-box;padding-left: 26px;}
+	.brand{width: 100%;margin-top: 10px;padding-bottom:10px;border-bottom: 1px solid #F0F0F0;}
+	.brand-txt{width: 50%;margin: 0 auto;}
+	.brand-txt:after{content: '.';height: 0;display: block;visibility: hidden;clear: both;}
+	.brand-txt div{background: #fff;color: #66546E;padding:4px 5px; float: left;box-sizing: border-box;width: 50%;text-align: center;border: 1px solid #66546E;}
+	.brand-txt div:first-child{border-top-left-radius: 3px;border-bottom-left-radius: 3px;}
+	.brand-txt div:last-child{border-top-right-radius: 3px;border-bottom-right-radius: 3px;}
+	.subject{width: 100%;}
+	.subject:after{content: '.';height: 0;display: block;visibility: hidden;clear: both;}
+	.subject-l{width: 22%;background: #F4F3F5;}
+	.subject-r{width: 78%;background: #fff;overflow-y: auto;}
+	.subject-r-p{width: 100%;}
+	.subject-r-bottom-ul:after{content: '.';height: 0;display: block;visibility: hidden;clear: both;}
+	.subject-r-top-ul:after{content: '.';height: 0;display: block;visibility: hidden;clear: both;}
+	.subject-l-ul li{text-align: center;border-bottom: 2px solid #fff;padding: 13px 13px 13px 8px;border-left: 5px solid transparent;}
+	.subject-r-top{border-bottom: 1px solid #F0F0F0;}
+	.subject-r-top p,.subject-r-botoom p{line-height: 3.5em; height: 3.7em; margin: 0;   text-indent: 1em;  border-bottom: 1px dotted #f0f0f0;font-weight: bold;}
+	 .subject-r-botoom a.right {float: right; margin-right: 10px; line-height: 2em; font-size: 1.6em; font-family: initial; font-weight: 600; color: #ccc;}
+	.subject-r-top-ul li,.subject-r-bottom-ul li{float: left;width: 33.33%;box-sizing: border-box;padding: 7px;text-align: center;}
+	.subject-r-top-ul li img,.subject-r-bottom-ul li img{width: 100%;max-width: 100px;}
+	.brand-ul li{float: left;width: 33.33%;box-sizing: border-box;padding: 5px;text-align: center;}
+	.brand-ul li img{width: 100%;}
+	.brand-ul:after{content:'.';height: 0;display: block;visibility:hidden;clear: both;}
+	.subject{display: none;}
+	.subject-r{display: none;}
+	.img-search{width: 25px;height: 25px;position: absolute;top: 16px;left: 11.3%;z-index: 99;}
+	.logo-div .brand-ul li{width: 34%;}
+	.logo-div .brand-ul li:last-child{width: 32%;}
+	.subject-r-bottom-ul li a:last-child{font-family: "微软雅黑";overflow: hidden;text-overflow: ellipsis;height: 20px;white-space: nowrap; }
+	#last_footer_public{display:none;}
+</style>
+<script src="images/sort/jquery-2.2.4.js"></script>
+<script type="text/javascript">
+var THIS_ID = 0;
+</script>
+<div class="head">
+	<div class="head-div">
+		<form action="<{url action=topm_ctl_search@index}>" method="POST">
+			<img class="img-search" src="images/sort/Search.png"/>
+			<input type="text" name="keyword" placeholder="寻找商品、店铺"/>
+		</form>
+	</div>
+</div>
+
+<div class="brand">
+	<div class="brand-txt">
+		<div class="active-hover" data-fid="666"><a href="javascript:void(0)">分类</a></div>
+		<div data-fid="777"><a href="javascript:void(0)">品牌</a></div>
+	</div>
+</div>
+
+
+<!-- 分类商品 start-->
+<div class="subject" data-fid="666" style="display: block;">
+	<!-- 一级分类 start-->
+	<div class="subject-l lt">
+		<ul class="subject-l-ul">
+			<{if $data}>
+				<{foreach from=$data item=item key=key name=tnk}>
+					<li class="<{if $env.foreach.tnk.first}>active-1<{/if}>" data-cid="<{$item.cat_id}>">
+						<a href="javascript:void(0)"><{$item.cat_name}></a>
+					</li>
+			 	<{/foreach}>
+			<{else}>
+				<li data-cid="000"><a href="##">暂无</a></li>
+			<{/if}>
+		</ul>
+	</div>
+<!-- 一级分类 end-->
+			
+			
+<!-- 右边分类查询结果 Start -->		
+	<{foreach from=$data item=item key=key name=firstone}>
+		<div data-cid="<{$item.cat_id}>" class="subject-r lt" style="<{if $env.foreach.firstone.first}>display: block;<{/if}>">
+			<div class="subject-r-top hide">
+				<div>
+					<p>热销分类<{$item.cat_id}></p>
+				</div>
+				<div>
+					<ul class="subject-r-top-ul">
+						<li><a href="##"><img src="images/sort/ceshi.png"/></a></li>
+						<li><a href="##"><img src="images/sort/ceshi.png"/></a></li>
+						<li><a href="##"><img src="images/sort/ceshi.png"/></a></li>
+					</ul>
+				</div>
+			</div>
+			<div class="subject-r-botoom">
+				<{if $item.lv2}>
+					<{foreach from=$item.lv2 item=lv2item key=lv2key name=name}>
+						<div style="<{if !$env.foreach.name.first}>margin-top: 1.2em;<{/if}>">
+							<p><{$lv2item.cat_name}>&nbsp;&nbsp; <a class="right" href="<{url action=topm_ctl_list@index cat_id=$lv2item.cat_id}>&class=two" title="所有商品"  >&gt;</a></p>
+						</div>
+						<div>
+							<ul class="subject-r-bottom-ul">
+							<{if $lv2item.lv3}>
+								<{assign var=lv3_index value=0}>
+								<{foreach from=$lv2item.lv3 item=lv3item key=lv3key name=nk3}>
+									<{assign var=lv3setting value=$all_setting_data[$lv3item.cat_id]}><!--配置数据对象-->
+						          	<{assign var=lv3_index value=$lv3_index+1}>
+					          		<li>
+					          			<a href="<{url action=topm_ctl_list@index cat_id=$lv3item.cat_id}>">
+					          				<{if $lv3setting.default_sett.image_default_id}>
+					          					<img src="<{$lv3setting.default_sett.image_default_id|storager:'t'}>" style="min-width:50px;min-height:50px" />
+						         	 	 	<{else}>
+						         	 	 		<div class="default_img"></div>
+						         	 	 	<{/if}>
+					          			</a>
+					          			<a href="<{url action=topm_ctl_list@index cat_id=$lv3item.cat_id}>"><{$lv3item.cat_name}></a>
+									</li>
+									<{if ($lv3_index>1 && $lv3_index % 3 == 0 && !$env.foreach.nk3.last)}>
+							          	</ul><ul class="subject-r-bottom-ul">
+						          	<{/if}>
+					           <{/foreach}>
+					        <{/if}>
+					        </ul>
+						</div>
+					<{/foreach}>
+				<{/if}>
+			</div>
+		</div>
+	<{/foreach}>
+<!-- 右边分类查询结果  END -->
+</div>
+
+<!-- 品牌LOGO start -->
+<div class="subject" data-fid="777" >
+	<div class="subject-r-p lt" style="overflow-y: auto;">
+		<div class="subject-r-top">
+			<div style="padding: 5px;">
+				<p style="font-size:0.9em;">精选品牌</p>
+			</div>
+			<div class="logo-div">
+				<ul class="brand-ul">
+					<li><a href="<{url action=topm_ctl_list@index brand_id=1106}>"><img src="images/sort/logo/Logo-01.gif"/></a></li>
+					<li><a href="<{url action=topm_ctl_list@index brand_id=1109}>"><img src="images/sort/logo/Logo-02.gif"/></a></li>
+					<li><a href="<{url action=topm_ctl_list@index brand_id=1168}>"><img src="images/sort/logo/Logo-03.png"/></a></li>
+				</ul>
+				<ul class="brand-ul">
+					<li><a href="<{url action=topm_ctl_list@index brand_id=1038}>"><img src="images/sort/logo/Logo-04.gif"/></a></li>
+					<li><a href="<{url action=topm_ctl_list@index brand_id=1094}>"><img src="images/sort/logo/Logo-05.gif"/></a></li>
+					<li><a href="<{url action=topm_ctl_list@index brand_id=1000}>"><img src="images/sort/logo/Logo-06.gif"/></a></li>
+				</ul>
+				<ul class="brand-ul">
+					<li><a href="<{url action=topm_ctl_list@index brand_id=1012}>"><img src="images/sort/logo/Logo-07.gif"/></a></li>
+					<li><a href="<{url action=topm_ctl_list@index brand_id=992}>"><img src="images/sort/logo/Logo-08.gif"/></a></li>
+					<li><a href="<{url action=topm_ctl_list@index brand_id=995}>"><img src="images/sort/logo/Logo-09.gif"/></a></li>
+				</ul>
+				<ul class="brand-ul">
+					<li><a href="<{url action=topm_ctl_list@index brand_id=1069}>"><img src="images/sort/logo/Logo-10.gif"/></a></li>
+					<li><a href="<{url action=topm_ctl_list@index brand_id=1021}>"><img src="images/sort/logo/Logo-11.gif"/></a></li>
+					<li><a href="<{url action=topm_ctl_list@index brand_id=1196}>"><img src="images/sort/logo/Logo-12.gif"/></a></li>
+				</ul>
+				<ul class="brand-ul">
+					<li><a href="<{url action=topm_ctl_list@index brand_id=986}>"><img src="images/sort/logo/Logo-13.gif"/></a></li>
+					<li><a href="<{url action=topm_ctl_list@index brand_id=1058}>"><img src="images/sort/logo/Logo-14.gif"/></a></li>
+					<li><a href="<{url action=topm_ctl_list@index brand_id=980}>"><img src="images/sort/logo/Logo-15.gif"/></a></li>
+				</ul>
+			</div>
+			
+			<div style="padding: 5px;">
+				<p style="font-size:0.9em;">热销品牌</p>
+			</div>
+			<div class="logo-div">
+				<ul class="brand-ul">
+					<li><a href="<{url action=topm_ctl_list@index brand_id=1108}>"><img src="images/sort/logo/Logo-16.gif"/></a></li>
+					<li><a href="<{url action=topm_ctl_list@index brand_id=1077}>"><img src="images/sort/logo/Logo-17.gif"/></a></li>
+					<li><a href="<{url action=topm_ctl_list@index brand_id=1055}>"><img src="images/sort/logo/Logo-18.gif"/></a></li>
+				</ul>
+				<ul class="brand-ul">
+					<li><a href="<{url action=topm_ctl_list@index brand_id=1075}>"><img src="images/sort/logo/Logo-19.gif"/></a></li>
+					<li><a href="<{url action=topm_ctl_list@index brand_id=997}>"><img src="images/sort/logo/Logo-20.gif"/></a></li>
+					<li><a href="<{url action=topm_ctl_list@index brand_id=1032}>"><img src="images/sort/logo/Logo-21.gif"/></a></li>
+				</ul>
+				<ul class="brand-ul">
+					<li><a href="<{url action=topm_ctl_list@index brand_id=1008}>"><img src="images/sort/logo/Logo-22.gif"/></a></li>
+					<li><a href="<{url action=topm_ctl_list@index brand_id=1088}>"><img src="images/sort/logo/Logo-23.gif"/></a></li>
+					<li><a href="<{url action=topm_ctl_list@index brand_id=1116}>"><img src="images/sort/logo/Logo-24.gif"/></a></li>
+				</ul>
+				<ul class="brand-ul">
+					<li><a href="<{url action=topm_ctl_list@index brand_id=1066}>"><img src="images/sort/logo/Logo-25.gif"/></a></li>
+					<li><a href="<{url action=topm_ctl_list@index brand_id=1008}>"><img src="images/sort/logo/Logo-26.gif"/></a></li>
+					<li><a href="<{url action=topm_ctl_list@index brand_id=1016}>"><img src="images/sort/logo/Logo-27.gif"/></a></li>
+				</ul>
+				<ul class="brand-ul">
+					<li><a href="<{url action=topm_ctl_list@index brand_id=1057}>"><img src="images/sort/logo/Logo-28.gif"/></a></li>
+					<li><a href="<{url action=topm_ctl_list@index brand_id=982}>"><img src="images/sort/logo/Logo-29.gif"/></a></li>
+					<li><a href="<{url action=topm_ctl_list@index brand_id=978}>"><img src="images/sort/logo/Logo-30.gif"/></a></li>
+				</ul>
+			</div>
+			
+			<div style="padding: 5px;">
+				<p style="font-size:0.9em;">热荐品牌</p>
+			</div>
+			<div class="logo-div">
+				<ul class="brand-ul">
+					<li><a href="<{url action=topm_ctl_list@index brand_id=994}>"><img src="images/sort/logo/Logo-31.gif"/></a></li>
+					<li><a href="<{url action=topm_ctl_list@index brand_id=1097}>"><img src="images/sort/logo/Logo-32.gif"/></a></li>
+					<li><a href="<{url action=topm_ctl_list@index brand_id=1059}>"><img src="images/sort/logo/Logo-33.gif"/></a></li>
+				</ul>
+				<ul class="brand-ul">
+					<li><a href="<{url action=topm_ctl_list@index brand_id=1122}>"><img src="images/sort/logo/Logo-34.gif"/></a></li>
+					<li><a href="<{url action=topm_ctl_list@index brand_id=1002}>"><img src="images/sort/logo/Logo-35.gif"/></a></li>
+					<li><a href="<{url action=topm_ctl_list@index brand_id=980}>"><img src="images/sort/logo/Logo-36.gif"/></a></li>
+				</ul>
+			</div>
+		</div>
+	</div> 
+</div>
+<script type="text/javascript">
+	$(function(){
+		$('.subject-l-ul li').click(function(){//一级分类切换效果
+			$(this).addClass("active-1");
+			$('.subject-l-ul li').not(this).removeClass("active-1");
+			var tag = $(this).data("cid");
+			$('div.subject-r').not('div.subject-r[data-cid="'+tag+'"]').css("display","none");
+			$('div.subject-r[data-cid="'+tag+'"]').fadeIn();
+		});
+		$('.brand-txt div').click(function(){//分类品牌切换效果
+			$(this).addClass("active-hover");
+			$('.brand-txt div').not(this).removeClass("active-hover");
+			var tag2=$(this).data("fid");
+			if(tag2=="777"){
+				setCookie('category_select_brand','brand');
+				init_select();
+			}else{
+				setCookie('category_select_brand','cate');
+			}
+			$('div.subject').not('div.subject[data-fid="'+tag2+'"]').css("display","none");
+			$('div.subject[data-fid="'+tag2+'"]').fadeIn();
+		});
+	});
+	
+	/*预处理*/
+	function init_select(){
+		var cokie = getCookie('category_select_brand');
+		if(null!=cokie && ""!=cokie && cokie=="brand" ){
+			$('.brand-txt div').removeClass("active-hover");
+			$('.brand-txt div[data-fid=777]').addClass("active-hover");
+			$('div.subject').not('div.subject[data-fid="777"]').css("display","none");
+			$('div.subject[data-fid="777"]').fadeIn();
+		}else{
+			$('div.subject').not('div.subject[data-fid="666"]').css("display","none");
+			$('div.subject[data-fid="666"]').fadeIn();
+		}
+	}
+	
+	function setCookie(name,value,time)
+	{
+		var strsec = 900 * 1000;//只存15分钟
+		var exp = new Date();
+		exp.setTime(exp.getTime() + strsec*1);
+		document.cookie = name + "="+ escape (value) + ";expires=" + exp.toGMTString();
+	}
+	function getCookie(name)
+	{
+		var arr,reg=new RegExp("(^| )"+name+"=([^;]*)(;|$)");
+		if(arr=document.cookie.match(reg))
+			return unescape(arr[2]);
+		else
+			return null;
+	}
+	$.fn.extend({
+		gotop:function(){ }
+	});
+	init_select();
+	
+	<{if $env.get.cat_id}>
+		$('.subject-l-ul li').each(function(){ //当后面带了参数 sel_cateid = 表示增加了一个一级目录	
+			var ccid = $(this).data("cid");
+			var selectCid = '<{$env.get.cat_id}>' || 0;
+			if("undefined" != typeof(ccid) && "" != ccid && parseInt(ccid) >0  && parseInt(ccid) == parseInt(selectCid) ){
+				$(this).addClass("active-1");
+				$('.subject-l-ul li').not(this).removeClass("active-1");
+				$('div.subject-r').not('div.subject-r[data-cid="'+ccid+'"]').css("display","none");
+				$('div.subject-r[data-cid="'+ccid+'"]').fadeIn();
+			}
+		});	
+	<{/if}>
+	
+	
+</script>

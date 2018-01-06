@@ -1,0 +1,134 @@
+<div class="member shop">
+  <{include file="topm/common/top.html"}>
+  <div class="main">
+	<style type="text/css">
+	.member-info .member-head {	width:100%;min-height:13em; background: url(/themes/wapmall/images/member-head_b.jpg) no-repeat center left;background-size:100% 100%;position: relative;}
+	.member-info .member-head .t-top {line-height: 2em;text-align: right;; margin:0.1em; margin-right: 5em;}
+	.member-info .t-top .icon{ color: darkorange;font-family: 'iconfonts';speak: none;font-style: normal;font-weight: normal;font-variant: normal;text-transform: none;font-size: 1.8em;line-height: 1.5;-webkit-font-smoothing: antialiased;-moz-osx-font-smoothing: grayscale;}
+	.member-info .t-top span { color: #FFF; display: inline; margin: auto;font-size: 1.2em;font-family: inherit;}
+	.member-info .member-head .content{width: 24%; float: left;max-width: 100px;margin-top: 2%;margin-left: 4%;border: 1px solid #541B86;border-radius: 4%;overflow: hidden;}
+	.member-info .member-head .rightMore{float:right ;cursor: pointer;   margin-right: 1em;  margin-top: 2em; }
+	.member-info .member-head .bottom-info {position: absolute;left: 10%;bottom: 5px;color: #FFF;font-size: 1.5em;}
+	.member-info .member-head .bottom-info a{color:#FFFFFF;}
+	.member-info .member-head .content .largetimg img {zoom: 1;width: 70%!important; position: fixed;margin: 10px auto; z-index: 99999;    border: 3px solid #ff6f06;}
+	</style>
+	<script type="text/javascript">
+	 var activeLayer = function (obj){
+    	var vd = $(obj).attr("class");
+    	if(vd=="largetimg"){
+    		$(obj).removeClass("largetimg");
+    	}else{
+    		$(obj).addClass("largetimg");
+    	}
+    }
+	</script>
+    <div class="member-info" style="border: none;background: #561D86;">
+    	 <div class="member-head">
+    	 	<div class="t-top">
+    	 		<a href="<{url action=topm_ctl_member_experience@experience}>">
+    	 			<i class="icon icon-grade"></i><span><{$userInfo.grade_name}></span></a>
+    	 	</div>
+    	 	<div class="content">
+    	 		<a href="javascript:void(0);" onclick="activeLayer(this)"><img src ="<{$userInfo.mobile_qrc}>" style="width:100%;border:0px;" /> </a>
+    	 	</div>
+    	 	<a class="rightMore" href="<{url action=topm_ctl_member@userinfoSet}>"><img src="/themes/wapmall/images/mem_right_icon.png"  /></a>
+    	 	<div class="bottom-info">
+    	 		<a href="<{url action=topm_ctl_member@userinfoSet}>" title="查询用户信息"><b><{if ($userInfo.mobile neq '')}><{$userInfo.mobile}><{else}><{$account}><{/if}></b></a>
+    	 	</div>
+    	 </div>
+      
+      <div class="info-hd" style="display:none;">
+        <div>
+          <!-- <span class="hd-img"> <img src="images/member.png" alt="" >  </span>  -->
+			<span class="head-qrc" style="width: 25%;max-width: 100px;max-height: 100px;border-radius: 1%;display: inline-block;border: 0px solid #fff;">
+           		<img src="<{$userInfo.mobile_qrc}>" style="width:100%;border:0px;" />
+          	</span>
+          <span class="hd-name"><{$account}> <a href="<{url action=topm_ctl_member_experience@experience}>" class="grade"><i class="icon icon-grade"></i><{$userInfo.grade_name}></a></span>
+          <a href="<{url action=topm_ctl_member@userinfoSet}>" class="icon-top"></a>
+        </div>
+        <!-- <div class="user-grade">
+          <a href="<{url action=topm_ctl_member_experience@experience}>" class="grade"><i class="icon icon-grade"></i><{$userInfo.grade_name}></a>
+          <a href="<{url action=topm_ctl_member_point@point}>" class="money"><i class="icon icon-money"></i><{$userInfo.point}></a>
+        </div> -->
+      </div>
+      <div class="info-data">
+        <div class="col-goods">
+           <a href="<{url action=topm_ctl_member_deposit@view}>">
+            <span class="txt">账户余额(元)：</span>
+            <span class="num"><{$deposit.deposit|cur}></span>
+          </a>
+        </div>
+        <div class="col-goods col-stores">
+          <a href="<{url action=topm_ctl_member_coupon@couponList is_valid=offen}>">
+            <span class="txt">优惠券：</span>
+            <span class="num"><{$coupon.count|default:0}> 张</span>
+          </a>
+        </div>
+        <div class="col-stores">
+          <a href="<{url action=topm_ctl_member_point@point}>">
+            <span class="txt">统一积分：</span>
+            <span class="num"><{$userInfo.point|default:0}></span>
+          </a>
+        </div>
+      </div>
+    </div>
+    <div class="order-status">
+      <div class="order-hd">
+        <a href="<{url action=topm_ctl_member_trade@index}>">
+          <span class="my-order">我的订单</span>
+          <span class="whole">全部<i class="icon icon-forward"></i></span>
+        </a>
+      </div>
+      <div class="order-icons">
+        <ul>
+          <li class="notpaid">
+            <a href="<{url action=topm_ctl_member_trade@index s=1}>" ><span class="icon icon-book"><i><{$nupay|default:0}></i></span>待付款</a>
+          </li>
+          <li class="unfilled">
+            <a href="<{url action=topm_ctl_member_trade@index s=2}>" ><span class="icon icon-ribbon"><i><{$nudelivery|default:0}></i></span>待发货</a>
+          </li>
+          <li class="receiving">
+            <a href="<{url action=topm_ctl_member_trade@index s=3}>" ><span class="icon icon-truck"><i><{$nuconfirm|default:0}></i></span>待收货</a>
+          </li>
+          <li class="receiving">
+            <a href="<{url action=topm_ctl_member_trade@index s=4}>" ><span class="icon icon-dialog"><i><{$unrate|default:0}></i></span>待评价</a>
+          </li>
+          <li class="receiving">
+            <a href="<{url action=topm_ctl_member_trade@canceledTradeList}>" ><span class="icon icon-diary"><i><{$canceled|default:0}></i></span>取消记录</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div class="receive-address my-favorite">
+      <a href="javascript:void(0);">
+        <span class="safe">我的收藏</span>
+      </a>
+    </div>
+    <div class="receive-address my-favorite-item">
+      <a href="<{url action=topm_ctl_member@itemsCollect}>">
+        <span class="safe">收藏的商品：<em><{$itemcount}></em> 件</span>
+      </a>
+      <a href="<{url action=topm_ctl_member@shopsCollect}>">
+        <span class="safe">收藏的店铺：<em><{$shopcount}></em> 家</span>
+      </a>
+    </div>
+    <div class="receive-address">
+      <a href="<{url action=topm_ctl_member@address}>">
+        <span class="safe">收货地址</span>
+        <i class="icon icon-forward"></i>
+      </a>
+    </div>
+    <div class="safe-center">
+      <a href="<{url action=topm_ctl_member@security}>">
+        <span class="safe">安全中心</span>
+        <i class="icon icon-forward"></i>
+      </a>
+    </div>
+    <div class="help-center">
+      <a href="">
+        <span class="safe">帮助与反馈</span>
+        <i class="icon icon-forward"></i>
+      </a>
+    </div>
+  </div>
+</div>

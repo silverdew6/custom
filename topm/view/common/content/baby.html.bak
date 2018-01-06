@@ -1,0 +1,422 @@
+ <{require file="block/header_new.html"}>
+				<!-- nav -->
+				<div class="main" style="margin-top:6em;">
+
+            <!------------- 新增内容部分------------->
+                    <div class="banner-d">
+                    	<img src="images/modules/baby/banner1.jpg"/>
+                    </div>
+					
+					<!--轮播下小广告图 start-->
+					<div id="health-img">
+						<ul>
+							<li>
+								<a href="http://www.myjmall.com/wap/list.html?cat_id=782&class=two">
+									<img src="images/modules/baby/2016-11-23_164207.png" />
+								</a>
+							</li>
+							<li>
+								<a href="##">
+									<img src="images/modules/baby/2016-11-23_164247.png" />
+								</a>
+							</li>
+							<li>
+								<a href="##">
+									<img src="images/modules/baby/2016-11-23_164315.png" />
+								</a>
+							</li>
+							<li>
+								<a href="##">
+									<img src="images/modules/baby/2016-11-23_164331.png" />
+								</a>
+							</li>
+						</ul>
+					</div>
+					<!--轮播下小广告图 end-->
+					
+					<!-- sale  热卖区域-->
+					<div id="sale">
+						<div class="sale_l">
+							<div class="sale_l_top">
+								<div class="time_off">
+									<h1>新品上市</h1>
+									<div class="ski-time yomibox" id="time_flsh" style="line-height: 2em;padding: 0.3em 0.4em;font-size: 1em;color: red;">
+										<!--<ul>
+						        				<li><span class="time yomihour">00</span></li>
+						        				<li><i>:</i></li>
+						        				<li><span class="time yomimin">00</span></li>
+						        				<li><i>:</i></li>
+						        				<li><span class="time yomisec" id="second">00</span></li>
+						        			</ul>-->
+									</div>
+								</div>
+								<h3 style="text-overflow: ellipsis;line-height: 1.5em;  white-space: nowrap; overflow: hidden;"> Weleda维蕾德金盏花婴儿强效防风滋润霜</h3>
+							</div>
+							<a href="<{url action=topm_ctl_item@index item_id=5702}>" target="_blank">
+								<img src="images/modules/baby/sale1.jpg" />
+							</a>
+						</div>
+						<div class="sale_r">
+							<div class="sale_r_top">
+								<div class="sale_r_txt">
+									<h1>热销<br />TOP榜</h1>
+									<a href="<{url action=topm_ctl_topic@index tname=wanshui}>" target="_blank">
+										<h3 style="line-height: 1em;margin-top: 1.2em;">DHC低至54元&gt;&gt;</h3>
+									</a>
+								</div>
+								<div class="sale_r_pic">
+									<a href="<{url action=topm_ctl_item@index item_id=5905}>" target="_blank">
+										<img src="images/modules/baby/sale2.jpg" />
+									</a>
+								</div>
+							</div>
+							<div class="sale_r_bottom">
+								<div class="sale_r_txt">
+									<h1>品质<br />推荐</h1>
+									<a href="<{url action=topm_ctl_topic@index tname=zhiyou}>" target="_blank">
+										<h3 style="line-height: 1em;margin-top: 1.2em;">DHC低至54元&gt;&gt;</h3>
+									</a>
+								</div>
+								<div class="sale_r_pic">
+									<a href="<{url action=topm_ctl_item@index item_id=5801}>" target="_blank">
+										<img src="images/modules/baby/sale3.jpg" />
+									</a>
+								</div>
+							</div>
+						</div>
+					</div>
+					<!-- sale  热卖区域 END -->
+					
+                    <!-- 推荐热品 start -->
+                    <div id="Hot-product">
+                    	<div class="Hot-product-txt">
+                    		<b>热门推荐</b><span>大家都在买</span>
+                    	</div>
+                    	<div class="Hot-product-img">
+                    		<a href="##">
+                    			<img src="images/modules/baby/banner.jpg" />
+                    		</a>
+                    	</div>
+                    	<div class="Hot-product-pro">
+                    		<div class="product-1">
+                    			<div class="lt">
+                    				<dl>
+                    					<dt>
+                    						<a href="http://www.myjmall.com/wap/item.html?item_id=5693">
+                    							<img src="images/modules/baby/HOT1.jpg"/>
+                    						</a>
+                    					</dt>
+                    					<dd>
+                    						<a href="http://www.myjmall.com/wap/item.html?item_id=5693">AVENT新安怡宽口径自然原生-PP奶瓶260-ML</a>
+                    					</dd>
+                    					<dd class="color-red">&yen;77</dd>
+                    				</dl>
+                    			</div>
+                    			<div class="lt">
+                    				<dl>
+                    					<dt>
+                    						<a href="http://www.myjmall.com/wap/item.html?item_id=5902">
+                    							<img src="images/modules/baby/HOT2.jpg"/>
+                    						</a>
+                    					</dt>
+                    					<dd>
+                    						<a href="http://www.myjmall.com/wap/item.html?item_id=5902">Bio-Oil-百洛油125毫升</a>
+                    					</dd>
+                    					<dd class="color-red">&yen;116</dd>
+                    				</dl>
+                    			</div>
+                    		</div>
+                    		<div class="product-2">
+                    			<div class="lt">
+                    				<dl>
+                    					<dt>
+                    						<a href="http://www.myjmall.com/wap/item.html?item_id=5812">
+                    							<img src="images/modules/baby/HOT3.jpg"/>
+                    						</a>
+                    					</dt>
+                    					<dd>
+                    						<a href="http://www.myjmall.com/wap/item.html?item_id=5812">NUBY防呛水壶 2个价</a>
+                    					</dd>
+                    					<dd class="color-red">&yen;68</dd>
+                    				</dl>
+                    			</div>
+                    			<div class="lt">
+                    				<dl>
+                    					<dt>
+                    						<a href="http://www.myjmall.com/wap/item.html?item_id=5696">
+                    							<img src="images/modules/baby/HOT4.jpg"/>
+                    						</a>
+                    					</dt>
+                    					<dd>
+                    						<a href="http://www.myjmall.com/wap/item.html?item_id=5696">Weleda维蕾德金盏花婴儿滋润霜面霜</a>
+                    					</dd>
+                    					<dd class="color-red">&yen;78</dd>
+                    				</dl>
+                    			</div>
+                    		</div>
+                    		<div class="product-3">
+                    			<div class="lt">
+                    				<dl>
+                    					<dt>
+                    						<a href="http://www.myjmall.com/wap/item.html?item_id=5818">
+                    							<img src="images/modules/baby/HOT5.jpg"/>
+                    						</a>
+                    					</dt>
+                    					<dd>
+                    						<a href="http://www.myjmall.com/wap/item.html?item_id=5818">德国Aptamil爱他美婴幼儿奶粉1+段 2罐价</a>
+                    					</dd>
+                    					<dd class="color-red">&yen;236</dd>
+                    				</dl>
+                    			</div>
+                    			<div class="lt">
+                    				<dl>
+                    					<dt>
+                    						<a href="http://www.myjmall.com/wap/item.html?item_id=5854">
+                    							<img src="images/modules/baby/HOT6.jpg"/>
+                    						</a>
+                    					</dt>
+                    					<dd>
+                    						<a href="http://www.myjmall.com/wap/item.html?item_id=5854">法国Mustela妙思乐贝贝亲肤洗发沐浴露750ml</a>
+                    					</dd>
+                    					<dd class="color-red">&yen;118</dd>
+                    				</dl>
+                    			</div>
+                    		</div>
+                    	</div>
+                    </div>
+                    <!-- 推荐热品 end -->
+                    
+                    <!-- 基础商品楼层 start01 -->
+                    <div class="border-bottom">
+                    	<div class="Hot-product-txt">
+                    		<b>奶粉辅食</b><span class="boult">&gt;&gt;</span>
+                    	</div>
+                    	<div class="products">
+                    		<div class="product-4">
+                    			<div class="lt">
+                    				<dl>
+                    					<dt>
+                    						<a href="http://www.myjmall.com/wap/item.html?item_id=5814">
+                    							<img src="images/modules/baby/assisted1.jpg"/>
+                    						</a>
+                    					</dt>
+                    					<dd>
+                    						<a href="http://www.myjmall.com/wap/item.html?item_id=5814">Herobaby美素4段-白金版 2罐价</a></dd>
+                    					<dd class="color-red">&yen;238</dd>
+                    				</dl>
+                    			</div>
+                    			<div class="lt">
+                    				<dl>
+                    					<dt>
+                    						<a href="http://www.myjmall.com/wap/item.html?item_id=5824">
+                    							<img src="images/modules/baby/assisted2.jpg"/>
+                    						</a>
+                    					</dt>
+                    					<dd>
+                    						<a href="http://www.myjmall.com/wap/item.html?item_id=5824">Kabrita金装婴儿配方羊奶粉1段</a></dd>
+                    					<dd class="color-red">&yen;275</dd>
+                    				</dl>
+                    			</div>
+                    		</div>
+                    		<div class="product-4">
+                    			<div class="lt">
+                    				<dl>
+                    					<dt>
+                    						<a href="http://www.myjmall.com/wap/item.html?item_id=5895">
+                    							<img src="images/modules/baby/assisted3.jpg"/>
+                    						</a>
+                    					</dt>
+                    					<dd><a href="http://www.myjmall.com/wap/item.html?item_id=5895">德国Hipp喜宝有机奶粉2段-800g 2罐装</a></dd>
+                    					<dd class="color-red">&yen;270</dd>
+                    				</dl>
+                    			</div>
+                    			<div class="lt">
+                    				<dl>
+                    					<dt>
+                    						<a href="http://www.myjmall.com/wap/item.html?item_id=6346">
+                    							<img src="images/modules/baby/assisted4.jpg"/>
+                    						</a>
+                    					</dt>
+                    					<dd><a href="http://www.myjmall.com/wap/item.html?item_id=6346">德国进口原装Aptamil爱他美Pre段新生婴儿奶粉 2罐价</a></dd>
+                    					<dd class="color-red">&yen;298</dd>
+                    				</dl>
+                    			</div>
+                    		</div>
+                    	</div>
+                    </div>
+                    <!-- 基础商品楼层 end01 -->
+                    
+                    <!-- 基础商品楼层 start02 -->
+                    <div class="border-bottom">
+                    	<div class="Hot-product-txt">
+                    		<b>护理区</b><span class="boult">&gt;&gt;</span>
+                    	</div>
+                    	<div class="products">
+                    		<div class="product-4">
+                    			<div class="lt">
+                    				<dl>
+                    					<dt>
+                    						<a href="http://www.myjmall.com/wap/item.html?item_id=5902">
+                    							<img src="images/modules/baby/nurse1.jpg"/>
+                    						</a>
+                    					</dt>
+                    					<dd><a href="http://www.myjmall.com/wap/item.html?item_id=5902">Bio-Oil-百洛油125毫升</a></dd>
+                    					<dd class="color-red">&yen;116</dd>
+                    				</dl>
+                    			</div>
+                    			<div class="lt">
+                    				<dl>
+                    					<dt>
+                    						<a href="http://www.myjmall.com/wap/item.html?item_id=5867">
+                    							<img src="images/modules/baby/nurse2.jpg"/>
+                    						</a>
+                    					</dt>
+                    					<dd><a href="http://www.myjmall.com/wap/item.html?item_id=5867">Neutral-宝宝温和润肤按摩油</a></dd>
+                    					<dd class="color-red">&yen;68</dd>
+                    				</dl>
+                    			</div>
+                    		</div>
+                    		<div class="product-4">
+                    			<div class="lt">
+                    				<dl>
+                    					<dt>
+                    						<a href="http://www.myjmall.com/wap/item.html?item_id=5743">
+                    							<img src="images/modules/baby/nurse3.jpg"/>
+                    						</a>
+                    					</dt>
+                    					<dd><a href="http://www.myjmall.com/wap/item.html?item_id=5743">WELEDA维蕾德顺产按摩油</a></dd>
+                    					<dd class="color-red">&yen;108</dd>
+                    				</dl>
+                    			</div>
+                    			<div class="lt">
+                    				<dl>
+                    					<dt>
+                    						<a href="http://www.myjmall.com/wap/item.html?item_id=5745">
+                    							<img src="images/modules/baby/nurse4.jpg"/>
+                    						</a>
+                    					</dt>
+                    					<dd><a href="http://www.myjmall.com/wap/item.html?item_id=5745">Weleda维蕾德有机妊娠纹按摩油</a></dd>
+                    					<dd class="color-red">&yen;118</dd>
+                    				</dl>
+                    			</div>
+                    		</div>
+                    	</div>
+                    </div>
+                    <!-- 基础商品楼层 end02 -->
+                    
+                    <!-- 基础商品楼层 start03 -->
+                    <div class="border-bottom">
+                    	<div class="Hot-product-txt">
+                    		<b>奶瓶餐具</b><span class="boult">&gt;&gt;</span>
+                    	</div>
+                    	<div class="products">
+                    		<div class="product-4">
+                    			<div class="lt">
+                    				<dl>
+                    					<dt>
+                    						<a href="http://www.myjmall.com/wap/item.html?item_id=5693">
+                    							<img src="images/modules/baby/feeder1.jpg"/>
+                    						</a>
+                    					</dt>
+                    					<dd><a href="http://www.myjmall.com/wap/item.html?item_id=5693">AVENT新安怡宽口径自然原生</a></dd>
+                    					<dd class="color-red">&yen;77</dd>
+                    				</dl>
+                    			</div>
+                    			<div class="lt">
+                    				<dl>
+                    					<dt>
+                    						<a href="http://www.myjmall.com/wap/item.html?item_id=5804">
+                    							<img src="images/modules/baby/feeder2.jpg"/>
+                    						</a>
+                    					</dt>
+                    					<dd><a href="http://www.myjmall.com/wap/item.html?item_id=5804">AVENT新安怡新款卡通企鹅杯</a></dd>
+                    					<dd class="color-red">&yen;88</dd>
+                    				</dl>
+                    			</div>
+                    		</div>
+                    		<div class="product-4">
+                    			<div class="lt">
+                    				<dl>
+                    					<dt>
+                    						<a href="http://www.myjmall.com/wap/item.html?item_id=5815">
+                    							<img src="images/modules/baby/feeder3.jpg"/>
+                    						</a>
+                    					</dt>
+                    					<dd><a href="http://www.myjmall.com/wap/item.html?item_id=5815">NUBY保温吸盘碗</a></dd>
+                    					<dd class="color-red">&yen;69</dd>
+                    				</dl>
+                    			</div>
+                    			<div class="lt">
+                    				<dl>
+                    					<dt>
+                    						<a href="http://www.myjmall.com/wap/item.html?item_id=5817">
+                    							<img src="images/modules/baby/feeder4.jpg"/>
+                    						</a>
+                    					</dt>
+                    					<dd><a href="http://www.myjmall.com/wap/item.html?item_id=5817">NUBY小怪兽学饮杯</a></dd>
+                    					<dd class="color-red">&yen;59</dd>
+                    				</dl>
+                    			</div>
+                    		</div>
+                    	</div>
+                    </div>
+                    <!-- 基础商品楼层 end03 -->
+                    
+                    <!-- 基础商品楼层 start04 -->
+                    <div>
+                    	<div class="Hot-product-txt">
+                    		<b>宝宝洗护</b><span class="boult">&gt;&gt;</span>
+                    	</div>
+                    	<div class="products">
+                    		<div class="product-4">
+                    			<div class="lt">
+                    				<dl>
+                    					<dt>
+                    						<a href="http://www.myjmall.com/wap/item.html?item_id=5871">
+                    							<img src="images/modules/baby/Cleaning1.jpg"/>
+                    						</a>
+                    					</dt>
+                    					<dd><a href="http://www.myjmall.com/wap/item.html?item_id=5871">Neutral 宝宝洗发露250ml</a></dd>
+                    					<dd class="color-red">&yen;66</dd>
+                    				</dl>
+                    			</div>
+                    			<div class="lt">
+                    				<dl>
+                    					<dt>
+                    						<a href="http://www.myjmall.com/wap/item.html?item_id=5913">
+                    							<img src="images/modules/baby/Cleaning2.jpg"/>
+                    						</a>
+                    					</dt>
+                    					<dd><a href="http://www.myjmall.com/wap/item.html?item_id=5913">Zwitsal-宝宝预防治疗红屁屁</a></dd>
+                    					<dd class="color-red">&yen;75</dd>
+                    				</dl>
+                    			</div>
+                    		</div>
+                    		<div class="product-4">
+                    			<div class="lt">
+                    				<dl>
+                    					<dt>
+                    						<a href="http://www.myjmall.com/wap/item.html?item_id=5893">
+                    							<img src="images/modules/baby/Cleaning3.jpg"/>
+                    						</a>
+                    					</dt>
+                    					<dd><a href="http://www.myjmall.com/wap/item.html?item_id=5893">Zwitsal公主防打结洗发露-400ml</a></dd>
+                    					<dd class="color-red">&yen;75</dd>
+                    				</dl>
+                    			</div>
+                    			<div class="lt">
+                    				<dl>
+                    					<dt>
+                    						<a href="http://www.myjmall.com/wap/item.html?item_id=5899">
+                    							<img src="images/modules/baby/Cleaning4.jpg"/>
+                    						</a>
+                    					</dt>
+                    					<dd><a href="http://www.myjmall.com/wap/item.html?item_id=5899">Zwitsal婴儿无泪配方洗发露-500ml</a></dd>
+                    					<dd class="color-red">&yen;77</dd>
+                    				</dl>
+                    			</div>
+                    		</div>
+                    	</div>
+                    </div>
+                    <!-- 基础商品楼层 end04 -->
+				</div> 

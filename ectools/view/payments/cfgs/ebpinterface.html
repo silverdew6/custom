@@ -1,0 +1,37 @@
+<div class="tableform">
+    <div class="division">
+					
+<div class="finder-title">
+    <h2 class="head-title span-auto">海关接口管理<span class="num"></span></h2>
+	</div>
+      <table width="50%" border="1" cellspacing="0" cellpadding="0">
+        <tr align="center">
+          <td >
+        编辑
+          </td>
+		  <td >
+   海关接口
+          </td>
+		  <td >
+       状态
+          </td>
+        </tr>
+  <{foreach from=$ebpinterface item=item key=key}>
+		  <tr align="center">
+
+	 <td >
+		         <a  style="color: #3367ac;" target="dialog::{title:'编辑',  width:500,height:320}" href="?app=ectools&amp;ctl=payment_sea&amp;act=editinterface&amp;ebp_id=<{$item.ebp_id}>&amp;_finder[finder_id]=ba4332&amp;finder_id=ba4332" >编辑</a>
+       </td>
+		  <td >
+       <{$item.name}>
+          </td>
+		<td >
+		<{if($item.ebptype)}>关闭 <{else}>开启 <{/if}>
+          </td>
+        </tr>
+<{/foreach}>
+    </table>   
+	</div>
+</div>
+
+

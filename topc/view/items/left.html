@@ -1,0 +1,62 @@
+<div class="side-box">
+  <div class="hd">搜索本店</div>
+  <div class="bd">
+    <form action="<{url action=topc_ctl_shopcenter@search}>" method="post">
+      <div class="searchbar-small has-figure">
+        <input type="text" class="input-block" name="n" id="" placeholder="关键字">
+        <input type="hidden" name="shop_id" value="<{$item.shop_id}>" />
+        <button type="submit" class="icon-search-a btn input-figure"></button>
+      </div>
+    </form>
+  </div>
+</div>
+<{include file="topc/shop/cat.html"}>
+
+
+
+<!-- 热卖排行 -->
+<div id="showLeftProjects"><i class="icon icon-load-a" ></i></div>
+<!-- 推荐商品 -->
+<div id="showLeft2Projects"><i class="icon icon-load-a" ></i></div>
+<script type="text/javascript">
+	//加载执卖产品
+	$.get("<{url action=topc_ctl_item@hotsaleItem shop_id=$item.shop_id}>",{"showtype":"hotsale"},function(restuthtml){
+		//加载 HTML 代码
+		$("#showLeftProjects").html(restuthtml);
+	});
+	//加载推荐产品
+	$.get("<{url action=topc_ctl_item@hotsaleItem shop_id=$item.shop_id}>",{"showtype":"tuijian"},function(restuthtml2){
+		//加载 HTML 代码
+		$("#showLeft2Projects").html(restuthtml2);
+	});
+</script>
+
+<!-- 浏览过的商品  Start -->	
+<div class="side-box" id="view_history">
+  <div class="hd">浏览过的商品</div>
+  <div class="bd"></div>
+</div>
+
+<!-- 最近购买记录 Start -->	
+<div class="side-box" id="view_buy">
+	<{if $buyerList}>
+	  <div class="hd">最近购买记录</div>
+	  <div class="bd">
+	    <{foreach from=$buyerList item=row}>
+	    <div class="item clearfix ">
+	      <div class="pic">
+	        <a href="<{url action=topc_ctl_item@index item_id=$row.item_id}>" target="_blank" title="<{$row.title}>" data-gid="<{$row.item_id}>">
+	          <img width="210" height="230" src="<{$row.pic_path|storager:t}>" alt="<{$row.title}>">
+	        </a>
+	      </div>
+	      <div class="item-info">
+	        <a class="name" href="<{url action=topc_ctl_item@index item_id=$row.item_id}>" target="_blank" title="<{$row.title}>"><{$row.title}></a>
+	        <div class="price"><{$row.price|cur}></div>
+	      </div>
+	    </div>
+	    <{/foreach}>
+	  </div>
+<{else}>
+	  <div style="margin:10px auto;width:70%;text-align:center">暂无浏览记录</div>
+<{/if}>
+</div>

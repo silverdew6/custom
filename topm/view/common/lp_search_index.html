@@ -1,0 +1,159 @@
+<!-- header -->
+    <header style="height: 80px;position: relative;">
+    	<div id="top_layer">
+            <!------------- 公共的头部导航，固定位置------------>
+            <{require file="block/lp_top.html"}>
+            <!------------- 公共的头部导航，固定位置------------>
+            <div class="liping-d">
+			  	<ul class="liping-ul">
+			  		<{if ($topnav_list)}>
+			  			<{foreach from=$topnav_list item=navl key=lvk}>
+			  				<li><a style="<{if ($current_default_id>0 and $lvk==$current_default_id)}>color:#bd1ce4;<{/if}>" href="<{url action=topm_ctl_topic@lpsearch cid=$lvk}>" title="<{$navl}>"><{$navl}></a></li>
+			  			<{/foreach}>
+			  		<{else}>
+				  		<li><a href="<{url action=topm_ctl_topic@lpsearch cid=781}>">母嬰</a></li>
+				  		<li><a href="<{url action=topm_ctl_topic@lpsearch cid=786}>">美食</a></li>
+				  		<li><a href="<{url action=topm_ctl_topic@lpsearch cid=827}>">保健</a></li>
+				  		<li><a href="<{url action=topm_ctl_topic@lpsearch cid=797}>">美妝</a></li>
+				  		<li><a href="<{url action=topm_ctl_topic@lpsearch cid=705}>">轻奢</a></li>
+			  		<{/if}>
+			  	</ul>
+			</div>
+    	</div>
+	</header>
+	<!-- header -->
+		<div class="home" style="margin: 0 auto;width: 100%;margin-top:3em;">
+			<!-- nav -->
+			<div class="main" style=""> 
+				 <!--<div class="banner-d">
+                    	<img style="width: 100%;" src="images/modules/baby/banner1.jpg"/>
+                 </div>-->
+                 <!--轮播四个小分类；start-->
+					<{if ($results.info.childs)}>
+					<div id="health-img">
+						<ul>
+							<{assign var="fck" value=0}>
+							<{foreach from=$results.info.childs item=curcat key=curk }>
+							<{assign var="fck" value=$fck+1}>
+							<li style="<{if ($fck>4)}>display:none;<{/if}>;text-align:center;border: 1px solid #CCC; border-radius: 1px;">
+								<a href="#floor_<{$curcat.cat_id}>" title="<{$curcat.cat_name}>" target="_self">
+									<img src="<{$curcat.cat_smallpic|default:"images/jmall_loading.png"}>" class="lazy"/>
+									<{if !($curcat.cat_smallpic)}><{$curcat.cat_name}><{/if}>
+								</a>
+							</li>
+							<{/foreach}>
+						</ul>
+					</div>
+					<{/if}>
+				 <!--下四个小分类；end-->
+					
+				<!-- 显示不同的楼层的商品数据-->
+				<{if ($results.info.childs && $results.productlist)}>
+					<{assign var="floorindex" value=0}>
+					<{foreach from=$results.info.childs item=curcat key=cur_ck}>
+					<{assign var="floorindex" value=$floorindex+1}>
+						<div id="floor" class="floor_layer">
+						    <a class="hide_a" id="floor_<{$cur_ck}>"></a>
+							<div class="floor-txt floor-bg-<{$floorindex}>">
+								<span style="color: white;"><{$curcat.cat_name}></span>
+								<a href="<{url action=topm_ctl_topic@lpsearch cid=$cur_ck}>" title="点击查看所有商品" class="more_r">查看所有商品 &gt; </a>
+							</div>
+							<div class="floor-pic swiper-container">
+								<ul class="pic-ul swiper-wrapper">
+									<{if ($cur_ck && $results.productlist[$cur_ck].list  && $results.productlist[$cur_ck].total_found > 0)}>
+									<li class="item swiper-slide">
+										<{assign var="proj_index" value=0}>
+										<{foreach from=$results.productlist[$cur_ck].list item=project key=proid }>
+											<{assign var="proj_index" value=$proj_index+1}>
+												<dl style="position: relative;">
+													<dt class="jmalltax_<{$project.tax}>">
+														<a href="<{url action=topm_ctl_topic@lpdetail id=$project.item_id}>" target="_self"><img data-src="<{$project.image_default_id|storager:'s'}>" class="swiper-lazy" style="width: 270px;height: 270px;"/></a>
+													</dt>
+													<dd class="pic-txt">
+														<a href="<{url action=topm_ctl_topic@lpdetail id=$project.item_id}>" target="_self"><{$project.title}></a>
+													</dd>
+													<dd class="pic-div">
+														<div class="pic-div1">
+															<p><{$project.price|cur}></p><span>扫码购买</span>
+														</div>
+														<div class="pic-div2">
+															<{if ($project.wap_qrcpath)}>
+																<img src="<{$project.wap_qrcpath}>"/>
+															<{else}>
+																<img src="images/ceshi-1.png"/>
+															<{/if}>
+														</div>
+													</dd>
+												</dl>
+											<{if ($proj_index>0 && $proj_index%2==0 && $proj_index < 24)}>
+												</li><!--每两个DL下面放一个Li下边-->
+												<li class="item swiper-slide">
+											<{/if}>
+										<{/foreach}>
+									</li>
+									<{/if}>
+								</ul>
+								<div class="swiper-button-prev swiper-button-black"></div>
+	    						<div class="swiper-button-next swiper-button-black"></div>
+							</div>
+						</div>
+					<{/foreach}>
+					
+				<{else}>
+					<div class="search-empty" style="width:100%; margin:10px auto; text-align:center;padding:30px;">
+						<div id="id">
+							没有搜索结果
+						</div>
+					</div>
+					<div id="floor">
+							<div class="floor-txt floor-bg-<{$floorindex}>">
+								<span>推荐商品</span>
+							</div>
+							<div class="floor-pic swiper-container">
+								<ul class="pic-ul swiper-wrapper">
+									<{if ($results.default_list)}>
+										<{foreach from=$results.default_list item=project key=proid }>
+											<li class="swiper-slide">
+												<dl>
+													<dt>
+														<a href="<{url action=topm_ctl_topic@lpdetail id=$project.item_id}>" target="_self"><img src="<{$project.image_default_id|storager:''}>" class="lazy_2" style="width: 290px;height: 290px;"/></a>
+													</dt>
+													<dd class="pic-txt">
+														<a href="<{url action=topm_ctl_topic@lpdetail id=$project.item_id}>" target="_self"><{$project.title}></a>
+													</dd>
+													<dd class="pic-div">
+														<div class="pic-div1">
+															<p><{$project.price|cur}></p><span>扫码购买</span>
+														</div>
+														<div class="pic-div2"><img src="images/ceshi-1.png"/></div>
+													</dd>
+												</dl>
+											</li>
+										<{/foreach}>
+									<{/if}>
+								</ul>
+								<div class="swiper-button-prev swiper-button-black"></div>
+	    						<div class="swiper-button-next swiper-button-black"></div>
+							</div>
+						</div>
+				<{/if}>
+			</div>
+		</div>
+<!-- 商品滑动切换脚本 -->
+<script>
+	$(function(){
+		var mySwiper = new Swiper('.swiper-container', {
+			autoplay: 3000,/*自动播放间隔 ms*/
+			slidesPerView : 3,/*每行显示的商品数量*/
+			slidesPerGroup : 6,/*3个商品一组*/
+			//slidesPerColumn : 2,/*多行布局里面每列的slide数量*/
+			slidesPerColumnFill : 'column',/*多行布局中以行形式填充*/
+			prevButton:'.swiper-button-prev',/*左边上一页按钮*/
+			nextButton:'.swiper-button-next',/*右边下一页按钮*/
+			lazyLoading : true,
+			lazyLoadingInPrevNext : true,
+			lazyLoadingInPrevNextAmount :5,
+		});
+		//images/jmall_loading.png
+	});
+</script> 

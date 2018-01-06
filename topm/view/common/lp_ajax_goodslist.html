@@ -1,0 +1,39 @@
+<{if ($results.productlist)}>
+	<{foreach from=$results.productlist item=project key=proid }>
+		<li class="item">
+			<dl>
+				<dt class="jmalltax_<{$project.tax}>">
+					<a href="<{url action=topm_ctl_topic@lpdetail id=$project.item_id}>" target="_self">
+						<img src="<{$project.image_default_id|storager:'s'}>"   style="width: 290px;height: 290px;">
+					</a>
+				</dt>
+				<dd class="pic-txt">
+					<a href="<{url action=topm_ctl_topic@lpdetail id=$project.item_id}>" target="_self"><{$project.title}></a>
+				</dd>
+				<dd class="pic-div">
+					<div class="pic-div1">
+						<p><{$project.price|cur}></p><span>扫码购买</span>
+					</div>
+					<div class="pic-div2">
+						<{if ($project.wap_qrcpath)}>
+							<img src="<{$project.wap_qrcpath}>"/>
+						<{else}>
+							<img src="images/ceshi-1.png"/>
+						<{/if}>
+					</div>
+				</dd>
+			</dl>
+		</li>
+	<{/foreach}>
+<{else}>
+	<div class="search-empty">
+		<div style="color:#999;"> 别再拉了，已经到最底部了……   </div>
+	</div>
+<{/if}>
+<script type="text/javascript">
+	$(".search-more").find("input[name=loading_nums]").val("<{$results.next_total_nums|default:0}>");//剩下的记录
+	$(".search-more .btn-loadingmore").attr("data-uri",'<{$results.getmore_action|default:""}>');  //点击地址
+	<{if(!$results.next_total_nums)}>
+		$(".search-more .btn-loadingmore").html("亲，已经到最底部了……").attr("style","cursor: no-drop;");
+	<{/if}>
+</script>

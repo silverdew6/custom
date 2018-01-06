@@ -1,0 +1,110 @@
+<div class=''>
+    <form id='create-open-key' action='?app=sysopen&ctl=admin_log&act=toEdit' method='post'>
+        <!--<{$shop_log.log_id}>-->
+
+        <table>
+            <{if !empty($shop_log.log_id)}>
+            <tr>
+                <th>
+                    <label> 物流企业id: </label>
+                </th>
+                <td>
+                    <input type='text' name="log[log_id]" id='log_id' readonly='readonly' value='<{$shop_log.log_id}>'>
+                </td>
+            </tr>
+            <{/if}>
+            <tr>
+                <th>
+                    <label> 企业组织机构代码: </label>
+                </th>
+                <td>
+                    <input type='text' name="log[OrgCode]" id='OrgCode' required  <{if !empty($shop_log.OrgCode)}> value='<{$shop_log.OrgCode}>' <{/if}>>
+                </td>
+            </tr>
+
+            <tr>
+                <th>
+                    <label> 企业海关注册码: </label>
+                </th>
+                <td>
+                    <input type='text'  name="log[CopCode]" id='CopCode' required  <{if !empty($shop_log.CopCode)}> value='<{$shop_log.CopCode}>' <{/if}>>
+                </td>
+            </tr>
+
+            <tr>
+                <th>
+                    <label> 企业海关注册名称: </label>
+                </th>
+                <td>
+                    <input type='text' name="log[CopName]" id='CopName' required  <{if !empty($shop_log.CopName)}> value='<{$shop_log.CopName}>' <{/if}>>
+                </td>
+            </tr>
+
+            <tr>
+                <th>
+                    <label> 发送方: </label>
+                </th>
+                <td>
+                    <input type='text' name="log[SenderID]" id='SenderID' required placeholder="发送方" <{if !empty($shop_log.SenderID)}> value='<{$shop_log.SenderID}>' <{/if}>>
+                </td>
+            </tr>
+
+            <tr>
+                <th>
+                    <label> 接收部门: </label>
+                </th>
+                <td>
+                    <input type='text' name="log[ReceiverDepartment]" id='ReceiverDepartment' required  <{if !empty($shop_log.ReceiverDepartment)}> value='<{$shop_log.ReceiverDepartment}>' <{/if}>>
+                </td>
+            </tr>
+
+            <tr>
+                <th>
+                    <label> 海关注册登记编号: </label>
+                </th>
+                <td>
+                    <input type='text' name="log[logisticsCode]" id='logisticsCode' required  <{if !empty($shop_log.logisticsCode)}> value='<{$shop_log.logisticsCode}>' <{/if}>>
+                </td>
+            </tr>
+
+            <tr>
+                <th>
+                    <label> 海关注册登记名称: </label>
+                </th>
+                <td>
+                    <input type='text'  name="log[logisticsName]" id='logisticsName' required  <{if !empty($shop_log.logisticsName)}> value='<{$shop_log.logisticsName}>' <{/if}>>
+                </td>
+            </tr>
+
+            <tr>
+                <th>
+                    <label> 报送类型: </label>
+                </th>
+                <td>
+                    <input type='text' name="log[appType]" id='appType' required  <{if !empty($shop_log.appType)}> value='<{$shop_log.appType}>' <{/if}>>
+                </td>
+            </tr>
+            <tr><td>&nbsp;&nbsp;</td><td><label class="label_club">(1-新增 2-变更,默认为1)</label></td></tr>
+
+            <tr>
+                <th>
+                    <label> 业务状态: </label>
+                </th>
+                <td>
+                    <input type='text' name="log[appStatus]" id='appStatus' required  <{if !empty($shop_log.appStatus)}> value='<{$shop_log.appStatus}>' <{/if}>>
+                </td>
+            </tr>
+            <tr><td>&nbsp;&nbsp;</td><td><label class="label_club">(1-暂存，2-申报，默认为2)</label></td></tr>
+            <tr>
+                <td colspan='2'>
+                    <div class="table-action">
+                        <!--<{button id='not-allow-pass' type="button"  label="禁止通过"}>-->
+                        <input type="submit" name="sb" value="确定">
+                        <!--<{button id='submit-create-open-key' type="submit" label="确定"}>-->
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </form>
+</div>
+

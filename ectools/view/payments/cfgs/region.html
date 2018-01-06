@@ -1,0 +1,62 @@
+<div class="tableform">
+    <div class="division">
+					
+<div class="finder-title">
+    <h2 class="head-title span-auto">区域管理<span class="num"></span></h2>
+	</div>
+
+<div style="padding-right:7px;" id="finder-action-ba4332" class="gridlist-action finder-action clearfix">
+  <ul class="finder-action-items flt">
+        <li>
+        <a target="dialog::{title:'添加区域',  width:500,height:320}" href="?app=ectools&amp;ctl=payment_sea&amp;act=toSetOffline&amp;_finder[finder_id]=ba4332&amp;finder_id=ba4332" >
+            <span>添加区域 </span>
+        </a>
+        
+    </li>
+        </ul>
+  </div>
+      <table width="100%" border="1" cellspacing="0" cellpadding="0">
+        <tr align="center">
+          <td style="width:80px;">
+         区域
+          </td>
+	<td style="width:80px;">
+         编辑
+          </td>
+		  <td >
+        支付方式
+          </td>
+		  <td style="width:300px;">
+        对应接口
+          </td>
+		<td style="width:80px;">
+        操作
+          </td>
+        </tr>
+
+  <{foreach from=$region item=item key=key}>
+		  <tr align="center">
+          <td style="width:80px;">
+  <{$item.name}>
+          </td>
+	 <td style="width:80px;">
+		         <a  style="color: #3367ac;" target="dialog::{title:'编辑',  width:500,height:320}" href="?app=ectools&amp;ctl=payment_sea&amp;act=editSetOffline&amp;region_id=<{$item.id}>&amp;_finder[finder_id]=ba4332&amp;finder_id=ba4332" >编辑</a>
+       </td>
+		  <td >
+       <{$item.pay}>
+          </td>
+		  <td style="width:300px;">
+       <{$item.interface}>
+          </td>
+		<td style="width:80px;">
+     <{if($item.state)}>关闭 <{else}>开启 <{/if}>
+          </td>
+        </tr>
+<{/foreach}>
+
+
+    </table>   
+	</div>
+</div>
+
+

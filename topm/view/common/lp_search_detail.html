@@ -1,0 +1,88 @@
+<!-- header -->
+<header style="height: 80px;position: relative;" class="hh1">
+	<!------------- 公共的头部导航，固定位置------------>
+        <{require file="block/lp_top.html"}>
+        <div class="liping-d">
+		  	<ul class="liping-ul">
+		  		<{if ($topnav_list)}>
+		  			<{foreach from=$topnav_list item=navl key=lvk}>
+		  				<li><a style="<{if ($current_default_id>0 and $lvk==$current_default_id)}>color:#bd1ce4;<{/if}>" href="<{url action=topm_ctl_topic@lpsearch cid=$lvk}>" title="<{$navl}>"><{$navl}></a></li>
+		  			<{/foreach}>
+		  		<{else}>
+			  		<li><a href="<{url action=topm_ctl_topic@lpsearch cid=781}>">母嬰</a></li>
+			  		<li><a href="<{url action=topm_ctl_topic@lpsearch cid=786}>">美食</a></li>
+			  		<li><a href="<{url action=topm_ctl_topic@lpsearch cid=827}>">保健</a></li>
+			  		<li><a href="<{url action=topm_ctl_topic@lpsearch cid=797}>">美妝</a></li>
+			  		<li><a href="<{url action=topm_ctl_topic@lpsearch cid=705}>">轻奢</a></li>
+		  		<{/if}>
+		  	</ul>
+		</div>
+    <!------------- 公共的头部导航，固定位置------------>
+	<div id="nav-top"> 
+	    <div class="floor-txt floor-bglist">
+			 <span>产品详情</span>
+			 <a class="return_back" href="javascript:void(0)" onclick="window.history.go(-1)" >返回产品列表</a>
+		</div>
+     </div>
+</header>
+<!--下拉脚本显示和定位-->
+	<!-- header -->
+		<div class="home" style="margin: 0 auto;width: 100%;margin-top: <{if ($results.info.childs)}>9em;<{else}>6em;<{/if}>">
+				<!-- Main Content Start -->
+				<div class="main" style="">
+					<!-- 展示当前产品的一些规格信息之类-->
+					
+						<div id="health-img">
+							<div style="padding: 5px 20px;margin-top: 10px;">
+								<span style="font-size: 16px; color: #999;">产品名称 </span> : <span><{if ($item.item_id)}><{$item.title}><{else}>获取产品信息异常<{/if}></span>
+							</div>
+							<{if ($item.list_image)}>
+							<div style="padding: 5px 20px;border-bottom: 1px solid #DDD;">
+								<span style="font-size: 16px; color: #999;">产品相册 </span>
+								<{if $item.wap_qrcpath}>
+									<div id="QRcode" style="float:right;border:2px solid orange;margin-top:3.5em;">
+										<h4>扫码购买</h4>
+										<img src="<{$item.wap_qrcpath}>" />
+									</div>
+								<{/if}>	
+							</div>
+							<ul>
+								<{assign var="fck" value=0}>
+								<{foreach from=$item.list_image item=currimg key=curk }>
+									<{assign var="fck" value=$fck+1}>
+									<li style="<{if ($fck>4)}>display:none;<{/if}>;text-align:center;border: 1px solid #CCC; border-radius: 1px;width:18%;margin-left:2%">
+										<a href="javascript:void(0);" title="<{$curcat.cat_name}>" target="_self">
+											<img src="<{$currimg}>" />
+										</a>
+									</li>
+								<{/foreach}>
+							</ul>
+							<{/if}>
+						</div>
+					<!-- 搜索商品数据-->
+					<div id="floor" class="floor_layer">
+						<!-- 展示当前的详细描述信息-->
+						<div style="padding: 5px 20px;border-bottom: 1px solid #DDD;">
+								<span style="font-size: 16px; color: #999;">产品介绍</span>
+						</div>
+						<div class="content-text" style="">
+							<{if ($item.wap_desc)}> 
+								<{$item.wap_desc|stripslashes}> 
+							<{else}>
+								对不起，当前商品没有详细描述！  
+							<{/if}> 
+						</div>
+					</div>
+				</div>			 
+				<!-- 预加载脚本 -->
+				<script>
+					  $(function() {
+					      $("#floor .content-text img").lazyload({
+					      	effect: "fadeIn",//载入特效
+					      	threshold: 150, // 提前开始加载
+					      });
+					  });
+				</script>
+			</div>
+		</body>
+</html>

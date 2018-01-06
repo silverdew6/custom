@@ -1,0 +1,47 @@
+<div class="tableform">
+    <div class="division">
+					
+<div class="finder-title">
+    <h2 class="head-title span-auto">海关接口管理<span class="num"></span></h2>
+	</div>
+
+<div style="padding-right:7px;" id="finder-action-ba4332" class="gridlist-action finder-action clearfix">
+  <ul class="finder-action-items flt">
+        <li>
+        <a target="dialog::{title:'添加接口',  width:500,height:320}" href="?app=ectools&amp;ctl=payment_sea&amp;act=sea_add&amp;_finder[finder_id]=ba4332&amp;finder_id=ba4332" >
+            <span>添加接口</span>
+        </a>
+    </li>
+        </ul>
+  </div>
+      <table width="50%" border="1" cellspacing="0" cellpadding="0">
+        <tr align="center">
+          <td >
+        编辑
+          </td>
+		  <td >
+   海关接口
+          </td>
+		  <td >
+       状态
+          </td>
+        </tr>
+  <{foreach from=$sea item=item key=key}>
+		  <tr align="center">
+
+	 <td >
+		         <a  style="color: #3367ac;" target="dialog::{title:'编辑',  width:500,height:490}" href="?app=ectools&amp;ctl=payment_sea&amp;act=editSetOffline&amp;region_id=<{$item.id}>&amp;_finder[finder_id]=ba4332&amp;" >编辑</a>
+       </td>
+		  <td >
+       <{$item.name}>
+          </td>
+		<td >
+       <a href="" style="color: #3367ac;">开启</a>
+          </td>
+        </tr>
+<{/foreach}>
+    </table>   
+	</div>
+</div>
+
+

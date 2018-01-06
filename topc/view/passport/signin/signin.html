@@ -1,0 +1,63 @@
+<style type="text/css">
+  #main{
+  	background:#fff;
+  	padding: 0;
+  }
+  #main .wrap-lg{
+  	width: 100%;
+  }
+	.login-wrap{
+		margin-top: 0;
+		margin-bottom: 0;
+	}
+	.offset-lg-1{
+		margin-left: 0;
+		background: #7A1484;
+	}
+	.offset-lg-1 .container{
+		width: 85%;
+    margin: 0 auto;
+	}
+	.offset-lg-1 .container:after{
+		content: '.';
+		height: 0;
+		display: block;
+		visibility: hidden;
+		clear: both;
+	}
+	.signin-logo{
+		height: 149px;
+		overflow: hidden;
+		background-image: url("themes/demo/images/signin-logo.png"); 
+		position: relative;
+	}
+	.signin-logo a{
+		display: inline-block;
+		width: 150px;
+		height: 30px;
+		position: absolute;
+		bottom: 0;
+		right: 26%;
+	}
+	.login .form-row{
+		margin: 0 50px;
+	}
+</style>
+
+<div class="row offset-lg-1 login-wrap">
+	<div class="signin-logo">
+		<a href="javascript:void(0);" style="background: #FFF;"></a>
+	</div>
+	<div class="container" style="width: 1210px;">
+	  <div class="col-lg-7" style="width: 800px;height: 400px;overflow: hidden;">
+	      <{if $env.conf.sysconf.site.loginlogo}>
+	      	<img src="<{$env.conf.sysconf.site.loginlogo}>" alt="<{$env.conf.sysconf.site.name}>" alt="" height="400" style="width:800px;">
+	      <{else}>
+	      	<img src="<{$env.base_full_url}>/themes/luckymall/images/demo_login.jpg" alt="" height="400" style="width:800px;">
+	      <{/if}>
+	  </div>
+	  <div class="col-lg-7 login" style="margin-top: 46px;margin-left: 20px;width: 360px;">
+	    <{include file='topc/passport/signin/member-signin.html'}>
+	  </div>
+  </div>
+</div>

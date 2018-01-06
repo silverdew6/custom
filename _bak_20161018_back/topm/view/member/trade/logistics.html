@@ -1,0 +1,43 @@
+  <div id="wl_layer">
+    <span>物流跟踪</span>
+    <{if $track.tracker}>
+    <i class="icon icon-down items"></i>
+    <ul id="wl_layer_info">
+      <{foreach from=$track.tracker item=tracker}>
+      <li>
+        <div class="dot"></div>
+        <div class="step-con">
+          <div><{$tracker.AcceptStation}></div>
+          <div><{$tracker.AcceptTime}></div>
+        </div>
+      </li>
+      <{/foreach}>
+    </ul>
+    <{else}>
+    <{$track.logmsg}>
+    <{/if}>
+ </div> 
+ <script type="text/javascript">
+      var flag = false;
+      $('#wl_layer_info li:first-child').tap(function(){
+        $(this).siblings('li').toggle();
+        if(flag==false){
+          $("#wl_layer").find('.icon-down').addClass('list-open');
+          flag = true;
+        }else{
+         $("#wl_layer").find('.icon-down').removeClass('list-open');
+          flag = false;
+        }
+      });
+      $("#wl_layer").find('.icon-down').tap(function(){
+      		var ti = $(this).attr('op');
+      		$('#wl_layer_info li:first-child').siblings('li').toggle(); //显示和关闭物流信息；
+      		if(ti=="op"){
+      			$(this).removeAttr('op');
+      			$(this).removeClass('list-open');
+      		}else{
+      			$(this).attr('op','op');
+      			$(this).addClass('list-open');
+      		}      	
+      });
+ </script>

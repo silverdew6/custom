@@ -1,0 +1,44 @@
+<div class=''>
+    <form id='create-open-key' action='?app=sysopen&ctl=admin_ebp&act=toEdit' method='post'>
+        <!--<{$shop_pay.pay_id}>-->
+
+        <table>
+            <{if !empty($shop_other.other_id)}>
+            <tr>
+                <th>
+                    <label> 信息id: </label>
+                </th>
+                <td>
+                    <input type='text' name="other[other_id]" id='other_id' readonly='readonly' value='<{$shop_other.other_id}>'>
+                </td>
+            </tr>
+            <{/if}>
+            <tr>
+                <th>
+                    <label> 电商平台代码: </label>
+                </th>
+                <td>
+                    <input type='text' name="other[ebpCode]" id='ebpCode' required  <{if !empty($shop_other.ebpCode)}> value='<{$shop_other.ebpCode}>' <{/if}>>
+                </td>
+            </tr>
+
+            <tr>
+                <th>
+                    <label> 电商平台名称: </label>
+                </th>
+                <td>
+                    <input type='text'  name="other[ebpName]" id='ebpName' required  <{if !empty($shop_other.ebpName)}> value='<{$shop_other.ebpName}>' <{/if}>>
+                </td>
+            </tr>
+            <tr>
+                <td colspan='2'>
+                    <div class="table-action">
+                        <input type="submit" name="submit" value="确定"/>
+                    </div>
+					<!--onclick="javascript:location.href='?app=sysopen&ctl=admin_ebp&act=index'"-->
+                </td>
+            </tr>
+        </table>
+    </form>
+</div>
+

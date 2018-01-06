@@ -1,0 +1,130 @@
+<style>
+  #mask{
+    position: absolute;
+    width: 175px;
+    height: 175px;
+    background: #ffa;
+    opacity: 0.5;
+    top: 0;
+    left: 0;
+    display:none;
+  }
+  #superMask{
+    position: absolute;
+    width: 363px;
+    height: 363px;
+    opacity: 0;
+    top: 0;
+    left: 0;
+    cursor: move;
+	}
+  #largeDiv{
+    position: absolute;
+    width: 400px;
+    height: 400px;
+    background: #fff;
+    border: 1px solid #ddd;
+    top: 0;
+    left: 364px;
+    z-index: 999;
+    display: none;
+	}
+</style>
+<div class="col-lg-5 box" style="float:none; border: 1px solid #e8e8e8;" >
+  <div class="thumbnail-slider" data-toggle="switchable" data-switchable-config='{
+    "circle": true,
+    "hasFlips": true
+  }' style="position: relative;">
+    <ol class="switchable-content" style="position: relative;border: 0; border-bottom: 1px solid #f3f3f3;">
+      <{if !$item.list_image}>
+      <li><img id="mImg" src="<{$image_default_id.L.default_image}>" /></li>
+      <{else}>
+      <{foreach from=$item.list_image item=image_id}>
+      <li><img id="mImg" src="<{$image_id|storager:'l'}>" /></li>
+      <{/foreach}>
+      <{/if}>
+      <div id="mask"></div>
+	  <div id="superMask"></div>
+    </ol>
+	<div id="largeDiv"></div>
+		
+    <div class="clearfix">
+      <span class="prev icon icon-arrow-left"></span>
+      <div class="switchable-nav-wrap">
+        <ul class="switchable-nav tab-switchable-nav">
+          <{if !$item.list_image}>
+          <li class="active"><img src="<{$image_default_id.S.default_image|storager:t}>" /></li>
+          <{else}>
+          <{foreach from=$item.list_image item=image_id}>
+          <{if $image_id == $item.image_default_id}>
+          <li class="active"><img src="<{$image_id|storager:t}>" /></li>
+          <{else}>
+          <li><img src="<{$image_id|storager:t}>" /></li>
+          <{/if}>
+          <{/foreach}>
+          <{/if}>
+        </ul>
+      </div>
+      <span class="next icon icon-arrow-right"></span>
+    </div>
+  </div>
+</div>
+
+<script>
+//商品图片放大镜功能脚本  2017-02-04 郑永荣 start
+window.onload=function(){
+	zoom.init();
+}
+var zoom={
+	MSIZE:0,//保存mask的宽和高
+	MAX:0,//保存最大可用的top和left
+	
+	init:function(){
+		$("#superMask").mouseover(function(){
+		  $("#mask").css("display","block");
+		  var showOk = false ;
+		  $(".tab-switchable-nav>li").each(function(x,v){
+			  	if($(v).hasClass("active") && $(v).has("img[src]")){
+			  		var src=$(v).children("img").attr("src");
+			  		if("undefined"  !=  typeof src && src != "" && !showOk ){
+			  			  var i=src.lastIndexOf(".");//查找src中最后一个.的位置i
+							  src=src.slice(0,i-1)+"l"+src.slice(i);//修改src为: 截取src中0~i-1的子字符串,拼l,拼src中i到结尾的剩余内容
+							  $("#largeDiv").css("backgroundImage","url("+src+")");//设置id为largeDiv的元素的背景图片为:"url("+src+")"
+							  $("#largeDiv").css("display","block");
+			  				showOk =true ;
+			  		}
+			  	}
+		  });
+		});
+		$("#superMask").mouseout(function(){
+		    $("#mask").css("display","none");
+		    $("#largeDiv").css("display","none");
+		});
+		
+		this.MSIZE=parseFloat($("#mask").width());
+		var ssize=parseFloat($("#superMask").width());
+		console.log(ssize)
+		//计算MAX: ssize-MSIZE;
+		this.MAX=ssize-this.MSIZE;
+		//为id为superMask的div绑定鼠标移动事件为maskMove
+		$("#superMask").bind("mousemove",this.maskMove.bind(this));
+		
+	},
+	//专门负责响应mousemove事件，移动mask
+	maskMove:function(e){//获得事件对象
+		var x=e.offsetX;//获得鼠标相对于superMask的x坐标，保存在x中
+		var y=e.offsetY;//获得鼠标相对于superMask的y坐标，保存在y中
+		//计算top: y-MSIZE/2 保存在变量t中
+		var t=y-this.MSIZE/2;
+		//计算left: x-MSIZE/2 保存在变量l中
+		var l=x-this.MSIZE/2;
+		t=t<0?0:t>this.MAX?this.MAX:t;//如果t<0,就改回0，否则如果t>MAX，就改回MAX
+		l=l<0?0:l>this.MAX?this.MAX:l;//如果left<0,就改回0，否则如果left>MAX，就改回MAX
+		$("#mask").css("top",t+"px");//设置id为mask的元素的top为t
+		$("#mask").css("left",l+"px");//设置id为mask的元素的left为l
+		//修改largeDiv的背景图片位置为-l*倍数和-t*倍数
+		$("#largeDiv").css("backgroundPosition",-l*16/8+"px "+(-t*16/8)+"px");
+	},
+}
+//商品图片放大镜功能脚本  2017-02-04 郑永荣 end
+</script>

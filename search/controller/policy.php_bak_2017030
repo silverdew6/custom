@@ -1,0 +1,107 @@
+<?php
+
+class search_ctl_policy extends desktop_controller {
+
+    public function index()
+    {
+        if( $policy = app::get('search')->getConf('search_server_policy') )
+        {
+            $obj = kernel::single($policy);   //search_policy_mysql
+            $status = $obj->status($msg); //查询当前搜索的连接状态。
+            if( !$status ) {
+                app::get('search')->setConf('search_server_policy','');
+            }
+        }
+        //查询已有的搜索方式
+        $searchList = $this->finder('search_mdl_policy',
+        				   array(
+				                'title' =>  app::get('search')->_('搜索引擎管理'),
+				                'base_filter' => array(),
+				                'use_buildin_set_tag' => false,
+				                'use_buildin_export' => false,
+				                'use_buildin_selectrow'=>false,
+				            ));
+        return  $searchList ? $searchList : false ;
+    }
+    
+    /**
+     * 开启 Xunsearch 搜索引擎的索引更新操作；
+     * 
+     */
+     function xunsearch(){
+     	// 是否开启
+     	$xsobj = 	kernel::single("search_policy_xunsearch")->instance("demo");
+     	echo "总数据记录条数：".$xsobj->getTotal_num();
+     	echo "<br/>";
+     	$unnn = 0 ;
+     	$condition = array("level"=> 3 , "keyword"=> "奶粉");
+     	
+     	//分面 $xsobj->commonFacetsConfig(array("parent_id")); $resd = $xsobj->commonFacetsConfig("parent_id" ,true);
+     	$rest = $xsobj-> searchXs_Result($condition,1,$unnn);
+     	
+     	echo "<TTTTTTTTTTT>";
+     	
+     	$condition2 = array("shop_id"=> 1 , "keyword"=> "韩国进口");
+     	$xsobj2 = 	kernel::single("search_policy_xunsearch")->instance("jmall");
+     	$rest = $xsobj2-> searchXs_Result($condition2,1,$unnn);
+     	var_dump($unnn);
+     	exit;
+     	$newInd = array("cat_id" => 901 , "cat_name"=> "小样我就这样2","parent_id"=>792,'level'=>3);
+     	$ret = $xsobj->add_One($newInd);
+     	var_dump($ret);
+     	exit;
+     	$inputdata = input::get();
+     	//print_r($inputdata);
+     	$status_pl  = array("open"=> "启用","colse"=> "关闭");
+     	//POST 表单提交
+     	$msg = "";
+     	if(isset($inputdata["open_status"]) && trim($inputdata["open_status"])!= "" ){
+     		$up_status = isset($inputdata["open_status"]) ? trim($inputdata["open_status"]) : 'colse';
+     		//显示开启操作；
+	 		if($up_status== 'open' && intval($inputdata["opta"])===1){
+	 			//$xsobj = 	kernel::single("search_policy_xunsearch");  //xunsearch Lib   ＝＝＝＝ search_policy_xunsearch
+	            $xsobj = 	kernel::single("search_policy_xunsearch")->instance("demo");
+	            if($xsobj->checkXS_status($msg) ) {	//查询当前搜索的连接状态。
+	                app::get('search')->setConf('search_server_xunsearch',1);
+	                $is_open_status = 'open';
+	            } //return redirect::back();  return redirect::action('topc_ctl_list@index',array('n'=>$keyword));
+	 		}else{  
+	 			app::get('search')->setConf('search_server_xunsearch',0);	//关闭
+	 			$is_open_status = 'colse';
+	 		}
+     	}
+     	$is_openxs  = app::get('search')->getConf('search_server_xunsearch');
+     	
+     	if(isset($is_openxs) && intval($is_openxs) ===1 ){  //已开启 ，才有更新索引的相关功能和操作内容
+     		$is_open_status = 'open';
+     		//展示索引数量；
+     		
+     		
+     		//查询索引的相关数据；
+     		
+     		
+     	} 
+     	$pagedata["xuns_opendata"] = array("slist" => $status_pl , "status" =>  $is_open_status );
+     	return $this->page('search/xunsearch/default.html', $pagedata);
+     }
+
+    //开启搜索
+    public function setDefault()
+    {
+        $this->begin('?app=search&ctl=policy&act=index');
+        $method = $_GET['method'];
+        $name = $_GET['name'];
+        if($method == 'open')
+        {
+            $obj = kernel::single($name);
+            if( !$obj->status($msg) )
+            {
+                $this->end(false, $this->app->_('连接异常，请先确认是否连接'));
+            }
+            app::get('search')->setConf('search_server_policy',$name);
+        }
+        $this->adminlog("修改默认搜索引擎", 1);
+        $this->end(true, $this->app->_('保存成功'));
+    }
+}
+

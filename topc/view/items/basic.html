@@ -1,0 +1,81 @@
+<div class="row">
+	<!-- 分三大区域-->
+	<div style="width: 80%; display: inline-block;  ">
+		<!-- 相册-->
+		<div style="display: inline-block; vertical-align: top;padding-top:10px;">
+			<{include file="topc/items/basic/pic.html"}>
+			<!-- 添加收藏 和分享-->
+		  	<!-- JiaThis Button BEGIN -->
+		  	<div class="pro-like01" style="margin:10px 8px;">
+		  		<span style="color:#888;font-size:10px;">暂不购买？ </span>
+				<{if $nologin!=1}>
+					<a href="<{url action=topc_ctl_passport@signin next_page=$next_page}>" class="favorite-btn on"><i class="icon icon-heart"></i>收藏商品</a>
+				<{else}>
+					<!-- 是否已经收藏过当前商品 -->
+					<span class="favorite-btn hide"><i class="icon icon-heart"></i>已收藏</span>
+					<a href="<{url action=topc_ctl_collect@ajaxFav}>" class="favorite-btn on" data-ajax-data="item_id=<{$item.item_id}>" rel="_request"><i class="icon icon-heart"></i>收藏商品</a>
+				<{/if}>
+				
+				<!-- JiaThis share -->
+				<div class="jiathis_style pro-share" style="margin-left:30px;float: right;">
+				  <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jtico jtico_jiathis" target="_blank" style="color: #8C8C8C;"><i style="font-size:18px;color:#dd2434" class="icon icon-share"></i> 分享</a>
+				</div>
+		    </div>
+		     <!--<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js?uid=" charset="utf-8"></script> JiaThis Button END -->
+		</div>
+	
+		<!-- 详细内容区-->
+		 <div class="col-lg-11 box" style="margin-left: 0; display: inline-block;  width: auto;float: none;max-width:560px;">
+		    <div class="detail-panel description-panel">
+		      <div class="detail-panel-bd">
+		        <form action="<{url action=topc_ctl_cart@add mode=fastbuy}>" method="post" id="items_action_form">
+		          <!-- 	middle    -->
+		          <div class="detail-panel-info" style="width:auto">
+		            <div class="detail-panel-hd">
+						 <h1><!-- 2016/3/4 LCD 增加业务模式和区域 -->
+							<span style="background: rgb(150, 22, 195); color: #f3f3f3; border-radius: 3px; padding: 3px 8px; font-size: 0.8em;">
+							<{if $item.tax==1}>完税<{/if}><{if $item.tax==2}>保税<{/if}><{if $item.tax==3}>直邮<{/if}>
+						   &nbsp;<{$item.name_region}></span>
+			                <{if $activityDetail}>
+			                <a href="<{url action=topc_ctl_activity@activity_item_list id=$activityDetail.activity_info.activity_id}>" data-id="<{$group.activity_id}>">
+			                  <span class="item-describe-tag" style="height: 25px;line-height: 25px;border-radius: 3px;"><{$activityDetail.activity_info.activity_tag}></span>
+			                </a>
+			                <{/if}>
+			                <{$item.title}>
+			              </h1>
+			              <div><{$item.sub_title}></div>
+		            </div>
+		            <!--  商品价格区域以及商品配送区域  -->
+		            <{include file="topc/items/basic/price.html"}> 
+		             <!--  商品购买 -->
+		            <{include file="topc/items/basic/buy.html"}>
+		          </div>
+		        </form>
+		      </div>
+		    </div>
+		  </div>
+		<!-- 详细内容区 END -->
+	
+	</div>
+	<!-- 店招品牌 START -->
+	<div class="detail-panel detail-brand" >
+		<{if $item_brandinfo}>
+      		<div class="brdlay">
+      			<{if ($item_brandinfo.brand_id && $item_brandinfo.brand_logo)}>
+      				<a href="javascript:void(0);"  title="所属品牌：<{$item_brandinfo.brand_name}>" class="jmalltax_brand"><img style="max-height:100px;" src="<{$item_brandinfo.brand_logo|storager:''}>"  /></a> 
+      			<{else}>
+      				<img src="./images/2017-02-07_093430.png" style="max-height: 100px;" />
+      			<{/if}>
+      		</div>
+      	<{/if}>
+		
+      	<{include file="topc/items/basic/shop.html"}>
+	</div>
+	<!-- 店招品牌 END -->
+	
+	<!-- 服务要求 start -->
+		<div class="tips-img" style="margin-top:20px;">
+			<div><img src="./images/tips.png"/> </div>
+		</div>
+	<!-- 服务要求 end -->
+</div>

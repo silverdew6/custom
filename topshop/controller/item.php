@@ -1,0 +1,572 @@
+<?php
+
+/**
+ * @brief 商家商品管理
+ */
+class topshop_ctl_item extends topshop_controller {
+
+    public $limit = 10;
+    
+    public $sys_taxList = array();
+    
+    function __construct(){
+    	parent::__construct();
+    	$this->sys_taxList= array(array("id"=>1 ,"name"=>"完税"),array("id"=>2 ,"name"=>"保税"),array("id"=>3 ,"name"=>"直邮")) ;;
+    }
+
+    public function add()
+    {
+        //$pagedata['return_to_url'] = request::server('HTTP_REFERER');
+        $pagedata['shopCatList'] = app::get('topshop')->rpcCall('shop.cat.get',array('shop_id'=>$this->shopId,'fields'=>'cat_id,cat_name,is_leaf,parent_id,level'));
+        $pagedata['shopId'] = $this->shopId;
+        $filter['shop_id']= $this->shopId;
+        // 获取店铺区域和业务模式基本信息  //2016/2/24 lcd
+        $objMdlshop = app::get('sysshop')->model('shop_info');
+        $shopInfo = $objMdlshop->getRow('sea_region,tax', $filter);
+        $filter = unserialize($shopInfo['sea_region']);
+		//	区域2016/3/1  这里变更了，从表wareregion表中取数据
+		$pagedata['region'] = $this->_getWareList();
+		
+		/*
+		 $ectoolsdata = app::get('sysshop')->model('ware_region');
+		 $fields = "id,name,state,tax";
+		 $filter =array('shop_id'=>$this->shopId);
+		 $pagedata['region']=$ectoolsdata ->getList($fields, $filter);
+      	 $ectoolsdata = app::get('ectools')->model('region');
+		 $fields = "id,name";
+		 $filter =array('id'=>$filter);
+		 $pagedata['region']=$ectoolsdata ->getList($fields, $filter);	
+		*/
+         $filter_tax= unserialize($shopInfo['tax']);
+		 //业务模式2016/3/1  ，先固定为业务为1完税，3直邮   _____by xch 09.08
+		 /*$ectoolsdata = app::get('sysshop')->model('tax');
+		 $filter_tax =array('id'=>$filter_tax);
+		 $pagedata['tax']=$ectoolsdata ->getList('*', $filter_tax);*/
+		 $pagedata['tax']= $this->sys_taxList; //$ectoolsdata ->getList('*', $filter_tax);
+		 //区分是增加的
+		 $pagedata['add']=1;
+
+        $this->contentHeaderTitle = app::get('topshop')->_('添加商品');
+        return $this->page('topshop/item/edit.html', $pagedata);
+    }
+    /**
+     * 获取所有的仓库
+     */
+    private function _getWareList(){
+    	//$taxList = array(array("id"=>1 ,"name"=>"完税"),array("id"=>3 ,"name"=>"直邮"));
+    	$taxList = array("1"=>"完税","2"=>"保税","3"=>"直邮");
+    	$ectoolsdata = app::get('sysshop')->model('ware_region');
+		$fields = "id,name,state,tax";
+		$filter =array('shop_id'=>$this->shopId);
+		$region_list=$ectoolsdata ->getList($fields, $filter);
+		if($region_list&& !empty($region_list)){
+		 	foreach($region_list as $kv => $vrie){
+		 		$tax_name = intval($vrie["tax"])> 0 && !empty($taxList[$vrie["tax"]]) ?  $taxList[$vrie["tax"]] : "";
+		 		$tax_name  and $region_list[$kv]["full_name"] = "[{$tax_name}]&nbsp;&nbsp;&nbsp;&nbsp;". $vrie["name"];
+		 	}		 	
+		}
+    	return $region_list;
+    }
+    
+    //商品库存报警设置
+    public function storePolice()
+    {
+        $shopId = $this->shopId;
+        $params['shop_id'] = $shopId;
+        $params['fields'] = 'police_id,policevalue';
+
+        $storePolice = app::get('topshop')->rpcCall('item.store.info',$params);
+        //echo '<pre>';print_r($storePolice);exit();
+        $pagedata['storePolice'] = $storePolice;
+        $this->contentHeaderTitle = app::get('topshop')->_('设置商品库存报警数');
+        return $this->page('topshop/item/storepolice.html', $pagedata);
+    }
+    //保存库存报警
+    public function saveStorePolice()
+    {
+        $storePolice = intval(input::get('storepolice'));
+        $policeId = intval(input::get('police_id'));
+        $url = url::action('topshop_ctl_item@storePolice');
+        try
+        {
+            $validator = validator::make(
+                    [$storePolice],
+                    ['required|integer|min:1|max:99999'],
+                    ['库存预警值必填!|库存预警值必须为整数!|库存预警值最小为1!|库存预警值最大为99999!']
+                );
+            $validator->newFails();
+        }
+        catch( \LogicException $e )
+        {
+            return $this->splash('error', $url, $e->getMessage(), true);
+        }
+        $shopId = $this->shopId;
+        $params['shop_id'] = $shopId;
+        $params['policevalue'] = $storePolice;
+        if(!is_null($policeId))
+        {
+            $params['police_id'] = $policeId;
+        }
+        try
+        {
+            app::get('topshop')->rpcCall('item.store.add',$params);
+        }
+        catch( \LogicException $e )
+        {
+            return $this->splash('error', null, $e->getMessage(), true);
+        }
+
+        return $this->splash('success', $url, '保存成功', true);
+    }
+
+    public function edit()
+    {
+        //$pagedata['return_to_url'] = request::server('HTTP_REFERER');
+        $itemId = intval(input::get('item_id'));
+        $pagedata['shopId'] = $this->shopId;
+
+        // 店铺关联的商品品牌列表
+        // 商品详细信息
+        $params['item_id'] = $itemId;
+        $params['shop_id'] = $this->shopId;
+        $params['fields'] = "*,sku,item_store,item_status,item_count,item_desc,item_nature,spec_index";
+        $pagedata['item'] = app::get('topshop')->rpcCall('item.get',$params);
+        //print_r($pagedata['item']);
+        $pagedata['item']['title'] = $pagedata['item']['title'];
+        // 商家分类及此商品关联的分类标示selected
+        $scparams['shop_id'] = $this->shopId;
+        $scparams['fields'] = 'cat_id,cat_name,is_leaf,parent_id,level';
+        $pagedata['shopCatList'] = app::get('topshop')->rpcCall('shop.cat.get',$scparams);
+        $selectedShopCids = explode(',', $pagedata['item']['shop_cat_id']);
+        foreach($pagedata['shopCatList'] as &$v)
+        {
+            if($v['children'])
+            {
+                foreach($v['children'] as &$vv)
+                {
+                    if(in_array($vv['cat_id'], $selectedShopCids))
+                    {
+                        $vv['selected'] = true;
+                    }
+                }
+            }
+            else
+            {
+                if(in_array($v['cat_id'], $selectedShopCids))
+                {
+                    $v['selected'] = true;
+                }
+            }
+        }
+        // 获取店铺区域和业务模式基本信息  //2016/2/24 lcd
+		 $filter['shop_id']= $this->shopId;
+        $objMdlshop = app::get('sysshop')->model('shop_info');
+
+        $shopInfo = $objMdlshop->getRow('sea_region,tax', $filter);
+        $filter = unserialize($shopInfo['sea_region']);
+      	 /*$ectoolsdata = app::get('ectools')->model('region');
+		 $filter =array('id'=>$filter);
+		 $fields = "id,name";
+		 $pagedata['region']=$ectoolsdata ->getList($fields, $filter);*/	
+		 //	区域2016/3/1  这里变更了，从表wareregion表中取数据
+		 /*$ectoolsdata = app::get('sysshop')->model('ware_region');
+		 $fields = "id,name,state";
+		 $filter =array('shop_id'=>$this->shopId);
+		 $pagedata['region']=$ectoolsdata ->getList($fields, $filter);*/
+		 $pagedata['region'] = $this->_getWareList();
+         $filter_tax= unserialize($shopInfo['tax']);
+		 //业务模式2016/3/1
+		 /*$ectoolsdata = app::get('sysshop')->model('tax');
+		 $filter_tax =array('id'=>$filter_tax);
+		 $pagedata['tax']=$ectoolsdata ->getList('*', $filter_tax);*/
+		 $pagedata['tax'] = $this->sys_taxList;
+        $this->contentHeaderTitle = app::get('topshop')->_('添加商品');
+        return $this->page('topshop/item/edit.html', $pagedata);
+    }
+
+    public function itemList()
+    {
+        $pagedata['image_default_id'] = kernel::single('image_data_image')->getImageSetting('item');
+
+        $status = input::get('status',false);
+        $pages =  input::get('pages',1);
+        $pagedata['status'] = $status;
+        $filter = array(
+            'shop_id' => $this->shopId,
+            'approve_status' => $status,
+            'page_no' =>intval($pages),
+            'page_size' => intval($this->limit),
+        );
+        $shopCatId = input::get('shop_cat_id',false);
+        if( $shopCatId )
+        {
+            $filter['shop_cat_id'] = $shopCatId;
+        }
+        $filter['fields'] = 'item_id,list_time,modified_time,title,image_default_id,price,approve_status,store,tax';
+        //库存报警判断
+        if($status=='oversku')
+        {
+            $params['shop_id'] = $this->shopId;
+            $params['fields'] = 'policevalue';
+            $storePolice = app::get('topshop')->rpcCall('item.store.info',$params);
+            $filter['store'] = $storePolice['policevalue']?$storePolice['policevalue']:0;
+            //echo '<pre>';print_r($filter);exit();
+            $itemsList = app::get('topshop')->rpcCall('item.store.police',$filter);
+        }
+        else
+        {
+        	$filter["is_usexunsearch"] = 0 ;//不使用搜索引擎来搜索
+            $itemsList = app::get('topshop')->rpcCall('item.search',$filter);
+        }
+        $pagedata['item_list'] = $itemsList['list'];
+        $pagedata['total'] = $itemsList['total_found'];
+
+        $totalPage = ceil($itemsList['total_found']/$this->limit);
+        $pagersFilter['pages'] = time();
+        $pagersFilter['status'] = $status;
+        $pagers = array(
+            'link'=>url::action('topshop_ctl_item@itemList',$pagersFilter),
+            'current'=>$pages,
+            'use_app' => 'topshop',
+            'total'=>$totalPage,
+            'token'=>time(),
+        );
+        $pagedata['pagers'] = $pagers;
+
+        //获取当前店铺商品分类
+        $catparams['shop_id'] = $this->shopId;
+        //$catparams['fields'] = 'cat_id,cat_name';
+        $itemCat = app::get('topshop')->rpcCall('shop.cat.get', $catparams);
+        $pagedata['item_cat'] = $itemCat;
+        $pagedata['item_tax_type'] = $this->sys_taxList; //业务类型
+        $pagedata['image_default_id'] = kernel::single('image_data_image')->getImageSetting('item');
+
+        $this->contentHeaderTitle = app::get('topshop')->_('商品列表');
+        return $this->page('topshop/item/list.html', $pagedata);
+    }
+    //商品搜所
+    public function searchItem()
+    {
+        $filter = input::get();
+
+        if($filter['min_price']&&$filter['max_price'])
+        {
+            if($filter['min_price']>$filter['max_price'])
+             {
+                $msg = app::get('topshop')->_('最大值不能小于最小值！');
+                return $this->splash('error', null, $msg, true);
+            }
+        }
+        $pages =  $filter['pages'] ? $filter['pages'] : 1;
+        $params = array(
+            'shop_id' => $this->shopId,
+            'search_keywords' => $filter['item_title'],
+			'bn' => $filter['bn'],//2015/12/11增加SKU搜索,雷成德
+            'min_price' => $filter['min_price'],
+            'max_price' => $filter['max_price'],
+            'page_no' =>intval($pages),
+            'page_size' => intval($this->limit),
+        );
+
+        if($filter['use_platform'] >= 0)
+        {
+            $params['use_platform'] = $filter['use_platform'];
+        }
+        if($filter['item_cat'] && $filter['item_cat'] > 0)
+        {
+            $params['search_shop_cat_id'] = (int)$filter['item_cat'];
+        }
+        if($filter['item_no'])
+        {
+            $params['bn'] = $filter['item_no'];
+        }
+
+        $pagedata['use_platform'] = $filter['use_platform'];
+        $pagedata['min_price'] = $filter['min_price'];
+        $pagedata['max_price'] = $filter['max_price'];
+        $pagedata['search_keywords'] = $filter['item_title'];
+        $pagedata['item_cat_id'] = $filter['item_cat'];
+        $pagedata['item_no'] = $filter['item_no'];
+        $params['fields'] = 'item_id,list_time,modified_time,title,image_default_id,price,approve_status,store,tax';
+        $itemsList = app::get('topshop')->rpcCall('item.search',$params);
+
+        $pagedata['item_list'] = $itemsList['list'];
+        $pagedata['total'] = $itemsList['total_found'];
+
+        $totalPage = ceil($itemsList['total_found']/$this->limit);
+        $pagersFilter['pages'] = time();
+        $pagersFilter['min_price'] = $filter['min_price'];
+        $pagersFilter['max_price'] = $filter['max_price'];
+        $pagersFilter['use_platform'] = $filter['use_platform'];
+        $pagersFilter['item_title'] = $filter['item_title'];
+        $pagersFilter['item_cat'] = $filter['item_cat'];
+        $pagersFilter['item_no'] = $filter['item_no'];
+        $pagers = array(
+            'link'=>url::action('topshop_ctl_item@searchItem',$pagersFilter),
+            'current'=>$pages,
+            'use_app' => 'topshop',
+            'total'=>$totalPage,
+            'token'=>time(),
+        );
+        $pagedata['pagers'] = $pagers;
+
+        //获取当前店铺商品分类
+        $catparams['shop_id'] = $this->shopId;
+        //$catparams['fields'] = 'cat_id,cat_name';
+        $itemCat = app::get('topshop')->rpcCall('shop.cat.get', $catparams);
+        $pagedata['item_cat'] = $itemCat;
+
+        $this->contentHeaderTitle = app::get('topshop')->_('商品列表');
+        return $this->page('topshop/item/list.html', $pagedata);
+
+    }
+    public function storeItem()
+    {
+        $postData = input::get();//var_dump($postData);exit;
+        //特殊符号转义
+        $postData['item']['title'] = htmlspecialchars($postData['item']['title']);
+        $postData['item']['sub_title'] = htmlspecialchars($postData['item']['sub_title']);
+        $postData['item']['shop_id'] = $this->shopId;
+        $postData['item']['cat_id'] = $postData['cat_id'];
+        $postData['item']['approve_status'] = 'instock'; //保存时默认为下架
+
+        //单位
+        if(!isset($postData['item']['unit'])|| empty($postData['item']['unit'])){
+        	$postData['item']['unit'] = '011'; //默认单位使用、件；
+        }
+        if(isset($postData["approve_status"]) && trim($postData["approve_status"])=="onsale"){
+        	$postData['item']['approve_status'] = 'onsale'; //上架时保持上架
+        }       
+        if(!implode(',', $postData['item']['shop_cids']))
+        {
+            return $this->splash('error', '', '店铺分类至少选择一项!', true);
+        }
+        $postData['item']['shop_cat_id'] = ','.implode(',', $postData['item']['shop_cids']).',';
+         //判断店铺是不是自营店铺 gongjiapeng
+        $selfShopType = app::get('topshop')->rpcCall('shop.get',array('shop_id'=>$this->shopId));
+        if($selfShopType['shop_type']=='self') {
+            $postData['item']['is_selfshop'] = 1;
+        }
+        try
+        {
+            //条件判断
+            $postData = $this->_checkPost($postData);
+            //添加商品
+            $result = app::get('topshop')->rpcCall('item.create',$postData);
+            //$url = $postData['return_to_url'];
+            $url = url::action('topshop_ctl_item@itemList');
+            $msg = app::get('topshop')->_('保存成功');
+            return $this->splash('success', $url, $msg, true);
+        }
+        catch (Exception $e)
+        {
+            return $this->splash('error', '', $e->getMessage(), true);
+        }
+    }
+
+    private function _checkPost($postData)
+    {
+        if(!$postData['item']['mkt_price'])
+        {
+            $postData['item']['mkt_price'] = 0;
+        }
+        if(!$postData['item']['cost_price'])
+        {
+            $postData['item']['cost_price'] = 0;
+        }
+        if(!$postData['item']['weight'])
+        {
+            $postData['item']['weight'] = 0;
+        }
+        if(!$postData['item']['order_sort'])
+        {
+            $postData['item']['order_sort'] = 1;
+        }
+        if(mb_strlen($postData['item']['title'],'UTF8') > 50)
+        {
+            throw new Exception('商品名称至多50个字符');
+        }
+		 if(mb_strlen($postData['item']['tax'],'UTF8') ==0)
+        {
+            throw new Exception('业务模式不能为空');
+        }
+		if(mb_strlen($postData['item']['sea_region'],'UTF8')==0 || intval($postData['item']['sea_region'])<=0)
+        {
+            throw new Exception('发货仓库不能为空');
+        }
+        $goods_tax = isset($postData['item']['tax']) ? intval($postData['item']['tax']) : 1;
+		if($goods_tax == 1){ //完税商品不需要备案信息和税费
+        	$postData['item']['gs_code']='';
+        	$postData['item']['postyun_code']='';
+        	$postData['item']['postyun_rate']=0;
+        }else{
+        	//海关编码＝＝〉$postData['item']['gs_code']
+        	//海关商品编码＝＝〉$postData['item']['gcode']
+        	if(isset($postData['item']['gcode']) && !empty($postData['item']['gcode'])){
+        		$llent = mb_strlen($postData['item']['gcode'],'UTF8');
+        		if($llent <=5 || $llent> 15)
+		        {
+		            throw new Exception('海关商品编码长度有误');
+		        }
+		        if($goods_tax==3){  //直邮
+		        	$llent2 = mb_strlen($postData['item']['postyun_code'],'UTF8');
+			        if($llent2 <=5 || $llent2> 20) {
+			            throw new Exception('行邮税号长度有误');
+			        }
+			        $feelis = isset($postData['item']['postyun_rate']) ? floatval($postData['item']['postyun_rate']) : 0 ;
+			        if($feelis < 0 || $feelis >= 1) {
+			            throw new Exception('税率的范围在0到1之间的小数');
+			        }
+		        }
+        	}else{
+        		throw new Exception('海关商品编号不能为空');
+        	}
+		}
+        return $postData;
+    }
+
+
+    public function setItemStatus(){
+
+        $postData = input::get();
+        try
+        {
+            if(!$itemId = $postData['item_id'])
+            {
+                $msg = app::get('topshop')->_('商品id不能为空');
+                return $this->splash('error',null,$msg,true);
+            }
+
+            if($postData['type'] == 'tosale')
+            {
+                $shopdata = app::get('topshop')->rpcCall('shop.get',array('shop_id'=>$this->shopId),'seller');
+                if( empty($shopdata) || $shopdata['status'] == "dead" )
+                {
+                    $msg = app::get('topshop')->_('抱歉，您的店铺处于关闭状态，不能发布(上架)商品');
+                    return $this->splash('error',null,$msg,true);
+                }
+                $status = 'onsale';
+                $msg = app::get('topshop')->_('上架成功');
+            }
+            elseif($postData['type'] == 'tostock')
+            {
+                $status = 'instock';
+                $msg = app::get('topshop')->_('下架成功');
+            }
+            else
+            {
+                return $this->splash('error',null,'非法操作!', true);
+            }
+
+            $params['item_id'] = intval($itemId);
+            $params['shop_id'] = intval($this->shopId);
+            $params['approve_status'] = $status;
+            app::get('topshop')->rpcCall('item.sale.status',$params);
+            $queue_params['item_id'] = intval($itemId);
+            $queue_params['shop_id'] = intval($this->shopId);
+            //发送到货通知的邮件
+            if($status == "onsale")
+            {
+                system_queue::instance()->publish('sysitem_tasks_userItemNotify', 'sysitem_tasks_userItemNotify', $queue_params);
+            }
+            $url = url::action('topshop_ctl_item@itemList');
+            return $this->splash('success', $url, $msg, true);
+        }
+        catch(Exception $e)
+        {
+            return $this->splash('error',null,$e->getMessage(), true);
+        }
+    }
+
+    public function deleteItem()
+    {
+        $postData = input::get();
+        //订单状态
+        $orderStatus = array('WAIT_BUYER_PAY', 'WAIT_SELLER_SEND_GOODS', 'WAIT_BUYER_CONFIRM_GOODS');
+
+        try
+        {
+            if(!$itemId = $postData['item_id'])
+            {
+                $msg = app::get('topshop')->_('商品id不能为空');
+                return $this->splash('error',null,$msg, true);
+            }
+
+            //判断商品所在订单的状态
+            $orderParams = array();
+            $orderParams['item_id'] = (int)$itemId;
+            $orderParams['fields'] = 'status';
+            $orderList = app::get('topshop')->rpcCall('trade.order.list.get', $orderParams);
+            if($orderList)
+            {
+                $orderArrStatus = array_column($orderList, 'status');
+                foreach ($orderStatus as $status)
+                {
+                    if(in_array($status, $orderArrStatus))
+                    {
+                        $msg = app::get('topshop')->_('商品存在未完成的订单，不能删除');
+                        return $this->splash('error',null,$msg, true);
+                    }
+                }
+            }
+
+            app::get('topshop')->rpcCall('item.delete',array('item_id'=>intval($itemId),'shop_id'=>intval($this->shopId)));
+        }
+        catch(Exception $e)
+        {
+            return $this->splash('error',null, $e->getMessage(), true);
+        }
+        return $this->splash('success',null,'删除成功', true);
+    }
+
+    public function ajaxGetBrand($cat_id)
+    {
+
+        $params['shop_id'] = $this->shopId;
+        $params['cat_id'] = input::get('cat_id');
+        try
+        {
+            $brand = app::get('topshop')->rpcCall('category.get.cat.rel.brand',$params);
+        }
+        catch(Exception $e)
+        {
+            return $this->splash('error',null, $e->getMessage(), true);
+        }
+        return response::json($brand);exit;
+    }
+	public function ajaxCounty()
+    {
+    	$objShop = app::get('sysshop')->model('area');
+	   	$objMdlShopCat = $objShop->getList('*',null,0,1000,"cn_first ASC");
+	   	/*拼音查找 并更新到数据里*/
+	   	//include("pinyin.php");
+	   	foreach($objMdlShopCat as $k => $value){
+	   		$objMdlShopCat[$k]["cn_name"]= $value["cn_first"]." - ".$value["cn_name"]. " (".$value["en_name"].")";
+	   		/*$charis = pinyin($value["cn_name"],"one","","");
+	   		if($charis){
+	   			$att = array("cn_first"=> strtoupper($charis));
+	   			$objShop->update($att,["area_id"=>$value["area_id"] ] );
+	   		}*/
+	   	}
+      	return response::json($objMdlShopCat);exit;
+    }
+
+    //标准单位
+	public function ajaxUnit()
+    {
+	   $objMdlUnit = app::get('sysitem')->model('unit')->getList('*');
+      return response::json($objMdlUnit);exit;
+    }
+//2016/4/24 通过海关编码获取名称 雷成德
+	public function ajax_itemcode()
+    {
+	$item_gcode = input::get('item_gcode');
+	$filter['code_ts']=$item_gcode;
+   $objItem_code = app::get('sysitem')->model('item_code')->getRow('g_name',$filter);
+      return $objItem_code['g_name'];exit;
+    }
+
+
+}
+
+

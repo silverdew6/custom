@@ -1,0 +1,15 @@
+<span>Defult</span>
+
+<div>
+	<h2 >秒杀活动内容</h2>	
+	<div>
+	<{if $flashdealList}>
+		<{foreach from=$flashdealList item=flash}>
+			<div>
+				<img src ="<{$flash.default_image}>" width="300" />
+				<span><{$flash.item_name}></span>
+			</div>
+		<{/foreach}>		
+	<{/if}>
+	</div>
+</div>

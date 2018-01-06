@@ -1,0 +1,59 @@
+<ul class="seller">
+  <li style="position: relative;">  店铺�?
+  	<a target="_blank" href="<{url action=topc_ctl_shopcenter@index shop_id=$shop.shop_id}>" title="<{$shop.shop_id|shopname}>"><{$shop.shop_id|shopname}></a>
+  	<label style="border: 1px solid #c719dc;  padding: 0 2px; color: #f3f3f3; background: #aa11e6;  border-radius: 1px;position: absolute;  top: -10px;  left: 0;"><{$shop.shoptype|default:""}></label>
+  </li>
+  <li>
+    <div class="clearfix">
+      <div class="im-tit">联系客服�?/div>
+      <div class="im-b">
+			<!--下方在线客服进行了修�?->
+	  		<a target="_blank" href="http://v2.live800.com/live800/chatClient/chatbox.jsp?companyID=597185&configID=125648&jid=4127524804">
+    		<img border="0" src="http://www.myjmall.com/app/toputil/statics/images/jmkf01.jpg" height="15" width="72" alt="" title=""></a>
+	  </div>
+    </div>
+  </li>
+  <li>
+    <div class="dl">
+      <div class="dl-left">评分明细</div>
+      <div class="dl-right">与行业相�?/div>
+    </div>
+    <div class="dl">
+      <div class="dl-left">商品评分�?{$shopDsrData.countDsr.tally_dsr}>�?/div>
+      <div class="dl-right">
+        <i class="icon <{if $shopDsrData.catDsrDiff.tally_dsr.trend == 'go-up'}>icon-arrow-up-a<{elseif $shopDsrData.catDsrDiff.tally_dsr.trend == 'go-down'}>icon-arrow-down-a<{else}>-<{/if}>">
+          <{$shopDsrData.catDsrDiff.tally_dsr.percentage|default:'持平'}>
+        </i>
+      </div>
+    </div>
+    <div class="dl">
+      <div class="dl-left">服务评分�?{$shopDsrData.countDsr.attitude_dsr}>�?/div>
+      <div class="dl-right">
+        <i class="icon <{if $shopDsrData.catDsrDiff.attitude_dsr.trend == 'go-up'}>icon-arrow-up-a<{elseif $shopDsrData.catDsrDiff.attitude_dsr.trend == 'go-down'}>icon-arrow-down-a<{else}>-<{/if}>">
+          <{$shopDsrData.catDsrDiff.attitude_dsr.percentage|default:'持平'}>
+        </i>
+      </div>
+    </div>
+    <div class="dl">
+      <div class="dl-left">配送评分：<{$shopDsrData.countDsr.delivery_speed_dsr}>�?/div>
+      <div class="dl-right">
+        <i class="icon <{if $shopDsrData.catDsrDiff.delivery_speed_dsr.trend == 'go-up'}>icon-arrow-up-a<{elseif $shopDsrData.catDsrDiff.delivery_speed_dsr.trend == 'go-down'}>icon-arrow-down-a<{else}>-<{/if}>">
+          <{$shopDsrData.catDsrDiff.delivery_speed_dsr.percentage|default:'持平'}>
+        </i>
+      </div>
+    </div>
+  </li>
+   <!-- 由于连接还没有做好暂时屏�?->
+  <li>
+    <div class="btn-wrap">
+      <a href="<{url action=topc_ctl_shopcenter@index shop_id=$item.shop_id}>" class="btn btn-sm btn-import"><span><span>进入店铺</span></span></a>
+       <{if $nologin!=1}>
+      <a href="<{url action=topc_ctl_passport@signin}>" class="btn btn-sm btn-caution"><span><span>收藏店铺</span></span></a>
+      <{else}>
+      <a href="<{url action=topc_ctl_collect@ajaxFavshop}>" class="btn btn-sm btn-caution" data-ajax-data="shop_id=<{$item.shop_id}>" rel="_request"><span><span>收藏店铺</span></span></a>
+      <{/if}>
+    </div>
+  </li>
+   
+</ul>
+

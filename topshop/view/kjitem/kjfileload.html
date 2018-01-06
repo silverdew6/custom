@@ -1,0 +1,25 @@
+<div >
+    <form action="<{url action=topshop_ctl_kjitem@kjfileload}>" method="post" enctype="multipart/form-data" >
+        <div style="margin:0 3% 0 0;float:right">
+            类型:<select name="type">
+            <option>全部商品</option>
+            <option value="1">新增商品</option>
+        </select></div>
+    <div style="margin:5% 3%;">
+        <div style="text-align:left">
+            <span style="font-size:16px;">请选择上传文本</span>
+        </div>
+        <hr/>
+        <div style="margin:6% 5%">
+
+        <input type="hidden" name="MAX_FILE_SIZE" value="1000000" />
+        <div style="float:right"><input type="submit" value="上传" /></div>
+        <div ><input type="file" name="pic[]" value=""></div>
+
+
+        </div>
+        <div style="margin:3% 5%;font-size:12px;text-align:center"><span>(上传文本格式:'xls', 'xlsx', 'csv')</span></div>
+        <div style="margin:3% 5%;font-size:14px;text-align:center;color:#FFDAB9"><span>注意：新增商品会进行数据库操作，数据为必填</span></div>
+    </div>
+    </form>
+</div>

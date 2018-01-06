@@ -1,0 +1,548 @@
+<style type="text/css">
+.icon-store-flag{float: left; margin-top: -0.3em;margin-left: -0.6em;}
+.icon-store-flag:before {content: "\e626";color: #ff6f06;padding: 2px 10px;}
+.store-tax-region {padding: 0.8em 1em; background: #fbfbfb; font-size: 0.9em; border-bottom: 1px solid #efefef; color:#007aff}
+.wenxin_layer {margin:1em auto;border: 1px solid #dad9de;border-radius: 2px;width:100%;padding: 0.3em 1.5em;font-size: 0.8em;color: #ff6f06;line-height: 1.7em;background: #fbfbfb;}
+.count_total{ color: green;font-size: 0.9em; width: 65%; display: inline-block; text-align: right;}
+.count_total .fprice{color: #ff6f06;font-size: 0.9em;}
+.select-store .order-discount i {font-size:1em; font-weight:bold;color:#ff6f06;}
+.select-store .activelayer{width:100%;margin:0.1em auto; text-align:right;font-size: 0.9em;}
+.select-store .label-danger2 {background: #FFF; color: red; border: 1px dotted red;}
+.select-store .order-minlus {height: 1.9em; background: #f3f3f3; padding-top: 2px;;display:inline-block;margin-right:0em;}
+.grayB {line-height:1.6em;}
+.sett_tax1_flag{background: #1e9c09; border: 1px solid #1e9c09; padding: 2px 6px; border-radius: 3px; color: #FFF;}
+.sett_tax2_flag{background: #ff6f06; border: 1px solid #ff6f06; padding: 2px 6px; border-radius: 3px; color: #FFF;}
+.icon-store-f { color: #f15d13; font-size: 1.1em; text-indent: 0.1em!important; margin-right: 0.5em; }
+.g-info .info-active{color:red; margin-right: 2em;float: right;font-size:0.8em;}
+.cart-promotion button{background: #FFF; color: red; padding: 2px 5px; margin-left: 0.8em;}
+    
+</style>
+<div class="order">
+  <!--- 头部内容显示-->
+  <header>
+    <div class="list-hd">
+      <div class="backto icon-back ">
+        <input type="button" name="returnBcak" onclick="history.back()">
+      </div>
+      <div class="tit">订单结算</div>
+      <div class="menu">
+      </div>
+    </div>
+  </header>
+  <div class="main">
+  	<div class="wenxin_layer">
+	  	<div class="msg">
+	  		<span style="color: #999;"><b>温馨提示：</b></span><br/>
+	  		因涉及国家监管部门规定，需要对收货信息实名备案，本网站不会保留相关个人信息，请放心填写。
+	  	</div>
+	  </div> 
+    <form action="<{url action=topm_ctl_trade@create}>" method="post" id="form_settle">
+      <input type="hidden" name="checkout" value="1">
+      <input type="hidden" name="mode" value="<{$mode}>">
+      <input type="hidden" name="md5_cart_info" value="<{$md5_cart_info}>">
+      <div class="address-info info-area">
+        <div class="address">
+          <{if $def_addr}>
+          <a href="<{url action=topm_ctl_cart@getAddrList mode=$mode selected=$def_addr.addr_id idcard=$isTaxFirst}>">
+            <input type="hidden" name="addr_id" value="<{$def_addr.addr_id}>">
+            <div class="info-l info">
+              <span class="icon icon-place"></span>
+            </div>
+            <div class="info-m">
+              <table>
+                <tr>
+                  <td class="tit">收货人：</td>
+                  <td class="con"><{$def_addr.name}> &nbsp;&nbsp;<{$def_addr.mobile}></td>
+                </tr>
+                <tr>
+                  <td class="tit">收货地址：</td>
+                  <td class="con"><{$def_addr.area|region}>&nbsp;<{$def_addr.addr}></td>
+                </tr>
+              </table>
+            </div>
+            <div class="info-r info">
+              <span class="icon icon-forward"></span>
+            </div>
+          </a>
+          <{elseif $nowcount <= 0}>
+          <a href="<{url action=topm_ctl_cart@editAddr mode=$mode idcard=$isTaxFirst}>">
+            <div class="info-l info">
+              <span class="icon icon-place"></span>
+            </div>
+            <div class="info-m">  收货地址为空，请去 添加新地址 </div>
+            <div class="info-r info">
+              <span class="icon icon-forward"></span>
+            </div>
+          </a>
+          <{else}>
+          <a href="<{url action=topm_ctl_cart@getAddrList mode=$mode idcard=$isTaxFirst}>">
+            <div class="info-l info">
+              <span class="icon icon-place"></span>
+            </div>
+            <div class="info-m">没有默认的收货地址，请去 选择收货地址 </div>
+            <div class="info-r info">
+              <span class="icon icon-forward"></span>
+            </div>
+          </a>
+          <{/if}>
+		  	<input type="hidden" id="buycard_val" name="buycard_val" value="<{$buycard}>"/>
+             <!--<{if $buycard==''}>
+		       <table>
+                <tr>
+                  <td >购买人身份证：</td>
+                  <td ><input type="text" value="<{$buycard}>"  name="buycard" id="buycard"/></td>
+				  <td>&nbsp;<button type="button" id='button_usercard' style='padding: 0.1em 0.2em;'>保存</span></span></button></td>
+                </tr>
+              </table>
+			  <{/if}>-->
+        </div>
+      </div>
+      <div class="address-info info-area">
+        <div class="address">
+          <a href="<{url action=topm_ctl_cart@getPayTypeList mode=$mode addr_id=$def_addr.addr_id selected=$payType.pay_type s=$isSelfShop}>">
+            <input type="hidden" name="payment_type" value="<{$payType.pay_type}>">
+            <div class="info-l info">
+              <span class="icon icon-point"></span>
+            </div>
+            <div class="info-m">
+              	支付方式：<span style="margin-left: 2em;"><{if $payType}><font color="#ff6f06"><b><{$payType.name}></b></font><{else}>请选择支付方式 <{/if}></span>
+            </div>
+            <div class="info-r info">
+              <span class="icon icon-forward"></span>
+            </div>
+          </a>
+        </div>
+      </div>
+      <{assign var=current_ccid value=1}>
+      <{foreach from=$cartInfo.resultCartData key=shop_id item=cart}>
+		<div class="select-store" style="border-radius: 5px;">
+			<div class="store-n"> <i class="icon icon-store-flag"></i><span><b><{$cart.shop_name}></b></span></div>
+			<!-- 优惠活动 开始-->  
+				<{foreach from=$cart.cartByPromotion item=itemPromotion key=key}>
+					<{if $key!='0'}>
+						<div class="cart-promotion cart-promotion-list">
+						  <{if $mode=='fastbuy'}>
+						  <section>
+							<div class="promotion-info">
+							  <mark>如需参加该商品的其他促销活动，请通过购物车购买</mark>
+							</div>
+							<div class="get-promotion">
+							  <a href="<{url action=topm_ctl_cart@index}>">返回</a> <i class="icon icon-forward"></i>
+							</div>
+						  </section>
+						  <{/if}>
+						  <section>
+							<div class="promotion-info">
+							  <{if $cart.basicPromotionListInfo[$key].promotion_tag }>
+								<button type="button" class="ui-btn ui-btn-negative"><{$cart.basicPromotionListInfo[$key].promotion_tag}></button>
+							  <{/if}>
+							  <{$cart.basicPromotionListInfo[$key].promotion_name}>
+							  <{if $cart.basicPromotionListInfo[$key].promotion_type=='fullminus' || $cart.basicPromotionListInfo[$key].promotion_type=='fulldiscount'}>
+								可优惠:<{$itemPromotion.discount_price|cur}>
+							  <{/if}>
+							</div>
+						  </section>
+						</div>
+					<{/if}>
+				<{/foreach}>
+			<!-- 优惠活动 结束--> 			
+			
+			<!-- 按仓库来拆分订单列表数据 -->
+			<{foreach from=$cart.object2 item=cangkuObj name=checkoutItemList key=searegionid}>
+				<{assign var=current_taxregion_id value=$cangkuObj.0.sea_region}><!--当前仓库及业务类型--> 
+				<div class="store-tax-region"> 
+					<span class="<{if $cangkuObj.0.tax eq '1'}>sett_tax1_flag<{else}>sett_tax2_flag<{/if}>"><{$cangkuObj.0.tax|appc_tax}></span>
+					<span><{$current_taxregion_id|appc_region}></span> 
+					<label class="count_total"> 订单合计：
+						<span id="child_amount_<{$shop_id}>_<{$searegionid}>" style="color:red;"> 0 </span>
+						&nbsp;&nbsp;运费：<span id="child_post_<{$shop_id}>_<{$searegionid}>" style="color:red;"> 0 </span></label>
+						
+					<!-- 参加的活动列表：Start --> 
+					<{if (isset($cangkuObj.selected_promotion) && !empty($cangkuObj.selected_promotion))}>
+					<div class="activelayer" >
+					<{foreach from=$cart.cartByPromotion item=srep key=skey}>
+						<{foreach from=$cangkuObj.selected_promotion item=sp_id name=sp_idd}>
+							<{if ($skey !='0' and $sp_id!='0' and $sp_id eq $skey)}>
+								<div  class="order-minlus">
+					                <span class="label label-danger2"><{$cart.basicPromotionListInfo[$skey].promotion_tag}></span> &nbsp;&nbsp;
+					                <a target="_blank" href="<{url action=topc_ctl_promotion@getPromotionItem promotion_id=$cart.basicPromotionListInfo[$skey].promotion_id}>">
+					                  <{$cart.basicPromotionListInfo[$skey].promotion_name}>
+					                </a>
+					                <{if $cart.basicPromotionListInfo[$skey].promotion_type=='fullminus'
+					                || $cart.basicPromotionListInfo[$skey].promotion_type=='fulldiscount'
+					                || $cart.basicPromotionListInfo[$skey].promotion_type=='xydiscount'}>
+					                 (<span> 活动订单额:<{$srep.fullminus_totalprice|cur}></span>&nbsp;&nbsp;
+					                  <{if ($cangkuObj.all_discount_price >0)}>
+					                  	<span class="order-discount">可减免 <i><{$cangkuObj.all_discount_price|default:0}></i></span>
+					                  <{else}>
+					                  	<a target="_blank" title ="去凑单" href="<{url action=topc_ctl_promotion@getPromotionItem promotion_id=$cart.basicPromotionListInfo[$skey].promotion_id}>">去凑单&gt;&gt;</a>
+					                  <{/if}>)	
+					                <{elseif ($cart.basicPromotionListInfo[$skey].promotion_type=='freepostage')}>
+					                	<span>(活动订单:<{$cangkuObj.all_prom_quantity[$sp_id]|default:0}>件)</span>
+					                <{/if}>
+				              </div>						
+							<{/if}>
+						<{/foreach}>											
+					<{/foreach}>
+					</div>	
+					<{/if}>
+				</div> 
+				 
+				<!--单个产品信息详细内容  便利仓库下面的所有商品信息$cangkuObj-->
+				<div class="store-g">
+				  <ul class="discount-area"> 					
+					<{foreach from=$cangkuObj item=goods name=checkoutItem}>
+						<{assign var=checkoutItemCount value=$cartInfo.resultCartData|count}>
+						<{if ($goods && is_array($goods) && isset($goods.obj_type) && !empty($goods.obj_type))}><!--有效商品-->						 
+						<li class="">
+						  <div class="g-info">
+							<div class="info-l">
+							  <a href="<{url action=topm_ctl_item@index item_id=$goods.item_id}>" class="g-pic">
+								<img src="<{$goods.image_default_id|storager:t}>" alt="<{$current_taxregion_id}>"></a>
+							</div>
+							<div class="info-m">
+							  <{if $goods.activityDetail}><span class="ui-badge-danger">[<{$goods.activityDetail.activity_info.activity_tag}>]</span><{/if}>
+							  <a href="<{url action=topm_ctl_item@index item_id=$goods.item_id}>" class="g-name"><{$goods.title}></a>
+							  <{$goods.spec_info}> 
+								
+								<{if ($goods.selected_promotion)}>
+										<div class="info-active"><{if ($goods.promotions)}>  
+											<{foreach from=$goods.promotions item=gp name=gpkv}><{if ($gp.promotion_id eq $goods.selected_promotion)}>
+												<a title="<{$gp.promotion_name}>" href="<{url action=topc_ctl_promotion@getPromotionItem promotion_id=$gp.promotion_id}>" style="color:red;text-decoration: underline;" target="_blank"><{$gp.promotion_name}>&nbsp;<i class="icon icon-star icon-store-f"></i></a>
+											<{/if}><{/foreach}>
+										<{/if}></div>
+								<{/if}> 
+							</div>
+							<div class="info-r">
+							  <div class="g-price">
+								<span class="after"><i style="color:#444;font-size:0.9em;">共</i><{$goods.price.total_price|cur}></span>
+								<br>
+								<span class="after" style="font-size: 0.8em;">(<i style="color:#444;">单价</i><{$goods.price.price|cur}>)</span>
+								<br><span class="num">
+								  x <i class="n"><{$goods.quantity}></i>
+								</span>
+							  </div>
+							</div>
+						  </div>
+						</li>
+						<{/if}>
+					<{/foreach}>
+				  </ul>
+				</div>				
+				<!-- 显示相关的产品：END -->
+			<{/foreach}>		
+			
+				<div class="sale-del">
+					  <!--  <div class="store-sale fold">
+						<span class="l">店铺优惠</span>
+						<div class="r sale-menu">
+						  <span class="ui-btn-warning ui-btn-outlined">
+							<span>满100元减10元</span>
+							<i class="icon icon-down"></i>
+						  </span>
+						  <div class="dropmenu">
+							<ul>
+							  <li>满100减1元</li>
+							  <li>满100减0元</li>
+							  <li>满100减10元</li>
+							  <li>满100减20元</li>
+							</ul>
+						  </div>
+						</div>
+					  </div> -->
+					  <div class="delivery fold hide">
+						<div class="l">优惠券</div>
+						<div class="r select">
+						  <select name="coupon_use[<{$shop_id}>][coupon_code]" data-shopid="<{$shop_id}>" class="action-select-coupon">
+							<{foreach from=$cart.couponList key=key item=couponItem}>
+							<option value="<{$couponItem.coupon_code}>"><{$couponItem.coupon_name}></option>
+							<{/foreach}>
+						  </select>
+						</div>
+					  </div>
+					  <div class="delivery fold">
+						<div class="l">配送方式
+							<{if ($cart.tax_ids eq '3' or  $cart.tax_ids eq '1-3')}>
+								<span style="font-size: 0.8em; background: rgba(239, 228, 191, 0.68); padding: 1px 5px; text-align: center;color: #007aff;">[直邮:国际EMS]</span>
+							  <{/if}>
+						</div>
+							<div class="r select">
+							 <{if ($cart.tax_ids eq '1' or  $cart.tax_ids eq '1-3')}>
+								 <select name="shipping[<{$shop_id}>][template_id]" id="" class="action-select-shipping" style="<{if ($cangkuObj.0.tax eq '3')}>cursor: not-allowed;background: #efefef;border: 1px solid #e4e4e4;<{/if}>">
+										<{foreach from=$dtyList[$shop_id] key=key item=dtyItem}>
+										<option value="<{$dtyItem.template_id}>"><{$dtyItem.name}></option>
+										<{/foreach}>
+								 </select>
+							 <{elseif ($cart.tax_ids eq '3')}>
+							 	<select name="shipping[<{$shop_id}>][template_id]" id="" class="action-select-shipping" style="cursor: not-allowed;background: #efefef;border: 1px solid #e4e4e4;">
+									<option value="10000">国际EMS(￥20,两件包邮)</option>	 
+								</select>
+							 <{/if}>
+							</div>						
+					  </div>
+					  <{if $zitiDataList}>
+					  <div class="delivery fold ziti-info" style="display: none;">
+						<span class="icon">自提地点&nbsp;&nbsp;&nbsp;</span>
+						<div class="r">
+						  <select id="select-ziti-id" name="ziti[<{$shop_id}>][ziti_addr]">
+						  <{foreach from=$zitiDataList item=item key=key}>
+						  <option value="<{$item.id}>"><{$item.name}></option>
+						  <{/foreach}>
+						  </select>
+						</div>
+					  </div>
+					  <{/if}>
+					  <div class="words">
+						<input type="text" name="mark[<{$shop_id}>]" maxlength="85" placeholder="买家留言，85个字以内">
+					  </div>
+					  <div class="charges">
+						<table>
+						   <tr>
+						    <td rowspan="5" style="text-align:center;vertical-align: top;background: #fbfbfb;"><font color="red">店铺合计</font></td>
+							<td class="t">商品金额:</td>
+							<td class="c warm" id="op_items_<{$shop_id}>"><{0|cur}></td>
+						  </tr>
+						  <tr>
+							<td class="t">总重:</td>
+							<td class="c warm" id="op_weight_<{$shop_id}>"><{0}></td>
+						  </tr> 
+						  <tr>
+							<td class="t">运费:</td>
+							<td class="c" id="op_shipping_<{$shop_id}>"><{0|cur}></td>
+						  </tr>
+						  <!--<tr>
+							<td class="t">消费税:</td>
+							<td class="c" id="tax_rate_price_<{$shop_id}>"><{0|cur}></td>
+						  </tr>
+							<tr>
+							<td class="t">增值税:</td>
+							<td class="c" id="reg_rate_price_<{$shop_id}>"><{0|cur}></td>
+						  </tr>-->
+						  <tr>
+							<td class="t">减免:</td>
+							<td class="c warm" id="op_discount_<{$shop_id}>"><{0|cur}></td>
+						  </tr>
+						  <tr class="total-c">
+							<td class="t">总计:</td>
+							<td class="c warm" id="op_total_<{$shop_id}>"><{$goods.price.total_price|cur}></td>
+						  </tr>
+						</table>
+					  </div>
+				</div>
+				<{if ($current_ccid eq 1 && $cart.cartCount.tax==1)}>
+					<div style="margin:0.5em auto;border:1px solid #eee;padding:0.5em;border-radius:0.5em;">
+					<{include file="topm/cart/checkout/invoice.html"}>
+					</div>
+				<{/if}>
+				<{assign var=current_ccid value=0}>
+		</div>		
+	  <{/foreach}>
+	  
+      <{if $if_open_point_deduction}>
+      <div class="points-deduction">
+                     积分抵扣<span class="canuser-point">可用积分<em class="left-point"></em>，抵扣<em class="deduct-point" id="deduct_point"></em>元<span class="choose"></span></span>
+        <span class="disabled">本单积分不可用</span>
+        <input type="hidden" name="use_points">
+      </div>
+      <{/if}>
+      <div class="total-price">
+        <div class="price">
+          <span>共计减免
+            <i class="tp" id="op_discount_total"><{0|cur}></i>
+          </span>
+          </br>
+          <span>合计
+            <i class="tp" id="op_amount"><{0|cur}></i>
+          </span>
+          <span>
+            (含运费
+            <i class="tp" id="op_post_fee"><{0|cur}></i>)
+          </span>
+        </div>
+        <div class="confirm">
+          <button type="submit" class="ui-btn-warning">结算</button>
+        </div>
+      </div>
+    </form>
+  </div>
+
+  <!--返回顶部-->
+  <div id="gotop"></div>
+
+</div>
+
+<script>
+$('#button_usercard').click(function(){
+var buycard =$('#buycard').val();
+if(buycard==''){
+	Message.error('身份证不能为空');
+return false;
+}
+  var data='buycard='+buycard
+  $.post('<{url action=topm_ctl_cart@buycard}>',data,function(rs){
+if(rs==1){
+	Message.error('身份证格式错误');
+}
+if(rs==2){
+$('#buycard_val').val(buycard);
+Message.error('保存成功');
+}
+if(rs==3){
+Message.error('保存失败');
+}
+});
+})
+  $('.button').button();
+  $('.g-standard').click(
+    function(){
+      $('.standard-info').toggleClass('cur');
+    }
+  );
+
+  var Message = new gmu.Message();
+
+  var totalPrice = 0;//总金额
+  var totalPostfee = 0;//总运费
+  var totalDiscount = 0;//总优惠价格
+  function total(){
+    var form = $('#form_settle');
+	var tax = 0;	//税  2016/3/23tax_price雷成德
+    $.post('<{url action=topm_ctl_cart@total}>', form.serialize(), function(rs) {
+	console.dir(rs);	
+    rs.shop && $.each(rs.shop, function(k, v) {
+    	var all_postfee = v.post_fee; //当前店铺的总运费显示
+    	var showOrderLay = "";
+    	if("undefined"!=typeof(v.child_post_num) && parseInt(v.child_post_num) > 0 && parseFloat(v.post_fee) >0  ){
+    		//all_postfee = parseInt(v.child_post_num) * v.post_fee;
+    		if(parseInt(v.child_post_num) > 1) {
+    			showOrderLay = "<label style='font-size:0.8em;color:#007AFF'>(拆成" + v.child_post_num + "单)</label>";	
+    		}
+    	}
+        $('#tax_rate_price_' + k).text(Currency.format(v.tax_rate_price||0));  //消费税
+        $('#reg_rate_price_' + k).text(Currency.format(v.reg_rate_price||0));  //增值税
+        $('#op_items_' + k).text(Currency.format(v.total_fee));
+        $('#op_shipping_' + k).html(showOrderLay + Currency.format( all_postfee ||0));
+        $('#op_total_' + k).text(Currency.format(v.payment));
+        $('#op_discount_' + k).text('-'+Currency.format(v.discount_fee));
+        $('#op_weight_' + k).text(v.totalWeight+'kg');
+		  if(v.tax>0){
+		  	tax = v.tax  //业务模式，如果订单确认页面是多个店铺，那么肯定是完税模式
+		  }
+		if("undefined"!=typeof(v.clist) && v.clist ) {
+			 $.each(v.clist, function(k2, v2) {
+			 	var kk2 = k + "_" + k2; //取健名
+			 	var pop_html = Currency.format(v2.post_fee);
+			 	var ptotal_html = Currency.format(v2.total_fee);
+			 	if(v2.shipping_free){
+			 		pop_html = '<span class="fprice">'+v2.shipping_freedesc + '</span>';
+			 	}
+			 	if(v2.discount_fee){
+			 		ptotal_html = ptotal_html + '<span class="fprice">( <font color="green">可优惠</font>：<b>'+ Currency.format(v2.discount_fee) + '</b>)</span>';
+			 	}
+			 	$('#child_post_' + kk2).html(pop_html);
+			 	$('#child_amount_' + kk2).html(ptotal_html);
+			 });
+		}  
+		  
+	});
+      $('#op_amount').text(Currency.format(rs.allPayment));		//总支付金额；
+      $('#op_post_fee').text(Currency.format(rs.allPostfee));	//总邮费金额；
+      $('#op_discount_total').text(Currency.format(rs.allDisMoney));//总优惠的金额；
+      totalPrice = Number($("#op_amount").text().substr(1));
+      totalPostfee = Number($("#op_post_fee").text().substr(1));
+      totalDiscount = Number($("#op_discount_total").text().substr(1));
+      getPoints(); //使用积分处理
+    });
+  }
+
+  $('.action-select-shipping').on('change', function(e) {
+    if($(this).val()==0){
+      $(this).parents('.select-store').find('.ziti-info').show();
+    }else{
+      $(this).parents('.select-store').find('.ziti-info').hide();
+      total();
+    }
+  }).eq(0).change();
+
+  $('.action-select-coupon').change(function(e) {
+    var that = $(this);
+    var fastbuyMode = '<{$mode}>';
+    var couponCode = $(this).val();
+    var shopId = $(this).attr('data-shopid');
+    var data = 'mode='+fastbuyMode+'&shop_id='+ shopId +'&coupon_code='+ couponCode;
+    if(couponCode!='-1') {
+      $.post('<{url action=topm_ctl_cart@useCoupon}>',data,function(rs){
+        if(rs.error==true){
+          that.val('-1');
+          Message.error(rs.message);
+          return;
+        }else{
+          total();
+        }
+      });
+    }else{
+      // 赋值优惠券号码为空
+      $.post('<{url action=topm_ctl_cart@cancelCoupon}>',data,function(rs){
+        if(rs.success) {
+          total();
+        }
+        if(rs.error) {
+          Message.error(rs.message);
+          return;
+        }
+      });
+    }
+  });
+
+  var deduct_point = 0;
+  function getPoints() {
+    $.post('<{url action=topm_ctl_member_point@ajaxGetUserPoint}>',{'total_price':totalPrice,'post_fee':totalPostfee}, function(rs){
+      if(rs) {
+        if(rs.open_point_deduction == "1" && rs.points != 0 && rs.point_deduction_max !=0){ //积分可用
+          $('.canuser-point').show();
+          var propertion = rs.point_deduction_rate;//换算比率
+          var maxpoints = rs.point_deduction_max; //最大积分
+          var points = rs.points; //总积分
+          var totalPricePoints = totalPrice * propertion;
+          var canUserPoints = 0;
+          if(maxpoints <= points) {
+            canUserPoints = maxpoints
+          }else {
+            canUserPoints = points;
+          }
+          if(canUserPoints > totalPricePoints) {
+            canUserPoints = totalPricePoints;
+          }
+          deduct_point = canUserPoints/propertion;
+         $('.left-point').text(canUserPoints);
+        if($('.choose').hasClass('chosen')){
+          $('input[name="use_points"]').val(canUserPoints);
+        }else {
+          $('input[name="use_points"]').val('');
+        }
+         $('#deduct_point').text(Currency.format(deduct_point));
+        }else { //积分不可用
+          $('.disabled').show();
+        }
+      }
+    });
+  }
+  $('.points-deduction').on('click', function() {
+    $('.choose').toggleClass('chosen');
+    getPoints();
+    if($('.choose').hasClass('chosen')){
+       $('#op_amount').text(Currency.format(totalPrice-deduct_point));
+    }else {
+      $('#op_amount').text(Currency.format(totalPrice));
+    }
+  });
+//发票信息
+  $('#invoice-check').on('click',function(){
+    var ivinput = $('#invoice-check input[name="invoice[need_invoice]"]:checked').val();
+    if(ivinput == '1'){
+      $('.invoice-info').show();
+    }else{
+      $('.invoice-info').hide();
+    }
+  });
+</script>

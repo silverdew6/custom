@@ -1,0 +1,109 @@
+<div class="summary-outbox">
+  <ul class="summary">
+    <li>
+      <div class="dt del"><{if $activityDetail}><del>价  格：</del><{else}>价  格：<{/if}></div>
+      <div class="dd"><span class="<{if !$activityDetail}>price<{/if}> action-update-price"><{if $activityDetail}><del><{$item.price|cur}></del><{else}><{$item.price|cur}><{/if}></span></div>
+    </li>
+    <!-- 活动价，单品活动促销 -->
+    <{if $activityDetail}>
+    <li>
+      <div class="dt red"><{$activityDetail.activity_info.activity_tag}>价：</div>
+      <div class="dd"><span class="price"><{$activityDetail.activity_price|cur}></span></div>
+    </li>
+    <{/if}>
+
+    <{if $promotionDetail}>
+    <li>
+      <div class="dt">优惠信息：</div>
+    <div class="dd activity">
+      <a href="<{url action=topc_ctl_promotion@getPromotionItem promotion_id=$promotionDetail.0.promotion_id}>" class="activity-txt">
+        <span class="label-danger"><{$promotionDetail.0.promotion_tag}></span><{ $promotionDetail.0.promotion_name}>
+      </a>
+      <{if $promotion_count>1}>
+      <div class="activity-more">
+        <div class="more">共<{$promotion_count}>条促销活动 <i class="icon icon-arrow-down-b"></i></div>
+        <ul class="activity-panel">
+          <{foreach from=$promotionDetail item=promotionDetail name=name}>
+          <{if $env.foreach.name.iteration != 1}>
+          <li>
+          <a href="<{url action=topc_ctl_promotion@getPromotionItem promotion_id=$promotionDetail.promotion_id}>" class="activity-txt"><span class="label-danger"><{$promotionDetail.promotion_tag}></span>
+          <{$promotionDetail.promotion_name}></a>
+           </li>
+           <{/if}>
+           <{/foreach}>
+        </ul>
+       </div>
+       <{/if}>
+     </div>
+    </li>
+    <{/if}>
+
+	<li>
+		<{if ($item.tax eq '2')}>
+		<div >综合税率：<{$item.tax_rate*100*0.7}>% </div>
+		<div >单件税费：<{$item.price*$item.tax_rate*0.7|cur}> （<a href="javascript:void(0)" data-regrate="<{$item.tax_rate}>" class="tax_desc_info">税额说明</a>）</div>
+		<{/if}>
+       <div style="left"><span>原产地：<{$item.area_name}><{if $item.area_img}>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img  width="38" height="25"src="<{$item.area_img}>" align="center" /><{/if}></span></div>
+    </li>
+
+  </ul>
+  <div class="goods-qrcode"><img src="<{$item.qrCodeData}>"><br>手机购买</div>
+</div>
+<ul class="goods-other-info">
+<!--暂时屏蔽 2016/1/11 lcd
+  <li>
+    <span>销量：<em><{$item.sold_quantity|default:'0'}></em> 件</span>
+  </li>
+  -->
+  <li>
+    <span>商品评分：<em><{$shopDsrData.countDsr.tally_dsr}></em> 分</span>
+    <!-- <span>
+      <a href="#" class="icon icon-star"></a>
+      <a href="#" class="icon icon-star"></a>
+      <a href="#" class="icon icon-star"></a>
+      <a href="#" class="icon icon-star"></a>
+      <a href="#" class="icon icon-star disabled"></a>
+    </span> -->
+  </li>
+  <li>
+    <span>商品评论：<em><{$item.rate_count|default:"0"}></em> 条</span>
+  </li>
+</ul>
+<script type="text/javascript">
+
+$('.tax_desc_info').hover(function(){
+	$(".jq_tips_box").remove(); //清空之后再显示
+	var reg_rate = $(this).data("regrate");
+	if(reg_rate&& Number(reg_rate)!="NaN" && Number(reg_rate)>0 && Number(reg_rate)<=1 ){
+		reg_rate = Number(reg_rate)* 100 ;
+	}else{reg_rate = 0;}
+	var currentRate = '根据海关规定，本商品适用的关税税率为0%，增值税率'+ reg_rate.toFixed(2) +'%，消费税率0.0% ；（其中当商品总价小于2000时，关税税率按0%计算，增值税与消费税享受70%折扣）';
+	var showTipC = '<div class="show-rate－content">单件税费  = 完税价 *综合税率<br>完税价 = 商品优惠后单价*数量 + 运费 <br>综合税率  =(消费税率+增值税率)/(1-消费税率）*0.7<br>' 
+		+ currentRate + '<br>注：不同品类商品的税率不同  ，详细请<a href="//help.aomygod.com/help_172.html" target="_blank" style="margin-left:10px;">了解相关税率</a></div>';
+	$(this).tips({   //selector 为jquery选择器
+		  msg: showTipC,   //你的提示消息  必填
+		  side:2,//提示窗显示位置  1，2，3，4 分别代表 上右下左 默认为1（上） 可选
+		  color:'#333333', //提示文字色 默认为白色 可选
+		  bg:'#FFFFFF',//提示窗背景色 默认为红色 可选
+		  bgtip:'#999999',//提示窗三角色 默认为红色 可选
+		  time:3,//自动关闭时间 默认2秒 设置0则不自动关闭 可选
+		  x:0,//横向偏移  正数向右偏移 负数向左偏移 默认为0 可选
+		  y:0,//纵向偏移  正数向下偏移 负数向上偏移 默认为0 可选
+	 });
+});
+
+function  tax_info() {
+ var dialog = new Dialog('<{url action=topc_ctl_list@tax_info}>', {
+    width: 540,
+    title: '购物须知',
+    modal:true,
+    async: 'ajax',
+    component: {
+      container: 'dialog takegoods-dialog'
+    },
+        asyncOptions: {
+      type: 'post',
+    }
+  });
+  }
+  </script>

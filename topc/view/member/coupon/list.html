@@ -1,0 +1,119 @@
+<style type="text/css">
+ /* coupon 领取*/
+#privilege{width: 450px ;margin-bottom: 2px;background: #fff;bottom: -110px;z-index: 1000;}
+.privilege-1{width: 100%;padding-top: 8px;}
+.privilege-1 ul{width: 96%;margin: 0 auto;text-align: center;padding:4px;}
+.privilege-1 li{height: 100px;margin-bottom: 3px;    float: left; width: 45%;  margin: 10px 2%;}
+.privilege-1 li:last-child{border-bottom: 0px solid #D1D1D1;}
+.privilege-1 li:after{content: '.';height: 0;display: block;visibility: hidden;clear: both;}
+.privilege-1-li div:first-child{float: left;width: 75%;background: #FFF0F3; box-sizing: border-box;height:100px;border-top-right-radius: 8px;border-bottom-right-radius: 8px;border: 1px solid #cacaca;padding: 0 30px 0 10px;border-right: 1px dashed #888;}
+.privilege-1-li div:last-child{float: right;width: 25%;background: #FFF0F3; height: 100px;border: 1px solid #cacaca;box-sizing: border-box;border-top-left-radius: 8px;border-bottom-left-radius: 8px;border-left: none;}
+.privilege-1-li div a{color: #c53ee4;font-size: 1em;line-height: 65px;height: 100px;display: block;font-weight: bold;font-family: "微软雅黑";}
+.privilege-1-dl{text-align: left;font-size: 0.6em;height: 100px;}
+.privilege-1-dl dt{color: red;font-size: 1.6em;font-weight: bold;padding-top:5px;}
+.privilege-1-dl dd{padding: 1px;font-size:11px;color:#c1827c;font-family: "微软雅黑";}
+.privilege-1-dl dd.dd-one{margin-top:0px; width:100%;height: 1.2em;    overflow: hidden;}
+.privilege-1-li div .no-re {line-height: 8em;  color: #999; font-weight: bold;}
+.privilege-1-li div .ao-usedd {line-height: 8em;  color: red ; font-weight: bold; cursor: pointer;}
+.privilege-1-li div .r-store {float: right;   color: #f3f3f3;  background: #bf23a5;  padding: 1px 4px;}
+.act_pos {color: #731585;font-weight: bold;background: #f3f3f3; border: 1px solid #e8e8e8; line-height: 43px; display: inline-block;  height: 44px;   padding: 0 10px;border-top-right-radius: 5px; border-top-left-radius: 5px; border-top: 2px solid #731585;border-bottom: none;}
+</style>
+<div class="membercenter-box">
+  <div class="membercenter-box-hd">
+    <div class="membercenter-box-left">
+    	<{if $coupon_offentype }>
+          		<a href="<{url action=topc_ctl_member_coupon@couponList}>" class="" title="线上优惠券">线上优惠券</a>
+      			<a href="<{url action=topc_ctl_member_coupon@couponList offen="on"}>" class="act_pos" title="线下优惠券">线下优惠券</a>
+          <{else}>
+          		<a href="<{url action=topc_ctl_member_coupon@couponList}>" class="act_pos" title="线上优惠券">线上优惠券</a>
+      			<a href="<{url action=topc_ctl_member_coupon@couponList offen="on"}>" class="" title="线下优惠券">线下优惠券</a>
+          <{/if}>
+    	
+    </div>
+    <div class="membercenter-box-right">
+    <span class="num">共<em><{$count}></em>条记录</span>
+    <{pagers data=$pagers type="mini"}>
+  </div>
+  </div>
+  <div class="membercenter-box-bd nogap">
+    <table class="item-table table-address" width="100%">
+      <thead>
+        <tr>
+          <td colspan="5" style="padding-left:2em;font-weight:600"> 
+          <{if $coupon_offentype }>
+          		线下优惠券
+          <{else}>
+          		优惠券列表
+          <{/if}></td>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td colspan="5">
+            <!--显示优惠券的列表信息 -->
+            <div class="privilege-1" id="privilegeContent">
+				<{if !$count }>
+					<div><div class="no-content">暂无优惠券</div></div>
+				<{else}>
+					<ul>
+		        		<{foreach from=$couponList item=item}>
+		        			 <li class="privilege-1-li">
+		        			  <{if $coupon_offentype }><!-- 线下优惠券-->
+			        			  	<div>
+							    		<dl class="privilege-1-dl">
+							    			<dt><{$item.coupon_amount|cur}>  <label class="r-store" title="线下活动编号：<{$item.active_code}>"><{$item.coupon_name}></label> </dt>
+							    			<dd>优惠券号码: <b><{$item.coupon_code}></b></dd>
+							    			<dd class="dd-one" title="优惠券详情：<{$item.coupon_desc}>"><{$item.coupon_desc}></dd>
+							    			<dd>有效期   <{$item.use_starttime|cdate:'RDATE'}>  ~ <{$item.use_endtime|cdate:'RDATE'}> </dd>
+							    		</dl>
+							    	</div>
+							    	<div> 
+							    		<{if $item.offen_status==1}>
+							    			<span class="ao-usedd">已核销</span> 
+							    		<{else}>
+							    			<{if $item.status==1 }>
+							    				<span class="gray no-re" title="未使用"> 未使用 </span>
+							    			<{else}>
+							    				<span class="gray no-re" title="优惠券已过期或作废">已失效</span>
+							    			<{/if}>
+			            			    <{/if}>
+			            			</div>
+          		
+					          <{else}> <!-- 线上优惠券-->
+						          	<div>
+							    		<dl class="privilege-1-dl">
+							    			<dt><{$item.deduct_money|cur}>  <label class="r-store"><{$item.shop_id|shopname}></label> </dt>
+							    			<dd>优惠券号码: <b><{$item.coupon_code}></b></dd>
+							    			<dd class="dd-one" title="使用规则：<{$item.coupon_desc}>">[<{$item.coupon_name}>] - <{$item.coupon_desc}></dd>
+							    			<dd>有效期   <{$item.canuse_start_time|cdate:'RDATE'}>  ~ <{$item.canuse_end_time|cdate:'RDATE'}> </dd>
+							    		</dl>
+							    	</div>
+							    	<div> 
+							    		<{if $item.is_valid==1}>
+							    			<span class="green">未使用</span> 
+							    		<{else}>
+							    			<{if isset($item.tid) and !empty($item.tid) }>
+							    				<span class="gray ao-usedd" title="关联订单号：<{$item.use_tids}>"> 已使用 </span>
+							    			<{else}>
+							    				<span class="gray no-re" title="优惠券已过期或作废">已失效</span>
+							    			<{/if}>
+			            			    <{/if}>
+			            			</div>
+					          <{/if}>
+		        			</li>	
+						<{/foreach}>
+					</ul>
+					<{/if}>
+				</div>
+            <!--显示优惠券的列表信息  END-->
+          </td>
+        </tr>
+        <tr>
+        	<td colspan="5"><{pagers data=$pagers}></td>
+        </tr>
+        
+      </tbody>
+    </table>
+  </div>
+  
+</div>

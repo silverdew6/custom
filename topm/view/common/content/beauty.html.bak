@@ -1,0 +1,381 @@
+ <{require file="block/header_new.html"}>
+				<!-- nav -->
+				<div class="main" style="margin-top:6em;">
+
+            <!------------- 新增内容部分------------->
+                    <div class="banner-d">
+                    	<img src="images/modules/beauty/banner2.jpg"/>
+                    </div>
+					
+					<!--轮播下小广告图 start-->
+					<div id="health-img">
+						<ul>
+							<li>
+								<a href="##">
+									<img src="images/modules/beauty/2016-11-25_143928.png" />
+								</a>
+							</li>
+							<li>
+								<a href="##">
+									<img src="images/modules/beauty/2016-11-25_144000.png" />
+								</a>
+							</li>
+							<li>
+								<a href="##">
+									<img src="images/modules/beauty/2016-11-25_144027.png" />
+								</a>
+							</li>
+							<li>
+								<a href="##">
+									<img src="images/modules/beauty/2016-11-25_144038.png" />
+								</a>
+							</li>
+						</ul>
+					</div>
+					<!--轮播下小广告图 end-->
+					
+					<!-- sale  热卖区域-->
+					<div id="saleM">
+						<div class="saleM_l">
+							<a href="http://www.myjmall.com/wap/item.html?item_id=5912" target="_blank">
+								<img src="images/modules/beauty/1.jpg"/>
+							</a>
+						</div>
+						<div class="saleM_r">
+							<ul>
+								<li>
+									<a href="http://www.myjmall.com/wap/item.html?item_id=6312" target="_blank"><img src="images/modules/beauty/2.jpg"/></a>
+								</li>
+								<li>
+									<a href="http://www.myjmall.com/wap/item.html?item_id=5885" target="_blank"><img src="images/modules/beauty/3.jpg"/></a>
+								</li>
+							</ul>
+						</div>
+					</div>
+					<!-- sale  热卖区域 END -->
+					
+                    <!-- 推荐热品 start -->
+                    <div id="Hot-product">
+                    	<div class="Hot-product-txt">
+                    		<b>热门推荐</b><span>大家都在买</span>
+                    	</div>
+                    	<div class="Hot-product-img">
+                    		<a href="##">
+                    			<img src="images/modules/beauty/banner.jpg" />
+                    		</a>
+                    	</div>
+                    	<div class="Hot-product-pro">
+                    		<div class="product-1">
+                    			<div class="lt">
+                    				<dl>
+                    					<dt>
+                    						<a href="http://www.myjmall.com/wap/item.html?item_id=6307">
+                    							<img src="images/modules/beauty/beauty1.jpg"/>
+                    						</a>
+                    					</dt>
+                    					<dd><a href="http://www.myjmall.com/wap/item.html?item_id=6307">Clearasil-速效4小时祛痘啫喱膏-15ml</a></dd>
+                    					<dd class="color-red">&yen;86</dd>
+                    				</dl>
+                    			</div>
+                    			<div class="lt">
+                    				<dl>
+                    					<dt>
+                    						<a href="http://www.myjmall.com/wap/item.html?item_id=6309">
+                    							<img src="images/modules/beauty/beauty2.jpg"/>
+                    						</a>
+                    					</dt>
+                    					<dd><a href="http://www.myjmall.com/wap/item.html?item_id=6309">Clearasil-速效水杨酸祛痘啫喱洗面奶-200ml</a></dd>
+                    					<dd class="color-red">&yen;89</dd>
+                    				</dl>
+                    			</div>
+                    		</div>
+                    		<div class="product-2">
+                    			<div class="lt">
+                    				<dl>
+                    					<dt>
+                    						<a href="http://www.myjmall.com/wap/item.html?item_id=5910">
+                    							<img src="images/modules/beauty/beauty3.jpg"/>
+                    						</a>
+                    					</dt>
+                    					<dd><a href="http://www.myjmall.com/wap/item.html?item_id=5910">芭乐雅-玻尿酸保湿浓缩精华安瓶7-1ml</a></dd>
+                    					<dd class="color-red">&yen;68</dd>
+                    				</dl>
+                    			</div>
+                    			<div class="lt">
+                    				<dl>
+                    					<dt>
+                    						<a href="http://www.myjmall.com/wap/item.html?item_id=5915">
+                    							<img src="images/modules/beauty/beauty4.jpg"/>
+                    						</a>
+                    					</dt>
+                    					<dd><a href="http://www.myjmall.com/wap/item.html?item_id=5915">法国bioderma贝德玛绿瓶控油洁肤液500ml</a></dd>
+                    					<dd class="color-red">&yen;115</dd>
+                    				</dl>
+                    			</div>
+                    		</div>
+                    		<div class="product-3">
+                    			<div class="lt">
+                    				<dl>
+                    					<dt>
+                    						<a href="http://www.myjmall.com/wap/item.html?item_id=5934">
+                    							<img src="images/modules/beauty/beauty5.jpg"/>
+                    						</a>
+                    					</dt>
+                    					<dd><a href="http://www.myjmall.com/wap/item.html?item_id=5934">黄瓜美白清洁面膜-10ml</a></dd>
+                    					<dd class="color-red">&yen;180</dd>
+                    				</dl>
+                    			</div>
+                    			<div class="lt">
+                    				<dl>
+                    					<dt>
+                    						<a href="http://www.myjmall.com/wap/item.html?item_id=5848">
+                    							<img src="images/modules/beauty/beauty6.jpg"/>
+                    						</a>
+                    					</dt>
+                    					<dd><a href="http://www.myjmall.com/wap/item.html?item_id=5848">Jacob-Hooy-七香草滋润面霜-250ml</a></dd>
+                    					<dd class="color-red">&yen;78</dd>
+                    				</dl>
+                    			</div>
+                    		</div>
+                    	</div>
+                    </div>
+                    <!-- 推荐热品 end -->
+                    
+                    <!-- 基础商品楼层 start01 -->
+                    <div class="border-bottom">
+                    	<div class="Hot-product-txt">
+                    		<b>精选品牌</b><span class="boult">&gt;&gt;</span>
+                    	</div>
+                    	<div class="products">
+                    		<div class="product-4">
+                    			<div class="lt">
+                    				<dl>
+                    					<dt>
+                    						<a href="http://www.myjmall.com/wap/item.html?item_id=5712">
+                    							<img src="images/modules/beauty/selection1.jpg"/>
+                    						</a>
+                    					</dt>
+                    					<dd><a href="http://www.myjmall.com/wap/item.html?item_id=5712">AVENE雅漾舒缓特护面霜50ml</a></dd>
+                    					<dd class="color-red">&yen;129</dd>
+                    				</dl>
+                    			</div>
+                    			<div class="lt">
+                    				<dl>
+                    					<dt>
+                    						<a href="http://www.myjmall.com/wap/item.html?item_id=5925">
+                    							<img src="images/modules/beauty/selection2.jpg"/>
+                    						</a>
+                    					</dt>
+                    					<dd><a href="http://www.myjmall.com/wap/item.html?item_id=5925">法国bioderma贝德玛舒妍多效洁肤液</a></dd>
+                    					<dd class="color-red">&yen;68</dd>
+                    				</dl>
+                    			</div>
+                    		</div>
+                    		<div class="product-4">
+                    			<div class="lt">
+                    				<dl>
+                    					<dt>
+                    						<a href="http://www.myjmall.com/wap/item.html?item_id=5917">
+                    							<img src="images/modules/beauty/selection3.jpg"/>
+                    						</a>
+                    					</dt>
+                    					<dd><a href="http://www.myjmall.com/wap/item.html?item_id=5917">法国bioderma贝德玛水润喷雾300ml</a></dd>
+                    					<dd class="color-red">&yen;75</dd>
+                    				</dl>
+                    			</div>
+                    			<div class="lt">
+                    				<dl>
+                    					<dt>
+                    						<a href="http://www.myjmall.com/wap/item.html?item_id=6121">
+                    							<img src="images/modules/beauty/selection4.jpg"/>
+                    						</a>
+                    					</dt>
+                    					<dd><a href="http://www.myjmall.com/wap/item.html?item_id=6121">依云矿泉水喷雾</a></dd>
+                    					<dd class="color-red">&yen;49</dd>
+                    				</dl>
+                    			</div>
+                    		</div>
+                    	</div>
+                    </div>
+                    <!-- 基础商品楼层 end01 -->
+                    
+                    <!-- 基础商品楼层 start02 -->
+                    <div class="border-bottom">
+                    	<div class="Hot-product-txt">
+                    		<b>面部护理</b><span class="boult">&gt;&gt;</span>
+                    	</div>
+                    	<div class="products">
+                    		<div class="product-4">
+                    			<div class="lt">
+                    				<dl>
+                    					<dt>
+                    						<a href="http://www.myjmall.com/wap/item.html?item_id=5920">
+                    							<img src="images/modules/beauty/face1.jpg"/>
+                    						</a>
+                    					</dt>
+                    					<dd><a href="http://www.myjmall.com/wap/item.html?item_id=5920">Balea芭乐雅-绿茶眼部保湿舒缓精华胶囊</a></dd>
+                    					<dd class="color-red">&yen;25</dd>
+                    				</dl>
+                    			</div>
+                    			<div class="lt">
+                    				<dl>
+                    					<dt>
+                    						<a href="http://www.myjmall.com/wap/item.html?item_id=5896">
+                    							<img src="images/modules/beauty/face2.jpg"/>
+                    						</a>
+                    					</dt>
+                    					<dd><a href="http://www.myjmall.com/wap/item.html?item_id=5896">Jacob-Hooy-玻尿酸精华安瓶-7-1ml</a></dd>
+                    					<dd class="color-red">&yen;77</dd>
+                    				</dl>
+                    			</div>
+                    		</div>
+                    		<div class="product-4">
+                    			<div class="lt">
+                    				<dl>
+                    					<dt>
+                    						<a href="http://www.myjmall.com/wap/item.html?item_id=5941">
+                    							<img src="images/modules/beauty/face3.jpg"/>
+                    						</a>
+                    					</dt>
+                    					<dd><a href="http://www.myjmall.com/wap/item.html?item_id=5941">Montagne-Jeunesse-死海泥面膜20g</a></dd>
+                    					<dd class="color-red">&yen;190</dd>
+                    				</dl>
+                    			</div>
+                    			<div class="lt">
+                    				<dl>
+                    					<dt>
+                    						<a href="http://www.myjmall.com/wap/item.html?item_id=6313">
+                    							<img src="images/modules/beauty/face4.jpg"/>
+                    						</a>
+                    					</dt>
+                    					<dd><a href="http://www.myjmall.com/wap/item.html?item_id=6313">Schaebens雪本诗-茶树油祛痘清洁面膜</a></dd>
+                    					<dd class="color-red">&yen;130</dd>
+                    				</dl>
+                    			</div>
+                    		</div>
+                    	</div>
+                    </div>
+                    <!-- 基础商品楼层 end02 -->
+                    
+                    <!-- 基础商品楼层 start03 -->
+                    <div class="border-bottom">
+                    	<div class="Hot-product-txt">
+                    		<b>热门功效</b><span class="boult">&gt;&gt;</span>
+                    	</div>
+                    	<div class="products">
+                    		<div class="product-4">
+                    			<div class="lt">
+                    				<dl>
+                    					<dt>
+                    						<a href="http://www.myjmall.com/wap/item.html?item_id=6004">
+                    							<img src="images/modules/beauty/efficacy1.jpg"/>
+                    						</a>
+                    					</dt>
+                    					<dd><a href="http://www.myjmall.com/wap/item.html?item_id=6004">Kneipp山金车肌肉关节舒缓泡澡沐浴香薰精油</a></dd>
+                    					<dd class="color-red">&yen;95</dd>
+                    				</dl>
+                    			</div>
+                    			<div class="lt">
+                    				<dl>
+                    					<dt>
+                    						<a href="http://www.myjmall.com/wap/item.html?item_id=6000">
+                    							<img src="images/modules/beauty/efficacy2.jpg"/>
+                    						</a>
+                    					</dt>
+                    					<dd><a href="http://www.myjmall.com/wap/item.html?item_id=6000">Kneipp杏仁花泡澡精油</a></dd>
+                    					<dd class="color-red">&yen;95</dd>
+                    				</dl>
+                    			</div>
+                    		</div>
+                    		<div class="product-4">
+                    			<div class="lt">
+                    				<dl>
+                    					<dt>
+                    						<a href="http://www.myjmall.com/wap/item.html?item_id=5953">
+                    							<img src="images/modules/beauty/efficacy3.jpg"/>
+                    						</a>
+                    					</dt>
+                    					<dd><a href="http://www.myjmall.com/wap/item.html?item_id=5953">Lavera拉薇有机免敏止汗走珠-50ml</a></dd>
+                    					<dd class="color-red">&yen;59</dd>
+                    				</dl>
+                    			</div>
+                    			<div class="lt">
+                    				<dl>
+                    					<dt>
+                    						<a href="http://www.myjmall.com/wap/item.html?item_id=5679">
+                    							<img src="images/modules/beauty/efficacy4.jpg"/>
+                    						</a>
+                    					</dt>
+                    					<dd><a href="http://www.myjmall.com/wap/item.html?item_id=5679">德国S-quito-free宝宝叮咬消炎止痒膏-15ml</a></dd>
+                    					<dd class="color-red">&yen;69</dd>
+                    				</dl>
+                    			</div>
+                    		</div>
+                    	</div>
+                    </div>
+                    <!-- 基础商品楼层 end03 -->
+                    
+                    <!-- 基础商品楼层 start04 -->
+                    <div>
+                    	<div class="Hot-product-txt">
+                    		<b>个人洗护</b><span class="boult">&gt;&gt;</span>
+                    	</div>
+                    	<div class="products">
+                    		<div class="product-4">
+                    			<div class="lt">
+                    				<dl>
+                    					<dt>
+                    						<a href="http://www.myjmall.com/wap/item.html?item_id=5884">
+                    							<img src="images/modules/beauty/person1.jpg"/>
+                    						</a>
+                    					</dt>
+                    					<dd><a href="http://www.myjmall.com/wap/item.html?item_id=5884">Jacob-Hooy-洋甘菊柔顺养护洗发水</a></dd>
+                    					<dd class="color-red">&yen;88</dd>
+                    				</dl>
+                    			</div>
+                    			<div class="lt">
+                    				<dl>
+                    					<dt>
+                    						<a href="http://www.myjmall.com/wap/item.html?item_id=5798">
+                    							<img src="images/modules/beauty/person2.jpg"/>
+                    						</a>
+                    					</dt>
+                    					<dd><a href="http://www.myjmall.com/wap/item.html?item_id=5798">PearlDrops4D有效去除咖啡茶渍美白牙膏50ml</a></dd>
+                    					<dd class="color-red">&yen;45</dd>
+                    				</dl>
+                    			</div>
+                    		</div>
+                    		<div class="product-4">
+                    			<div class="lt">
+                    				<dl>
+                    					<dt>
+                    						<a href="http://www.myjmall.com/wap/item.html?item_id=5724">
+                    							<img src="images/modules/beauty/person3.jpg"/>
+                    						</a>
+                    					</dt>
+                    					<dd><a href="http://www.myjmall.com/wap/item.html?item_id=5724">Weleda维蕾德可吞咽可食用无氟儿童牙膏</a></dd>
+                    					<dd class="color-red">&yen;49</dd>
+                    				</dl>
+                    			</div>
+                    			<div class="lt">
+                    				<dl>
+                    					<dt>
+                    						<a href="http://www.myjmall.com/wap/item.html?item_id=5994">
+                    							<img src="images/modules/beauty/person4.jpg"/>
+                    						</a>
+                    					</dt>
+                    					<dd><a href="http://www.myjmall.com/wap/item.html?item_id=5994">施巴Sebamed天然牛油果滋润淋浴油200ml</a></dd>
+                    					<dd class="color-red">&yen;49</dd>
+                    				</dl>
+                    			</div>
+                    		</div>
+                    	</div>
+                    </div>
+                    <!-- 基础商品楼层 end04 -->
+				</div>
+		</div>
+		
+		<{require file="block/footer.html"}>
+	</body>
+
+</html>

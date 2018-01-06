@@ -1,0 +1,130 @@
+<!-- header -->
+<header style="height: 80px;position: relative;" class="hh1">
+	<!------------- 公共的头部导航，固定位置------------>
+        <{require file="block/lp_top.html"}>
+        <div class="liping-d">
+		  	<ul class="liping-ul">
+		  		<{if ($topnav_list)}>
+		  			<{foreach from=$topnav_list item=navl key=lvk}>
+		  				<li><a style="<{if ($current_default_id>0 and $lvk==$current_default_id)}>color:#bd1ce4;<{/if}>" href="<{url action=topm_ctl_topic@lpsearch cid=$lvk}>" title="<{$navl}>"><{$navl}></a></li>
+		  			<{/foreach}>
+		  		<{else}>
+			  		<li><a href="<{url action=topm_ctl_topic@lpsearch cid=781}>">母嬰</a></li>
+			  		<li><a href="<{url action=topm_ctl_topic@lpsearch cid=786}>">美食</a></li>
+			  		<li><a href="<{url action=topm_ctl_topic@lpsearch cid=827}>">保健</a></li>
+			  		<li><a href="<{url action=topm_ctl_topic@lpsearch cid=797}>">美妝</a></li>
+			  		<li><a href="<{url action=topm_ctl_topic@lpsearch cid=705}>">轻奢</a></li>
+		  		<{/if}>
+		  	</ul>
+		</div>
+    <!------------- 公共的头部导航，固定位置------------>
+  	
+	<div id="nav-top"><!-- 产品分类导航  start -->
+	    <div class="floor-txt floor-bglist">
+			<span><{if ($results.info)}><{$results.info.cat_name}><{else}>搜索"<{$results.keywords}>"的结果<{/if}></span>
+		</div>
+		<!--子分类；start-->
+		<{if ($results.info.childs)}>
+			<div id="health-img">
+				<ul>
+					<{assign var="fck" value=0}>
+					<{foreach from=$results.info.childs item=curcat key=curk }>
+					<{assign var="fck" value=$fck+1}>
+					<li style="<{if ($fck>4)}>display:none;<{/if}>;text-align:center;border: 1px solid #CCC; border-radius: 1px;width:16%;margin-left:2%">
+						<a href="<{url action=topm_ctl_topic@lpsearch cid=$curk}>" title="<{$curcat.cat_name}>" target="_self">
+							<{$curcat.cat_name}>
+						</a>
+					</li>
+					<{/foreach}>
+				</ul>
+			</div>
+		<{/if}>
+     </div><!-- 分类导航 end -->
+</header>
+<!--下拉脚本显示和定位-->
+	<!-- header -->
+		<div class="home" style="margin: 0 auto;width: 100%;margin-top: <{if ($results.info.childs)}>9em;<{else}>6em;<{/if}>">
+				<!-- Main Content Start -->
+				<div class="main" style="">
+					<!-- 搜索商品数据-->
+						<div id="floor" class="floor_layer">
+							<!--三级子分类；end-->
+							<{if ($results.total_found>0 && $results.productlist)}>
+								<!--搜索结果列表 start-->
+								<div class="floor-pic">
+									<ul class="pic-ul">
+											<{foreach from=$results.productlist item=project key=proid }>
+												<li class="item">
+													<dl>
+														<dt class="jmalltax_<{$project.tax}>">
+															<a href="<{url action=topm_ctl_topic@lpdetail id=$project.item_id}>" target="_self">
+																<img data-original="<{$project.image_default_id|storager:'s'}>" class="lazy" style="width: 290px;height: 290px;">
+															</a>
+														</dt>
+														<dd class="pic-txt">
+															<a href="<{url action=topm_ctl_topic@lpdetail id=$project.item_id}>" target="_self"><{$project.title}></a>
+														</dd>
+														<dd class="pic-div">
+															<div class="pic-div1">
+																<p><{$project.price|cur}></p><span>扫码购买</span>
+															</div>
+															<div class="pic-div2">
+																<{if ($project.wap_qrcpath)}>
+																<img src="<{$project.wap_qrcpath}>"/></div>
+																<{else}>
+																	<img src="images/ceshi-1.png"/></div>
+																<{/if}>
+														</dd>
+													</dl>
+												</li>
+											<{/foreach}>
+									</ul>
+									<ul id="floor_content" class="pic-ul"></ul>
+	    							<div class="search-more" style="">
+										<div class="more-btn">
+											<input type="hidden" class="text" name="loading_nums" value="<{$results.getmoreinfo.loading_nums|default:0}>" />
+											<a class="btn-loadingmore" href="javascript:void(0);" data-uri="<{$results.getmoreinfo.more_action|default:""}>" onclick="return false;">点击加载更多内容</a>
+										</div>
+									</div>
+					    		</div>
+								<!--搜索结果列表 END-->
+								<{else}>
+									<div class="search-empty" style="">
+										<div style="color:#999;">
+											没有搜索结果
+										</div>
+									</div>
+								<{/if}>
+						</div>
+						<!-- 预加载脚本 -->
+						<script>
+							  $(function() {
+							      $("img.lazy").lazyload({
+							      	effect: "fadeIn",//载入特效
+							      //	placeholder : "img/grey.gif", //用图片提前占位
+							      	threshold: 100, // 提前开始加载
+							      });
+							      //绑定点击更多事件；
+							      $(".btn-loadingmore").click(function(){
+							      		var loaduri = $(this).attr("data-uri");
+							      		var loading_result = $(".search-more").find("input[name=loading_nums]").val();
+							      		if(typeof(loaduri) != "" & $.trim(loaduri)!="" && parseInt(loading_result)>0){
+							      			$.get(loaduri,{},function(resultHtml){
+							      				console.dir(resultHtml);
+							      				if(resultHtml.success === true){
+							      					$("#floor_content").append($(resultHtml.message)); //填充更多信息出来
+							      				}else{
+							      					$(".btn-loadingmore").html(resultHtml.message);//显示没有更多数据；
+							      				}
+							      			},"json");
+							      		}else{
+							      			$(".btn-loadingmore").html("亲，已经到最底部了……");//显示没有更多数据；
+							      		}
+							      });
+							  });
+						</script>
+		</body>
+    <style>
+    	
+    </style>
+</html>

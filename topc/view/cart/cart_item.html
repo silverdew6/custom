@@ -1,0 +1,88 @@
+<td>
+  <input type="checkbox" data-taxid="<{$good.tax}>"data-selectid="<{$shop_id}><{$k}>"class="cart-checked-item" name="cart_id[<{$goods.cart_id}>]" value="1" <{if $goods.is_checked=='1'}>checked="true"<{/if}> <{if !$goods.valid||$goods.select_tax==1}>disabled <{/if}>>
+  <input type="checkbox" data-taxid="<{$good.tax}>" data-selectid="<{$shop_id}><{$k}>"class="check-item hide" name="cart_id[<{$goods.cart_id}>]" value="0" <{if $goods.is_checked=='0'}>checked="true"<{/if}> <{if !$goods.valid||$goods.select_tax==1}>disabled <{/if}>>
+</td>
+<td>
+  <div class="table-goods-pic">
+    <{if $goods.image_default_id }>
+    <img width="64" height="64" src="<{$goods.image_default_id|storager:t}>">
+    <{else}>
+    <img width="64" height="64" src="<{$defaultImageId.T.default_image}>">
+    <{/if}>
+  </div>
+</td>
+<td width="15%">
+  <{if $goods.activityDetail}>
+  <a href="<{url action=topc_ctl_activity@activity_item_list id=$goods.activityDetail.activity_info.activity_id}>" data-id="<{$group.activity_id}>">
+    <span class="item-describe-tag"><{$goods.activityDetail.activity_info.activity_tag}></span>
+  </a>
+  <{/if}>
+  <a class="cart-goods-name" href="<{url action=topc_ctl_item@index item_id=$goods.item_id }>" >
+    <{$goods.title}>
+  </a>
+  <{if $goods.spec_info}><{$goods.spec_info}><{/if}>
+  <{if $goods.has_coupon eq '1'}><label class="can-usecoupon" title="点击查看优惠券的详细说明">优惠券</div><{/if}>
+</td>
+<td width="14%">
+  <{if $goods.activityDetail.activity_price}>
+  	<{$goods.activityDetail.activity_price|cur}>
+  <{else}>
+  	<{$goods.price.price|cur}>
+  <{/if}>
+  <!-- 商品选择优惠方式开始： 注意；有优惠活动则不参加满减活动 -->
+  <{if $goods.promotions}>
+  	<{if (!$goods.activityDetail.activity_price)}>
+	  <select <{if !$goods.valid}>disabled <{/if}> class="goods-discount" name="promotionid[<{$goods.cart_id}>]">
+	    <option value="0" <{if $goods.selected_promotion==0}> selected="selected" <{/if}>>不使用活动优惠</option>
+	    <{foreach from=$goods.promotions item=promitem}>
+	    <option value="<{$promitem.promotion_id}>" <{if $goods.selected_promotion==$promitem.promotion_id}> selected="selected" <{/if}> ><{$promitem.promotion_name}></option>
+	    <{/foreach}>
+	  </select>
+	<{else}>
+	<label class="not-active">[不参与其它活动]</label>
+	<{/if}>
+  <{/if}>
+  <!-- 商品选择优惠方式结束 -->
+</td>
+<td width="12%" >
+  <{if $goods.tax ==1}>
+ 	 免税
+  <{else}>
+  	共<{$goods.price.zonghe_rate_total|cur}><br/>
+  	<font color="#999">(<{$goods.price.zonghe_rate_price|cur}> * <{$goods.quantity}>)</font>
+  	<!--<br/>
+  	<{$goods.price.reg_rate_price}>-->
+  <{/if}>
+</td>
+<td width="13%">
+  <{if $goods.faile_valid==1}><div class="number is-stockout" style="color:red;">订单超额</div><{/if}>
+  <div class="number">
+    <{if $goods.valid }>
+    <span class="number-increase-decrease" >
+	
+ <a href="javascript:void(0);"     
+  <{if $goods.select_tax==1}>disabled <{/if}>
+ data-check="<{$goods.is_checked}>"data-taxid="<{$good.tax}>" data-selectid="<{$shop_id}><{$k}>"class="btn btn-flat decrease" data-min="1" data-cart-id='<{$goods.cart_id}>'><span><span>-</span></span></a>
+     
+	 <input type="number" value="<{$goods.quantity}>" data-selectid="<{$shop_id}><{$k}>"
+     <{if $goods.select_tax==1}>disabled <{/if}>
+	  data-taxid="<{$good.tax}>" name="cart_num[<{$goods.cart_id}>]" class="cart-num" min="1" max="<{if $goods.activityDetail.activity_info.buy_limit}><{$goods.activityDetail.activity_info.buy_limit}><{else}><{$goods.store}><{/if}>">
+	  <a href="javascript:void(0);" 
+	   <{if$goods.select_tax==1}>disabled <{/if}>
+	  data-check="<{$goods.is_checked}>"data-taxid="<{$good.tax}>" data-selectid="<{$shop_id}><{$k}>"class="btn btn-flat increase" data-max="<{if $goods.activityDetail.activity_info.buy_limit}><{$goods.activityDetail.activity_info.buy_limit}><{else}><{$goods.store}><{/if}>" data-cart-id="<{$goods.cart_id}>"><span><span>+</span></span></a>
+    </span>
+    <!--div class="number-stockout">限购6件</div-->
+    <{else}>
+    <{t}>已失效<{/t}>
+    <{/if}>
+  </div>
+</td>
+
+<td width="13%">
+  <em><{$goods.price.total_price+$goods.price.tax_rate_price+$goods.price.reg_rate_price|cur}></em>
+</td>
+<td class="col-operate">
+  <a href="<{url action=topc_ctl_collect@ajaxFav}>" data-ajax-data="item_id=<{$goods.item_id}>" rel="_request">收藏</a>
+  <a href="javascript:void(0);" class="delete-item" data-cart-id="<{$goods.cart_id}>">删除</a>
+</td>
+

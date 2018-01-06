@@ -1,0 +1,22 @@
+<div style="border: 1px solid #DDD; padding: 0.5em 1em; color: #ef371a; font-size: 0.8em; margin: 0.5em auto;border-radius: 5px;background: #efeed2;">
+	温馨提示：建议选择相同业务类型（完税/直邮）或同一仓库(如：精茂城)的商品参加同一个活动。
+</div>
+<ul class="clearfix">
+<{if !$itemsList}>
+  <p class="text-muted well no-shadow text-center">暂无数据</p>
+  <script>
+    $('#orderCancel,#orderEdit').on('hide.bs.modal', function(e) {
+      $(this).removeData('bs.modal');
+    })
+  </script>
+<{else}>
+  <{foreach from=$itemsList item=data}>
+  <li data-id="<{$data.item_id}>" data-src="<{$data.image_default_id}>" title="[<{$data.tax|appc_tax}>]<{$data.sea_region|appc_region}> - <{$data.title}>" >
+   	<label style="padding:0.1em 0.2em;background: #eee; width: 100%; color: #428bca;font-size:0.8em;"><font color="red">[<{$data.tax|appc_tax}>] </font><{$data.sea_region|appc_region}></label>
+    <div class="thumb"><img src="<{$data.image_default_id|storager:'m'}>"></div>
+    <div class="title"><{$data.title}></div>
+  </li>
+  <{/foreach}>
+<{/if}>
+</ul> 
+<div><{pagers data=$pagers}></div>

@@ -1,0 +1,30 @@
+<{if $search_goodslist}>
+  		<div class="product_pic_t">
+  			<ul class="product_pic_ul">
+  				<{assign var="curr_lckey" value=0}>
+				<{foreach from=$search_goodslist item=loucengpro key=lckey}>
+					<{assign var="curr_lckey" value=$curr_lckey+1}>
+					<!--显示一个产品的详细信息Start-->
+					<li>
+		  				<dl style="position: relative;">
+							<dt class="jmalltax_<{$loucengpro.tax}>">
+		  						<a class="product-image" href="<{url action=topc_ctl_item@index item_id=$loucengpro.item_id}>" title="<{$loucengpro.title}>" target="_blank">
+		  							<img class="lazy" src="<{$loucengpro.image_default_id|storager:'t'}>" alt=""/>
+		  						</a>
+		  					</dt>
+		  					<dd class="product-txt">
+		  						<a href="<{url action=topc_ctl_item@index item_id=$loucengpro.item_id}>" title="<{$loucengpro.title}>" target="_blank" style="<{if ($loucengpro.title_length<=12)}>line-height: 3em;<{/if}>"><{$loucengpro.title}></a>
+		  					</dd>
+		  					<dd class="product-pri"><span class="product_p"><{$loucengpro.price|cur}></span></dd>
+		  				</dl>
+		  			</li>
+					<{if ($curr_lckey >0 && $curr_lckey%3==0)}>
+						<!--显示三个之后换行-->
+						</ul></div> <div class="product_pic_b"><ul class="product_pic_ul">
+					<{/if}>
+		  		<{/foreach}>
+		  	</ul>
+		</div><!--last product_pic_t(_b) -->
+<{else}>
+	<div class="product_pic_t">产品数据为空</div>
+<{/if}>

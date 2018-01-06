@@ -1,0 +1,136 @@
+<!-- 产品价格及优惠促销展示 Start -->
+	<div class="summary-outbox">
+	  <ul class="summary">
+	    <li>
+	      <div class="dt del"><{if $activityDetail}><del>价&nbsp;&nbsp;&nbsp;格：</del><{else}>价&nbsp;&nbsp;&nbsp;格：<{/if}></div>
+	      <div class="dd"><span class="<{if !$activityDetail}>price<{/if}> action-update-price"><{if $activityDetail}><del><{$item.price|cur}></del><{else}><{$item.price|cur}><{/if}></span></div>
+	    </li>
+	    <!-- 活动价，单品活动促销 -->
+	    <{if $activityDetail}>
+		    <li>
+		      <div class="dt red"><{$activityDetail.activity_info.activity_tag}>价：</div>
+		      <div class="dd"><span class="price"><{$activityDetail.activity_price|cur}></span></div>
+		    </li>
+	    <{/if}>
+	
+	    <!-- 综合税  Start -->
+		<li>
+			<{if ($item.tax eq '2')}>
+				<div >综合税率：<{$item.tax_rate*100*0.7}>% </div>
+				<div >单件税费：<{$item.price*$item.tax_rate*0.7|cur}> （<a href="javascript:void(0)" data-regrate="<{$item.tax_rate}>" class="tax_desc_info">税额说明</a>）</div>
+			<{/if}>
+	       <div style="left">
+	       		<span style="position: relative;">原产地：<{$item.area_name}><{if $item.area_img}>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+	       		<img style="position: absolute;bottom: 0;"  width="38" height="25"src="<{$item.area_img}>" align="center" /><{/if}></span>
+	       </div>
+	    </li>
+	    <!-- 综合税  END -->
+	    
+	    <!-- 优惠活动 Start -->
+	    <{if $promotionDetail}>
+		    <{foreach from=$promotionDetail item=promotionDetail name=name}>
+		    	<li class="activity-1">
+			    	<div style="width:50px;"> <{if $env.foreach.name.iteration == 1}>优&nbsp;&nbsp;&nbsp;惠：<{else}>&nbsp;<{/if}></div>
+			    	<div class="explain">
+			    		<span><{$promotionDetail.promotion_tag}></span>
+			    		<i><{$promotionDetail.promotion_name}></i>
+			    	</div>
+			    	<div class="details"><a href="<{url action=topc_ctl_promotion@getPromotionItem promotion_id=$promotionDetail.promotion_id}>">详情&gt;&gt;</a></div>
+			    </li> 
+	       <{/foreach}>
+	    <{/if}>
+	    <!-- 优惠活动 END -->   
+	    
+	    <{if (false)}>
+	   		<li>
+	    		<div class="dt del" style="bottom: auto; ">优惠</div>
+			    <div class="dd activity">
+			      <a href="<{url action=topc_ctl_promotion@getPromotionItem promotion_id=$promotionDetail.0.promotion_id}>" class="activity-txt">
+			        	<span class="label-danger"><{$promotionDetail.0.promotion_tag}></span><{ $promotionDetail.0.promotion_name}>
+			      </a>
+			      <{if ($promotion_count >= 1)}>
+				      <div class="activity-more">
+				        <div class="more">共<{$promotion_count}>条促销活动 <i class="icon icon-arrow-down-b"></i></div>
+					        <ul class="activity-panel">
+					          <{foreach from=$promotionDetail item=promotionDetail name=name}>
+						          <{if $env.foreach.name.iteration != 0}>
+							          <li>
+								          <a href="<{url action=topc_ctl_promotion@getPromotionItem promotion_id=$promotionDetail.promotion_id}>" class="activity-txt"><span class="label-danger"><{$promotionDetail.promotion_tag}></span>
+								          <{$promotionDetail.promotion_name}></a>
+							           </li>
+						           <{/if}>
+					           <{/foreach}>
+					        </ul>
+				       </div>
+			       <{/if}>
+			    </div>
+		    </li>
+	    <{/if}>
+	    <!-- <li class="activity-1"> <div>优惠</div> <div class="explain"> <span>满减</span> <i>满189.00减10.00元</i> </div> 
+	    	<div class="details"><a href="##">详情&gt;&gt;</a></div> </li> -->
+	  </ul>
+	  <div class="goods-qrcode" style="box-shadow: 0px 0px 5px #ccc; border-radius: 2px;padding-bottom:3px;margin-right: 0; color: #ef0abc; background: #f3f3f3;"><img src="<{$item.qrCodeData}>"><br>手机购买</div>
+	</div>
+
+	<!-- 配送方式和运费  Start -->
+	<fieldset style="border: 1px solid #CCC;border-radius: 3px;margin-left: 20px;">
+	    <legend style="width:auto;font-size:12px;border:0;padding:3px;margin-left: 10px; ">配送方式和运费</legend>
+		<div class="dispatching" style="border:0;padding-top: 0px;">
+			<div class="dispatching-t">
+				<div>发货仓：</div>
+				<div>
+					<span style="margin-right: 5px;color:#9616c3;"><{$item.name_region}></span>
+					<!--至<select><option value ="1">深圳罗湖</option></select><span style="color: #000000;">有货</span>-->
+				</div>
+				<div>说明<a class="question" href="javascript:void(0)">?</a></div>
+			</div>
+			<div class="dispatching-b">
+				<div>运&nbsp;&nbsp;&nbsp;费：</div>
+				<div><div class="coupon-b-2">
+					<{if ($item.tax eq '1')}> 全场<em>完税商品</em>订单购买满￥50元免运费！
+					<{elseif($item.tax eq '3')}> 全场<em>直邮商品</em>订单购买满￥150元或购满2件免运费！
+					<{else}> 卖家承担运费  <{/if}>
+				</div></div>
+			</div>
+		</div>
+		<!-- 配送方式和运费  Start -->
+	</fieldset>
+	
+	<script type="text/javascript">
+		function showtiplay(targetObj ,showTipC){
+			if("underfined"!=typeof(targetObj) && showTipC)
+				targetObj.tips({   //selector 为jquery选择器
+					  msg: showTipC,   //你的提示消息  必填
+					  side:2,//提示窗显示位置  1，2，3，4 分别代表 上右下左 默认为1（上） 可选
+					  color:'#333333', //提示文字色 默认为白色 可选
+					  bg:'#FFFFFF',//提示窗背景色 默认为红色 可选
+					  bgtip:'#999999',//提示窗三角色 默认为红色 可选
+					  time:3,//自动关闭时间 默认2秒 设置0则不自动关闭 可选
+					  x:0,//横向偏移  正数向右偏移 负数向左偏移 默认为0 可选
+					  y:0,//纵向偏移  正数向下偏移 负数向上偏移 默认为0 可选
+				 });
+		}
+		//显示运费详情
+		$('.question').hover(function(){
+			$(".jq_tips_box").remove(); //清空之后再显示
+			var showTipC ='精茂城商品分为 完税商品、海外直邮和保税区发货三种。完税商品是已经缴纳关税再售卖的；保税区发货是提前将海外商品运抵国内保税区，在接收订单后直接从国内保税区仓库发货，通过国内快递寄到您手中，全程经由海关监管；如果您购买的是海外直邮的商品，将通过国际物流送到您手中。';
+			showtiplay($(this),showTipC);
+		});
+		//显示税费详情
+		$('.tax_desc_info').hover(function(){
+			$(".jq_tips_box").remove(); //清空之后再显示
+			var reg_rate = $(this).data("regrate");
+			if(reg_rate&& Number(reg_rate)!="NaN" && Number(reg_rate)>0 && Number(reg_rate)<=1 ){
+				reg_rate = Number(reg_rate)* 100 ;
+			}else{reg_rate = 0;}
+			var currentRate = '根据海关规定，本商品适用的关税税率为0%，增值税率'+ reg_rate.toFixed(2) +'%，消费税率0.0% ；（其中当商品总价小于2000时，关税税率按0%计算，增值税与消费税享受70%折扣）';
+			var showTipC = '<div class="show-rate－content">单件税费  = 完税价 *综合税率<br>完税价 = 商品优惠后单价*数量 + 运费 <br>综合税率  =(消费税率+增值税率)/(1-消费税率）*0.7<br>' 
+			+ currentRate + '<br>注：不同品类商品的税率不同  ，详细请<a href="//help.aomygod.com/help_172.html" target="_blank" style="margin-left:10px;">了解相关税率</a></div>';
+			showtiplay($(this),showTipC);
+		});
+		function  tax_info() {
+			 var dialog = new Dialog('<{url action=topc_ctl_list@tax_info}>', {
+			    width: 540, title: '购物须知', modal:true, async: 'ajax', component: { container: 'dialog takegoods-dialog' },asyncOptions: {  type: 'post', }
+			 });
+		}
+	</script>

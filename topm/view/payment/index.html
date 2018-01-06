@@ -1,0 +1,230 @@
+<div class="order-msg">
+  <header>
+    <div class="list-hd">
+      <div class="backto icon-back">
+        <input type="button" name="returnBcak" onclick="history.back()">
+      </div>
+      <div class="tit">订单支付</div>
+    </div>
+  </header>
+  <div class="main" id="main">
+    <form id="dopay_form" target="_blank" action="<{url action=topm_ctl_paycenter@dopayment}>" method="post" data-async="false">
+      <input type="hidden" name="payment[payment_id]" value="<{$trades.payment_id}>" id="pd">
+      <input type="hidden" name="openid" value="<{$openid}>" id="oid">
+      <input type="hidden" name="payment[money]" value="<{$trades.cur_money}>" id="my">
+      <input type="hidden" name="payment[tids]" value="<{$tids}>" id="ts">
+      <div class="order-fin">
+        <{if $newtrade}>
+        <div class="center">
+          <div class="fin-icon ok">
+            <span class="icon-ok"></span>
+          </div>
+          <div class="success-info">
+            <span class="info-su">订单提交成功，请您尽快付款！</span>
+            <span class="thanks">请您在提交订单后尽快完成支付，<br>以免订单被取消。</span>
+          </div>
+        </div>
+        <{/if}>
+      </div>
+      <div class="pay-amount">
+        <div class="tit">应付金额</div>
+        <div class="total"><{$trades.cur_money|cur}></div>
+      </div>
+      <div style="border: 1px solid #eee;border-radius: 4px;padding: 0.2em 1.5em;margin: 1em auto;width: 99%;color: #ff6f06;background: #F1EBE6;">
+      	温馨提示：您已下单成功，请在移动端完成订单付款 （建议使用微信扫码支付和手机支付宝）。
+      </div>
+      <{if $payments}>
+      <div class="ui-btn-group cur">
+        <div class="btn-group-hd">
+          <div class="tit">选择支付方式</div>
+          <div class="way">
+            <span></span>
+            <i class="icon-up"></i>
+          </div>
+        </div>
+        <ul>
+          <!--<{foreach from=$payments item=item name="payments"}>
+          <{if $item.app_id =="malipay"}>
+          <li class="<{$item.app_id}> payment_item">
+            <span class="choose"></span>
+            <label for="<{$item.app_id}>">
+              <{$item.app_display_name}>
+            </label>
+            <input id="<{$item.app_id}>" class="button" type="radio" name="payment[pay_app_id]" value="<{$item.app_id}>" id="p_id"/>
+          </li>
+          <{/if}>
+          <{/foreach}>-->
+
+           <li class="payment_item">
+            <span class="choose"></span>
+            <label for="H5">
+              手机快捷支付
+            </label>
+            <input id="H5" class="button" type="radio" name="payment[pay_app_id]" value="H5"/>
+          </li>
+          <li class="payment_item" >
+            <span class="choose"></span>
+            <label for="W02">
+              微信公众号支付
+            </label>
+            <input id="W02" class="button" type="radio" name="payment[pay_app_id]" value="W02"/>
+          </li>
+        </ul>
+      </div>
+      <!--<div class="pay-amount" style='display:none' id='deposit-password-input'>-->
+        <!--<input type='password' name='deposit_password' placeholder="点我输入预存款密码" id="pws">-->
+      <!--</div>-->
+      <{else}>
+      <div class="ui-btn-group cur">
+        <div class="btn-group-hd">
+        还没有可用的支付方式，请联系商家！
+      </div>
+      </div>
+      <{/if}>
+      <div class="confirm-btn">
+        <button type="button" class="ui-btn-warning form-submit">确认支付</button>
+      </div>
+    </form>
+  </div>
+</div>
+<div id="password_dialog" style="display:none;">
+  <div class="password-dialog">
+    <p>您还未设置支付密码！请到PC端安全中心设置。</p>
+  </div>
+</div>
+
+<script>
+  var Message = new gmu.Message();
+
+  $('.button').button();
+
+  $('.ui-btn-group li').tap(function(){
+    $('.choose').removeClass('chosen')                                       /*删除chosen属性*/
+    $('.ui-btn').removeClass('ui-state-active')
+    $(this).find('.ui-btn').addClass('ui-state-active');                     /*查询this中后代ui-btn添加属性*/
+    $(this).find('.choose').addClass('chosen')
+      //微信浏览器不支持trigger事件
+      $(".payment_item input[type=radio]").removeAttr('checked');
+      $(this).find("input[type='radio']").attr('checked',true);
+      //$(this).find('input[type="radio"]').trigger('click');
+    var payment = $(this).find('label').text();
+    $('.way').find('span').text(payment);
+  });
+
+  $('#password_dialog').dialog({
+      autoOpen: false,
+      closeBtn: false,
+      buttons: {
+        //'更换支付方式': function(){
+        //    this.close();
+        //},
+          '我知道了': function(){
+          //location.href="<{url action='topm_ctl_member@security'}>";
+            this.close();
+          }
+      }
+  });
+  $('.ui-btn-group').tap(function(){
+      $(this).toggleClass('cur');                          /* 用cur属性切换this中的属性*/
+  });
+  $('.payment_item').click(function(){
+      $(this).children('input').val() == 'deposit' ? $('#deposit-password-input').show() : $('#deposit-password-input').hide();
+  });
+
+  $('.form-submit').tap(function(e){                         /*提交表单*/
+    e.preventDefault();                                      //默认取消事件
+    if($('input[name="payment[pay_app_id]"]:checked').length>0){
+       // alert($('input[name="payment[pay_app_id]"]:checked').val());exit;
+      if($('input[name="payment[pay_app_id]"]:checked').val() == 'deposit'){
+        <{if !$hasDepositPassword.result}>
+        $('#password_dialog').dialog('open');   //打开jq ui对话框
+        return;
+        <{/if}>
+    	$('#dopay_form').attr('target','_self');
+      }
+
+
+      var payment_id          = $('#pd').val();
+      var money               = $('#my').val();
+      var tids                = $('#ts').val();
+      var openid              = $('#oid').val();
+      var deposit_password    = $('#pws').val();
+      var pay_app_id          = $('input[name="payment[pay_app_id]"]:checked').val();
+      var url = "<{url action=topm_ctl_paycenter@finish}>";
+      var return_url = url+"?payment_id="+payment_id;
+      var data={
+        'payment_id'          : payment_id,
+        'money'               : money,
+        'tids'                : tids,
+        'pay_app_id'          : pay_app_id,
+        'openid'              : openid,
+        'deposit_password'    : deposit_password
+      };
+
+
+
+      if(pay_app_id == 'wxpayjsapi'  || pay_app_id == 'W02'){
+        $.ajax({
+          "url":"<{url action=topm_ctl_paycenter@dopayment}>",                 //url请求的地址
+          "type":"post",                                                       //请求的类型 以何种方式请求数                                                //据 get 或 post 默认get
+                                                                               //数据发送的方式跟数据格式没有关系,跟type有关系
+          /*"scriptCharset": 'utf-8',
+           "dataType":"json",*/
+          "data":data,                                                          //请求发送的数据
+          "success":function(ms){
+            //判断是否含有html标签
+            function checkHtml(htmlStr) {
+              var  reg = /<[^>]+>/g;
+              return reg.test(htmlStr);
+            }
+            if(checkHtml(ms) == true){
+              document.write(ms);
+              window.history.back(-1);
+            }else{
+              var json                = JSON.parse(ms);
+              if(typeof json == 'object'){
+                WeixinJSBridge.invoke(
+                        "getBrandWCPayRequest",{
+                          "appId"         : json.appId,
+                          "timeStamp"     : json.timeStamp,
+                          "nonceStr"      : json.nonceStr,
+                          "package"       : json.package,
+                          "signType"      : json.signType,
+                          "paySign"       : json.paySign
+                        },function(res){
+                          if (res.err_msg == "get_brand_wcpay_request:ok") {
+                            alert('支付成功');
+                            window.location.href = return_url;
+                          }else if (res.err_msg == "get_brand_wcpay_request:cancel") {
+                            alert('你已取消微信支付');
+                            window.location.href = return_url;
+                          }else {
+                            window.location.href = return_url;
+                          }
+                        });
+              }else{
+                document.write(ms);
+              }
+            }
+          }
+        });
+    }else{
+        $.ajax({
+          "url":"<{url action=topm_ctl_paycenter@dopayment}>",                 //url请求的地址
+          "type":"post",                                                       //请求的类型 以何种方式请求数                                                //据 get 或 post 默认get
+                                                                               //数据发送的方式跟数据格式没有关系,跟type有关系
+          /*"scriptCharset": 'utf-8',
+           "dataType":"json",*/
+          "data":data,                                                          //请求发送的数据
+          "success":function(ms){
+            document.write(ms);
+        }});
+      }
+      //$('#dopay_form').submit();
+    }else{
+      Message.error('请选择支付方式！')
+      return;
+    }
+  });
+/*$(this).children('input').val() == 'deposit' ? $('#deposit-password-input').show() : $('#deposit-password-input').hide();*/
+</script>

@@ -1,0 +1,187 @@
+<form  action="<{url action=topshop_ctl_shop_information@save}>" method="post" class="form-horizontal" data-validate-onsuccess="ajaxSubmit" role="form">
+  <div class="panel panel-default">
+    <div class="panel-body">
+      <{if !empty($infor.infor_id)}>
+      <input type="hidden" name="infor_id"  value='<{$infor.infor_id}>' >
+      <input type="hidden" name="shop_id" value="<{$infor.shop_id}>">
+      <{/if}>
+
+      <div class="form-group">
+        <label class="col-sm-2 control-label"><{t}>企业组织机构代码<{/t}>：</label>
+        <div class="col-sm-6">
+          <label class="control-label">
+            <input type=text name='OrgCode' required <{if !empty($infor.OrgCode)}> value='<{$infor.OrgCode}>' <{/if}>></label>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="col-sm-2 control-label"><{t}>传输企业代码<{/t}>：</label>
+        <div class="col-sm-6">
+          <label class="control-label">
+            <input type=text name='CopCode' required <{if !empty($infor.CopCode)}> value='<{$infor.CopCode}>' <{/if}>>
+          </label>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="col-sm-2 control-label"><{t}>传输企业名称<{/t}>：</label>
+        <div class="col-sm-6">
+          <label class="control-label">
+            <input type=text name='CopName' required <{if !empty($infor.CopName)}> value='<{$infor.CopName}>' <{/if}>>
+          </label>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="col-sm-2 control-label"><{t}>发送方<{/t}>：</label>
+        <div class="col-sm-6">
+          <label class="control-label">
+            <input type=text name='SenderID' required <{if !empty($infor.SenderID)}> value='<{$infor.SenderID}>' <{/if}>>
+          </label>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="col-sm-2 control-label"><{t}>接收部门<{/t}>：</label>
+        <div class="col-sm-6">
+          <label class="control-label">
+            <input type=text name='ReceiverDepart' required <{if !empty($infor.ReceiverDepartment)}> value='<{$infor.ReceiverDepartment}>' <{/if}>>
+            <!--<input type="checkbox" name="ReceiverDepart[]" value="C"  <{if strpos($infor.ReceiverDepartment,'C')!==false}> checked <{/if}>/>海关　
+            <input type="checkbox" name="ReceiverDepart[]" value="Q" <{if strpos($infor.ReceiverDepartment,'Q')!==false}> checked <{/if}>/>检验检疫　
+            <input type="checkbox" name="ReceiverDepart[]" value="M" <{if strpos($infor.ReceiverDepartment,'M')!==false}> checked <{/if}>/>市场监管-->
+            <!--<input type=text name='ReceiverDepartment' value="<{$ReceiverDepartment}>">-->
+          </label>
+        </div>
+      </div>
+      <div class="form-group">
+      <label class="col-sm-2 control-label"><{t}>电商平台代码<{/t}>：</label>
+      <div class="col-sm-6">
+        <label class="control-label">
+          <input type=text name='ebpCode' required <{if !empty($infor.ebpCode)}> value='<{$infor.ebpCode}>' <{/if}>>
+        </label>
+      </div>
+    </div>
+      <div class="form-group">
+      <label class="col-sm-2 control-label"><{t}>电商平台企业名称<{/t}>：</label>
+      <div class="col-sm-6">
+        <label class="control-label">
+          <input type=text name='ebpName' required <{if !empty($infor.ebpName)}> value='<{$infor.ebpName}>' <{/if}>>
+        </label>
+      </div>
+    </div>
+      <div class="form-group">
+        <label class="col-sm-2 control-label"><{t}>电商商户代码<{/t}>：</label>
+        <div class="col-sm-6">
+          <label class="control-label">
+            <input type=text name='ebcCode' required <{if !empty($infor.ebcCode)}> value='<{$infor.ebcCode}>' <{/if}>>
+          </label>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="col-sm-2 control-label"><{t}>电商商户名称<{/t}>：</label>
+        <div class="col-sm-6">
+          <label class="control-label">
+            <input type=text name='ebcName' required <{if !empty($infor.ebcName)}> value='<{$infor.ebcName}>' <{/if}>>
+          </label>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="col-sm-2 control-label"><{t}>支付企业名称<{/t}>：</label>
+        <div class="col-sm-6">
+          <label class="control-label">
+            <select name="payID" required>
+              <option></option>
+              <{foreach from=$pay item=item }>
+              <option value="<{$item.pay_id}>" <{if $infor.payID==$item.pay_id}> selected="selected" <{/if}>><{$item.payName}></option>
+              <{/foreach}>
+            </select>
+          </label>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="col-sm-2 control-label"><{t}>物流企业名称<{/t}>：</label>
+        <div class="col-sm-6">
+          <label class="control-label">
+            <select name="logisticsID" required>
+              <option></option>
+              <{foreach from=$log item=item }>
+              <option value="<{$item.log_id}>" <{if $infor.logisticsID==$item.log_id}> selected="selected" <{/if}>><{$item.logisticsName}></option>
+              <{/foreach}>
+            </select>
+          </label>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="col-sm-2 control-label"><{t}>报关企业名称<{/t}>：</label>
+        <div class="col-sm-6">
+          <label class="control-label">
+            <select name="declarationID" required>
+              <option></option>
+              <{foreach from=$import item=item }>
+              <option <{if $infor.declarationID==$item.import_id}> selected="selected" <{/if}> value="<{$item.import_id}>" ><{$item.agentName}></option>
+              <{/foreach}>
+            </select>
+          </label>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="col-sm-2 control-label"><{t}>承运企业名称<{/t}>：</label>
+        <div class="col-sm-6">
+          <label class="control-label">
+            <select name="signID" required>
+              <option></option>
+              <{foreach from=$sign item=item }>
+              <option value="<{$item.sign_id}>" <{if $infor.signID==$item.sign_id}> selected="selected" <{/if}>><{$item.signCompanyName}></option>
+              <{/foreach}>
+            </select>
+          </label>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="col-sm-2 control-label"><{t}>报送类型<{/t}>：</label>
+        <div class="col-sm-6">
+          <label class="control-label">
+            <input type='radio' name='appType' required value="1" <{if $infor.appType==1}> checked <{/if}> >新增
+            <input type='radio' name='appType' value="2" <{if $infor.appType==2}> checked <{/if}> >变更
+          </label>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="col-sm-2 control-label"><{t}>业务状态<{/t}>：</label>
+        <div class="col-sm-3">
+          <label class="control-label">
+            <input type='radio' name='appStatus' required value="1" <{if $infor.appStatus==1}> checked <{/if}> >暂存
+            <input type='radio' name='appStatus' value="2" <{if $infor.appStatus==2}> checked <{/if}> >申报
+          </label>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="form-group">
+    <div class="col-sm-offset-5 col-sm-2">
+      <button type="submit" class="btn btn-primary btn-lg btn-block">保存</button>
+    </div>
+  </div>
+</form>
+
+<script>
+  function ajaxSubmit (e) {
+    var form = e.target;
+    e.preventDefault();
+    $.post(form.action, $(form).serialize(), function(rs) {
+      if(rs.error) {
+        $('#messagebox').message(rs.message);
+        return;
+      }
+      if(rs.success) {
+        $('#messagebox').message(rs.message, 'success');
+      }
+      if(rs.redirect) {
+        setTimeout(function(){location.href=rs.redirect;}, 800);
+      }
+    });
+  }
+</script>
+<script>
+  $(document).ready(
+    function() {
+      $(".sidebar .sidebar-menu li a i.glyphicon").eq(1).removeClass("glyphicon-list-alt").addClass("glyphicon-cog");
+    }
+  );
+</script>

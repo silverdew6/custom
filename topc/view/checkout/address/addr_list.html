@@ -1,0 +1,50 @@
+<ul class="order-confirm-address addr-list step1">
+  <{foreach from=$userAddrList item=addrList}>
+  <li class="form-row">
+    <input type="radio" name="addr" value="<{$addrList.addr_id}>" data-validate="onerequired" cdname="<{$addrList.name}>" cdpd="<{$addrList.cd_pd}>" cdid="<{$addrList.card_id}>" cardpd="<{$addrList.card_pd}>" <{if $addrList.def_a}>checked<{/if}>>
+    <label data-region-id="<{$addrList.region_id}>" data-addr-id="<{$addrList.addr_id}>" data-addr="<{$addrList.addr}>" data-name="<{$addrList.name}>" data-mobile="<{$addrList.mobile}>" data-zip="<{$addrList.zip}>" data-card_id="<{$addrList.card_id}>" title="<{$addrList.area|region}>&nbsp;<{$addrList.addr}> （<{$addrList.name}> 收） <{$addrList.mobile}>">
+      <{$addrList.area|region}>&nbsp;<{$addrList.addr|cut:75}> （<{$addrList.name}><{if ($addrList.card_id)}>-<font color="red"></font><{/if}> 收） <{$addrList.mobile}>
+    </label>
+    <input type="hidden" name="card_id"  id="card_id" value="<{$addrList.card_id}>">
+    <a href="javascript:void(0);" class="action-edit-address btn_dialog">修改本地址</a>
+    <{if $addrList.def_addr}>
+    <span class="address-default">默认地址</span>
+    <{/if}>
+  </li>
+  <{/foreach}>
+  <li class="form-row list-addr-more">
+    <input type="radio" name="addr" id="for_newaddr" class="action-edit-address" value="-1">
+    <label for="for_newaddr">使用新地址</label>
+  </li>
+</ul>
+
+<script>
+  $(document).ready(function() {
+	 var type = $('li input[type=radio]:checked');//默认选项
+	 var typee = $('li input[type=radio]')[0];
+	 var tt = $('.addr-list').find(type).val();
+	
+    //身份证信息显示  17/08/21 start
+    $('#name').text($('.addr-list').find(type).attr('cdname')).css({"font-weight":"bold","font-size":"14px"});//17/08/21
+    $('#cd_a').val(tt);
+	  if($('.addr-list').find(type).attr('cdpd')!=0){
+      var dd=$('.addr-list').find(type).attr('cdid');
+      var cc="<input type='text' name='card_id' id='cdid' required value="+dd+'>';
+      $('#cd_id').html(cc);
+      $('#cd_n').val($('.addr-list').find(type).attr('cdname'));
+    }else{
+      $('#cd_id').text($('.addr-list').find(type).attr('cardpd')).css({"font-weight":"bold","font-size":"12px",'color':'red'});
+    }
+    //身份证信息显示  17/08/21 end
+
+    if($('.addr-list').find(typee).val()!=-1){ //8/28
+      $('#dzkz').prop('atid','1');
+      $('#dzkz').html('收货地址列表展开'+'<img src="..\\images\\00\\00\\00\\xl.png">');
+      $(".addr-list li").hide();
+      $(".addr-list li").find('input[type=radio]:checked').parents('li').show();
+    }
+
+
+  })
+</script>
+

@@ -1,0 +1,19 @@
+<{if ($shopCouponCount>0 && $shopCouponList)}>
+	<h5>领取优惠券</h5>
+	<ul><{foreach from=$shopCouponList item=coupon key=icopk}>
+			 <li class="privilege-1-li">
+			 	<div>
+		    		<dl class="privilege-1-dl">
+		    			<dt><{$coupon.deduct_money|cur}></dt>
+		    			<dd class="dd-one"><{$coupon.coupon_desc}></dd>
+		    			<dd>有效期  <{$coupon.canuse_start_time|cdate:'FDATE'}> 至 <{$coupon.canuse_end_time|cdate:'DATE'}></dd>
+		    		</dl>
+		    	</div>
+		    	<div>
+		    		<a href="javascript:void(0);" onclick="selfCouponFun.ajaxGetHandler(this,<{$coupon.shop_id|default:0}>,'<{$coupon.coupon_id}>')">立即领取</a>
+		    	</div>
+		    </li>
+		<{/foreach}></ul>
+<{else}>
+	<div style="text-align:center;line-height:2em;padding:5px 10px;"><p>暂无优惠券</p></div>
+<{/if}>

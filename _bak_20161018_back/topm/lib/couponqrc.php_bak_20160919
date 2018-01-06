@@ -1,0 +1,31 @@
+<?php
+class topm_couponqrc{
+
+    //生成券码
+    public function createQrc($targetContent , &$fileName = "")
+    {
+    	include("phpqrcode.php");
+    	$len = strlen($targetContent);
+	    if ($len <= 360){
+	    	/*$file = fopen("t.txt","r+");
+	    	flock($file,LOCK_EX);
+	      	if($file) {
+		       $get_file = fgetss($file);
+		       $t = $get_file+1;
+		       $file2 = fopen("t.txt","w+");
+		       fwrite($file2,$t);	
+	      	}
+		    flock($file,LOCK_UN);
+		    fclose($file);
+		    fclose($file2);*/
+		    $dirpath = __DIR__ . "/../../../public/";
+		    $fileName = "upload/qrcpng/".$targetContent.".png" ;
+	   		QRcode::png($targetContent, $dirpath.$fileName);	
+	   		return true;
+	   } else {
+	     	throw new \LogicException(app::get('sysuser')->_('内容过大')); 
+	     	return false;
+	   }
+	   return false;
+    }
+}

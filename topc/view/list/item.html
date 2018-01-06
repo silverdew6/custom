@@ -1,0 +1,33 @@
+<{if ($items)}>
+	<ul class="itemslist">
+	  <{foreach from=$items item=item}>
+	  <li>
+	    <div class="item">
+	      <div class="pic">
+	        <a href="<{url action=topc_ctl_item@index item_id=$item.item_id}>" class="jmalltax_<{$item.tax|default:'1'}>">
+	          <{if !$item.image_default_id}>
+	          	<img width="210" height="230" src="<{$image_default_id.M.default_image}>" data-haszoom="700">
+	          <{else}>
+	          	<img width="210" height="230" src="<{$item.image_default_id|storager:'m'}>" data-haszoom="700">
+	          <{/if}>
+	        </a>
+	      </div>
+	      <a class="name" href="<{url action=topc_ctl_item@index item_id=$item.item_id}>"> <{if $item.activity.activity_tag}><span class="item-describe-tag"><{$item.activity.activity_tag}></span><{/if}><{$item.title}></a>
+	      <div class="price">
+	        <{if $item.activity.activity_tag}>
+	        <del class="text-muted"><{$item.price|cur}></del>
+	        	<{$item.activity_price|cur}>
+	        <{else}>
+	        	<{$item.price|cur}>
+	        <{/if}>
+	        <{if $item.promotion}><span class="discount-tag">惠</span><{/if}>
+	      </div>
+	    </div>
+	  </li>
+	  <{/foreach}>
+	</ul>
+<{else}>
+	<div style=" padding: 50px; text-align: center; font-size: 2em;  color: #999999; ">
+		抱歉，没有搜索到有关“<{$env.get.n|default:' '}>”商品，请换个关键字试试。
+	</div>
+<{/if}>

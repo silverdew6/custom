@@ -1,0 +1,570 @@
+ <p>
+    <span class="btn btn-default"><input type="checkbox" name="" id="selectAll"> 全选</span>
+    <button type="button" class="btn btn-default text-red act-delall">
+      <i class="glyphicon glyphicon-remove"></i>
+      <{t}>批量删除<{/t}>
+    </button>
+    <button type="button" class="btn btn-default text-blue act-addcat"  onclick="newWareDiaLayer()">
+      <i class="glyphicon glyphicon-plus"></i>
+      <{t}>添加新仓库<{/t}>
+    </button>
+	<!--
+    <button type="submit" class="btn btn-default pull-right"><{t}>保存更改<{/t}></button>-->
+  </p>
+	<style>
+		#newWareDialog .form-group {display: block; width: 100%;    float: left;}
+		#newWareDialog .form-group .col-sm-2{width: 30%;    float: left;}
+		#newWareDialog .form-group .col-sm-3{width: 30%;    float: left;}
+	</style>
+	<div id="newWareDialog" class="modal fade" style="">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">关闭</span></button>
+                <h4 class="modal-title">完善仓库信息</h4>
+              </div>              
+			  <form id="newWareForm" action="<{url action=topshop_ctl_areaware@saveWare}>" method="post"  onsubmit="return ajaxSubmit(event)">
+				<div class="modal-body">
+					<!-- 完善仓库信息 -->				 
+				    <div class="panel panel-default">
+					  <div class="panel-heading"> 仓库信息</div>
+						<div class="panel-body" id="wara_model_content">
+							<!-- 仓库模式start -->
+							 <div class="form-group">
+								<label for="" class="col-sm-2 control-label">所属业务类型：</label>
+								<div class="col-sm-3">
+									<input type="radio" onclick="checked_tax(1)" name="ware_tax" value="1" checked="checked">   完税									
+									<input type="radio" onclick="checked_tax(3)" name="ware_tax" value="3">   直邮	 
+								</div>
+							</div>							
+														
+							<div class="form-group for_tax">
+							  <label for="" class="col-sm-2 control-label">仓库名称：</label>
+							  <div class="col-sm-3">
+								<input type="text" name="ware_name" value="" id="ware_name" onblur="" class="form-control" placeholder="输入仓库名称">
+							  </div>
+							</div> 
+							<div class="form-group has-feedback">
+							  <label for="" class="col-sm-2 control-label">配置物流方式：</label>
+							  <div class="col-sm-3">
+								<select name="ware_shipping" required="" id="" class="form-control" data-validate-field="item[area_id]">
+								<option value="0">--请选择--</option>								 
+								<!--<option value="240">国内小包</option>-->
+								</select>
+								<i class="form-control-feedback" data-validate-icon-for="item[area_id]" style="display: none;"></i>
+							  <ins class="help-block" data-validate-validator="required" data-validate-for="item[area_id]" data-validate-result="NOT_VALIDATED" style="display: none;">
+							  请填写必填项目</ins></div>
+							</div> 
+							<div class="form-group">
+								<label for="" class="col-sm-2 control-label">初始状态：</label>
+								<div class="col-sm-3">
+								<{if $dd eq '1'}>
+								<input type="radio" name="ware_status" value="1" >正常
+								<input type="radio" name="ware_status" value="0" checked >无效
+								<{else}>
+								<input type="radio" name="ware_status" value="1" checked>正常
+								<input type="radio" name="ware_status" value="0">无效
+								<{/if}>
+								</div>
+							</div> 
+							<!-- 仓库模式end -->					   
+						</div>
+					</div>				 
+				  </div>
+				  <div class="modal-footer">
+					<button type="button" class="btn btn-primary">保存</button>
+					<button id = "close_layer_btn" type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+					<input type="hidden" id="editware_id" name = "editware_id" value="" />
+				  </div>
+				</form>
+			</div>
+		</div>
+	</div>
+	<!-- Daion end -->		
+			
+  <table class="table table-bordered table-hover table-shopcat" id="data_table">
+    <colgroup>
+      <col class="col-md-0">
+      <col class="col-md-5">
+      <col class="col-md-2">
+      <col class="col-md-2">
+      <col class="col-md-3">
+    </colgroup>
+    <thead>
+      <tr>
+        <td width="30"></td>
+        <td width="150"><{t}>仓库名称<{/t}></td>        
+		<td width="100" class="text-center"><{t}>业务类型<{/t}></td>
+		<td width="80" class="text-center"><{t}>状态<{/t}></td>
+        <td width="120" ><{t}>创建时间<{/t}></td>
+        <td width="120" class="text-center"><{t}>操作<{/t}></td>
+      </tr>
+    </thead>
+    <{if $wregions}>
+    <{foreach from=$wregions item=item name='name' key=key}>
+    <tbody>
+      <tr>
+        <td><input type="checkbox" name="cat[<{$item.id}>]" value="<{$item.id}>" class="main-check"></td>
+        <td class="form-group">           
+		  <span><{$item.name}></span>		   
+        </td>
+		<td class="form-group text-center">           
+		  <span><{if $item.tax eq '3'}> 直邮 <{else}> 完税 <{/if}></span>		   
+        </td>
+        <td class="sortable-bar">
+          <!--<input type="hidden" name="cat[<{$item.id}>][order_sort]">
+          <a href="#" class="icon icon-arrow-start-a act-start" title="置顶"></a>
+          <a href="#" class="icon icon-arrow-up-a act-up" title="上移"></a>
+          <a href="#" class="icon icon-arrow-down-a act-down" title="下移"></a>
+          <a href="#" class="icon icon-arrow-end-a act-end" title="置底"></a>-->
+		  <{if $item.state eq 1 }><font color="blue">正常</font><{else}><font color="red">失效</font><{/if}>		  
+        </td>
+        <td><{if $item.modified_time}><{$item.modified_time|cdate}><{/if}></td>
+        <td style="width: 161px!important;  display: inline-block;text-align: center;">			
+			<span class="text-nowrap"><a href="javascript:void(0)" wid="<{$item.id}>"  class="del text-danger"><{t}>删除<{/t}></a></span>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
+			<span class="text-nowrap"><a href="javascript:void(0)"  onclick = "readWareLayer(this)" wid="<{$item.id}>" tax="<{$item.tax}>" ware_status="<{$item.state}>" wname="<{$item.name}>" shipping="<{$item.shipping}>"><{t}>查看<{/t}></a></span>
+        </td>
+      </tr>       
+    </tbody>
+    <{/foreach}>
+    <{else}>
+    <tbody id="none_cat">
+      <tr class="none-information">
+        <td colspan="5" align="center">请先添加发货仓库</td>
+      </tr>
+    </tbody>
+    <{/if}>
+  </table>
+ 
+<textarea style="display:none;" id="cat_template">
+  <tbody>
+    <tr>
+      <td><input type="checkbox" name="new[{cat_id}][cat_id]" class="main-check" value="{cat_id}"></td>
+      <td class="form-group">
+        <i class="icon icon-arrow-down-b act-showsubcat"></i>
+        <input type="text" name="new[{cat_id}][cat_name]" value="" required>
+      </td>
+      <td class="sortable-bar">
+        <input type="hidden" name="new[{cat_id}][order_sort]" value="">
+        <a href="#" class="icon icon-arrow-start-a act-start" title="置顶"></a><a href="#" class="icon icon-arrow-up-a act-up" title="上移"></a><a href="#" class="icon icon-arrow-down-a act-down" title="下移"></a><a href="#" class="icon icon-arrow-end-a act-end" title="置底"></a>
+      </td>
+      <td><{$nowtime|cdate}></td>
+      <td>
+        <span class="col-md-2 text-nowrap"><a href="javascript:void(0)" wid="<{$item.id}>" class="del text-danger"><{t}>删除<{/t}></a></span>
+        <!--span class="col-md-2 text-nowrap"><a href="#"><{t}>查看<{/t}></a></span-->
+      </td>
+      <tr class="tr-foot">
+        <td></td>
+        <td colspan="4">
+          <i>&nbsp;&nbsp;&nbsp;</i>
+          <i class="icon icon-plot"></i>
+          <button type="button" class="btn btn-default btn-flat act-addsubcat"><i class="icon icon-subcat text-red"></i> 添加子分类</button>
+        </td>
+      </tr>
+    </tr>
+  </tbody>
+</textarea>
+<textarea style="display:none;" id="subcat_template">
+  <tr>
+    <td><input type="checkbox" name="new[{cat_id}][{sub_id}][cat_id]" class="sub-check" value="{sub_id}"></td>
+    <td class="form-group">
+      <i>&nbsp;&nbsp;&nbsp;</i>
+      <i class="icon icon-plot"></i>
+      <input type="text" name="new[{cat_id}][{sub_id}][cat_name]" value="" required>
+    </td>
+    <td class="sortable-bar">
+      <input type="hidden" name="new[{cat_id}][{sub_id}][order_sort]" value="">
+      <a href="#" class="icon icon-arrow-start-a act-start" title="置顶"></a><a href="#" class="icon icon-arrow-up-a act-up" title="上移"></a><a href="#" class="icon icon-arrow-down-a act-down" title="下移"></a><a href="#" class="icon icon-arrow-end-a act-end" title="置底"></a>
+    </td>
+    <td><{$nowtime|cdate}></td>
+    <td>
+      <span class="col-md-2 text-nowrap"><a href="#" class="del text-danger"><{t}>删除<{/t}></a></span>
+      <!--span class="col-md-2 text-nowrap"><a href="#"><{t}>查看<{/t}></a></span-->
+    </td>
+  </tr>
+</textarea>
+
+<script type="text/javascript">
+var cat_id, sub_id;
+var table = $('#data_table');
+var firstcheckbox = table.find('tbody input[type=checkbox][name^=cat]').first();
+var lastcheckbox = table.find('tbody input[type=checkbox][name^=cat]').last();
+if(firstcheckbox.size()) {
+    cat_id = firstcheckbox.val() || 0;
+}
+else {
+    cat_id = 0;
+}
+if(lastcheckbox.size()) {
+    sub_id = lastcheckbox.val() || 0;
+}
+else {
+    sub_id = 0;
+}
+cat_id ++;
+sub_id ++;
+function substitute(string, cat_id, sub_id) {
+    string = string.replace(/\{cat_id\}/g, cat_id);
+    if(sub_id || sub_id === 0) {
+        string = string.replace(/\{sub_id\}/g, sub_id);
+    }
+    return string;
+}
+//check disabled
+function checked_tax(){
+	var dumnd = $("#wara_model_content").find('input[name=ware_tax]:checked'); 
+	if(dumnd.length > 0){
+		$(".btn-primary").removeAttr("disabled");
+		$(".btn-primary").on('click',function(e){ 
+			var dumnd = $("#wara_model_content").find('input[name=ware_tax]:checked'); 			
+			if(dumnd.length<0){
+				return $('#messagebox').message('必须选择一项业务类型');
+				//alert("必须选择一项业务类型");return;
+			}					
+			$("#newWareForm").submit(); 
+		});		
+	}else{
+		$(".btn-primary").attr("disabled",true);
+	}
+}
+$('#selectAll').on('change', function(e) {
+    table.find('input[type=checkbox]').prop('checked', this.checked);
+});
+
+
+function newWareDiaLayer(){
+	clearWareForm(0);
+	$('#newWareDialog').modal('show');
+	$("#newWareForm .btn-primary").fadeIn();
+	/*触发事件*/
+	checked_tax();
+	$("#newWareForm .btn-primary").on("click",function (){ $("#newWareForm").submit();});
+}
+
+//清空数据；
+function clearWareForm( iscolose ){
+	setTimeout(function(){ 
+		$("#ware_name").val("");
+		$("#ware_shipping").val(0);		
+		$("#editware_id").val("");
+		//$("#close_layer_btn").trigger("click");
+		if(typeof(iscolose)!="undefined" && parseInt(iscolose) > 0){
+			$('#newWareDialog').modal('hide');
+		}
+	}, 1000);
+}
+//查看
+//data-toggle="modal" data-target="#newWareDialog"
+function readWareLayer(obj){
+	var tax = $(obj).attr("tax") || 0;
+	var wname = $(obj).attr("wname") || "";
+	var shipping = $(obj).attr("shipping") || 0;
+	var status = $(obj).attr("ware_status") || 0; 
+	//console.dir("  "+ tax + "  " +  wname + "   " + shipping+ "  " + status);
+	$('#newWareDialog').modal('show');
+	var wid  = $(obj).attr("wid") || 0;
+	$("#editware_id").val(wid);
+	$("#newWareForm .btn-primary").fadeOut();
+	
+	$("#wara_model_content").find("input[name=ware_name]").val(wname);
+	$("#wara_model_content").find("input[name=ware_shipping]").val(shipping);
+	var taxobj = $("#wara_model_content").find("input[name=ware_tax]");
+	taxobj.removeAttr('checked');
+	taxobj.each(function() {	
+					var selectv = $(this).val()||"";					 
+					if(parseInt(selectv)==parseInt(tax)){$(this).trigger('click');}
+                });
+	var statusobj = $("#wara_model_content").find("input[name=ware_status]");
+	statusobj.removeAttr('checked');
+	statusobj.each(function() {
+					var selectv = $(this).val()||"";					 
+					if(parseInt(selectv)==parseInt(status)){$(this).trigger('click');}					  
+                }); 
+}
+
+//提交表单
+function ajaxSubmit (e) {
+    var form = e.target;
+	var dumnd = $("#wara_model_content").find('input[name=ware_tax]:checked'); 	
+    e.preventDefault();
+    if( dumnd.length <=0 ) {
+        return $('#messagebox').message('必须选择一项业务类型');
+    }
+	if($.trim($("#ware_name").val())=="" ){				 
+		return $('#messagebox').message('仓库名称不能为空');
+	}     
+    //request remote url 后台保存数据
+    $.post(form.action, $(form).serialize(), function(rs) {
+        if(rs.success) {
+            window.onbeforeunload = null;
+            $('#messagebox').message(rs.message, 'success');            
+            clearWareForm(1);
+            window.location.reload();
+        }else{
+        	$('#messagebox').message(rs.message);return ;
+        }
+        if(rs.redirect) {
+            setTimeout(function(){location.href=rs.redirect;}, 800);
+        }
+    },"json");
+} 
+
+//批量删除 操作
+$('.act-delall').on('click', function(e) {
+    var checked = table.find('input[type=checkbox]:checked');
+    if(!checked.size()) {
+        return $('#messagebox').message('请至少选择一项');
+    }
+    if(confirm('确定删除选择的仓库吗？')) {
+		var del_ppids = new Array();
+        checked.each(function() {            
+			var parent_vid = $(this).val();		
+			
+            if(parent_vid && parseInt(parent_vid) >0) {
+                del_ppids.push(parent_vid);				 
+            }
+        });		 
+		
+		if(del_ppids.length==0){
+			 return $('#messagebox').message('请至少选择一项');
+		}else{
+			$.post('<{url action="topshop_ctl_areaware@removeWare"}>', {"delwids":del_ppids}, function(rs) {
+				console.dir(rs);
+                if(rs.success) {
+                    $('#messagebox').message(rs.message,"success");
+					checked.each(function() {            
+						var parent = $(this).parents('tr');
+						if(parent.index() == 0) {						 
+							parent = parent.parent();
+						}
+						parent.hide();
+					}); 
+                    return;
+                }else{
+					$('#messagebox').message(rs.message);
+				}				               
+            },"json");
+		}		
+		return true;
+    }
+});
+
+ 
+function categoryCallback (instance, option) {
+    $('#catDialog').find('.btn-primary').prop('disabled', option.hasChild ? true : false);
+}
+
+
+table.on('change', '.main-check', function(e) {
+    $(this).parents('tbody').find('input[type=checkbox].sub-check').prop('checked', this.checked);
+})
+.on('click', '.del', function(e) {
+    e.preventDefault();
+    var parent = $(this).parents('tr');
+    if(parent.index() == 0) {        
+        parent = parent.parent();
+    }
+	var del_arrid = new Array(1);
+    if(confirm('确定删除当前行吗？')) {
+		var del_pod_id = $(this).attr("wid");
+		if(del_pod_id){
+			del_arrid.push(del_pod_id);
+			$.post('<{url action="topshop_ctl_areaware@removeWare"}>', {"delwids":del_arrid}, function(rs) {				 
+                if(rs.success) {
+                    $('#messagebox').message(rs.message,"success");
+					parent.hide();
+                    return;
+                }else{
+					$('#messagebox').message(rs.message);
+				}				               
+            },"json");
+		}  
+    }
+});
+
+
+
+ 
+
+$('form')
+.on('click', '.act-addsubcat', function(){
+    var tpl = $('#subcat_template').val();
+    var trs = table.find('tbody tr:not(.tr-foot)');
+    if(trs.size() == 100) {
+        return $('#messagebox').message('最多添加100个分类（包括子分类）');
+    }
+    var parent = $(this).parents('tr');
+    var parentname = parent.parent().find('input[type=checkbox][name]').first();
+    console.log(parentname);
+    if(parentname.val() === '') {
+        return $('#messagebox').message('请先填写父分类名称');
+    }
+    var parent_id = parentname.attr('name').match(/^(?:cat|new)\[(\d+)\].*/)[1] || 0;
+    tpl = $(substitute(tpl, parent_id, sub_id));
+    parent.before(tpl);
+    sub_id ++;
+    $('#selectAll')[0].checked = false;
+    $('form').Validator('addField', tpl.find('input[type=text]'));
+})
+.on('click', '.act-showsubcat', function(){
+    var $this = $(this);
+    if($this.hasClass('icon-arrow-right-b')) {
+        $this.parents('tr').nextAll().show();
+        $this.addClass('icon-arrow-down-b').removeClass('icon-arrow-right-b');
+    }
+    else {
+        $this.parents('tr').nextAll().hide();
+        $this.addClass('icon-arrow-right-b').removeClass('icon-arrow-down-b');
+    }
+})
+.on('click', '.act-up', function(e) {
+    e.preventDefault();
+    var tr = $(this).parents('tr');
+    var tbody = tr.parent();
+    var prev;
+    if(tr.index() == 0) {
+        if(tbody.index(table.find('tbody')) == 0) {
+            return;
+        }
+        else {
+            prev = tbody.prev();
+            tbody.after(prev);
+            prev.find('tr:eq(0) input[name^=cat]').each(function() {
+                $(this).attr('name', $(this).attr('name').replace(/^(cat)/, 'up'));
+            });
+        }
+    }
+    else if(tr.index() == 1) {
+        return;
+    }
+    else {
+        prev = tr.prev();
+        tr.after(prev);
+        prev.find('input[name^=cat]').each(function() {
+            $(this).attr('name', $(this).attr('name').replace(/^(cat)/, 'up'));
+        });
+    }
+    table.find('.warning').removeClass('warning');
+    tr.addClass('warning');
+    tr.find('input[name^=cat]').each(function() {
+        $(this).attr('name', $(this).attr('name').replace(/^(cat)/, 'up'));
+    });
+})
+.on('click', '.act-down', function(e) {
+    e.preventDefault();
+    var tr = $(this).parents('tr');
+    var tbody = tr.parent();
+    var next;
+    if(tr.index() == 0) {
+        if(tbody.index(table.find('tbody')) == table.find('tbody').size() - 1) {
+            return;
+        }
+        else {
+            next = tbody.next();
+            tbody.before(next);
+            prev.find('tr:eq(0) input[name^=cat]').each(function() {
+                $(this).attr('name', $(this).attr('name').replace(/^(cat)/, 'up'));
+            });
+        }
+    }
+    else if(tr.index() == tbody.find('tr').size() - 2) {
+        return;
+    }
+    else {
+        next = tr.next();
+        tr.before(next);
+        prev.find('input[name^=cat]').each(function() {
+            $(this).attr('name', $(this).attr('name').replace(/^(cat)/, 'up'));
+        });
+    }
+    table.find('.warning').removeClass('warning');
+    tr.addClass('warning');
+    tr.find('input[name^=cat]').each(function() {
+        $(this).attr('name', $(this).attr('name').replace(/^(cat)/, 'up'));
+    });
+})
+.on('click', '.act-start', function(e) {
+    e.preventDefault();
+    var tr = $(this).parents('tr');
+    var tbody = tr.parent();
+    var first;
+    if(tr.index() == 0) {
+        if(tbody.index(table.find('tbody')) == 0) {
+            return;
+        }
+        else {
+            first = table.find('tbody').first();
+            first.before(tbody);
+            first.find('tr:eq(0) input[name^=cat]').each(function() {
+                $(this).attr('name', $(this).attr('name').replace(/^(cat)/, 'up'));
+            });
+        }
+    }
+    else if(tr.index() == 1) {
+        return;
+    }
+    else {
+        first = tbody.find('tr').first().next();
+        first.before(tr);
+        first.find('input[name^=cat]').each(function() {
+            $(this).attr('name', $(this).attr('name').replace(/^(cat)/, 'up'));
+        });
+    }
+    table.find('.warning').removeClass('warning');
+    tr.addClass('warning');
+    tr.find('input[name^=cat]').each(function() {
+        $(this).attr('name', $(this).attr('name').replace(/^(cat)/, 'up'));
+    });
+})
+.on('click', '.act-end', function(e) {
+    e.preventDefault();
+    var tr = $(this).parents('tr');
+    var tbody = tr.parent();
+    var last;
+    if(tr.index() == 0) {
+        if(tbody.index(table.find('tbody')) == table.find('tbody').size() - 1) {
+            return;
+        }
+        else {
+            last = table.find('tbody').last();
+            last.after(tbody);
+            last.find('tr:eq(0) input[name^=cat]').each(function() {
+                $(this).attr('name', $(this).attr('name').replace(/^(cat)/, 'up'));
+            });
+        }
+    }
+    else if(tr.index() == tbody.find('tr').size() - 2) {
+        return;
+    }
+    else {
+        last = tbody.find('tr').last().prev();
+        last.after(tr);
+        last.find('input[name^=cat]').each(function() {
+            $(this).attr('name', $(this).attr('name').replace(/^(cat)/, 'up'));
+        });
+    }
+    table.find('.warning').removeClass('warning');
+    tr.addClass('warning');
+    tr.find('input[name^=cat]').each(function() {
+        $(this).attr('name', $(this).attr('name').replace(/^(cat)/, 'up'));
+    });
+})
+.on('change', 'input[type=text]', function(e) {
+    $(this).parents('tr').find('input[name^=cat]').each(function() {
+        $(this).attr('name', $(this).attr('name').replace(/^(cat)/, 'up'));
+    });
+})
+.on('change', 'input, select, textarea', function(e) {
+    window.onbeforeunload = function(e){
+        e.returnValue = '你有一些更改还未保存。确定要离开此页吗？';
+    }
+});
+</script>
+
+<script>
+  $(document).ready(
+    function() {
+      $(".sidebar .sidebar-menu li a i.glyphicon").eq(1).removeClass("glyphicon-list-alt").addClass("glyphicon-edit");
+    }
+  );
+</script>

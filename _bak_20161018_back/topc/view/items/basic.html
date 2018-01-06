@@ -1,0 +1,33 @@
+<div class="row">
+  <{include file="topc/items/basic/pic.html"}>
+  <div class="col-lg-11 box">
+    <div class="detail-panel description-panel">
+      <div class="detail-panel-bd">
+        <form action="<{url action=topc_ctl_cart@add mode=fastbuy}>" method="post" id="items_action_form">
+          <div class="detail-panel-info">
+            <div class="detail-panel-hd">
+			<!--
+			2016/3/4 LCD 增加业务模式和区域
+			-->
+			 <h1>
+			<span style="background: rgb(150, 22, 195); color: #f3f3f3; border-radius: 3px; padding: 3px 8px; font-size: 0.8em;">
+				<{if $item.tax==1}>完税<{/if}><{if $item.tax==2}>保税<{/if}><{if $item.tax==3}>直邮<{/if}>
+			   &nbsp;<{$item.name_region}></span>
+                <{if $activityDetail}>
+                <a href="<{url action=topc_ctl_activity@activity_item_list id=$activityDetail.activity_info.activity_id}>" data-id="<{$group.activity_id}>">
+                  <span class="item-describe-tag"><{$activityDetail.activity_info.activity_tag}></span>
+                </a>
+                <{/if}>
+                <{$item.title}>
+              </h1>
+              <div><{$item.sub_title}></div>
+            </div>
+            <{include file="topc/items/basic/price.html"}>
+            <{include file="topc/items/basic/buy.html"}>
+          </div>
+          <{include file="topc/items/basic/shop.html"}>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

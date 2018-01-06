@@ -1,0 +1,1370 @@
+<style type="text/css">
+	.order-confirm-item-bd .item_store_head{line-height: 30px; font-size: 1.1em; text-indent: 2em;border-bottom: 1px solid #DDD; color: #444; background: #efefef;}
+	.order-confirm-item-bd .head_count_info {float: right;margin-right: 10px;}
+	.order-verify-invoice .order-confirm-item-bd .item-border{padding:8px 10px 5px;}
+	.icon-what { background:url(statics/images/newicon_jd.png)}
+	.show-rate-label{color: #8ab660; font-weight: bold;}
+	.show-rate－content{ font-size: 1em;  line-height: 1.5em;  padding: 0.4em;}
+	.head_count_info .canuse-cps {float: left;  border-right: 1px solid #cccccc;  padding-right: 5px; text-indent: 3px;}
+	.head_count_info .canuse-cps .cp {color: #ff6f06; font-size: 0.9em; font-family: inherit;  border: 1px dotted #ff6f06;  padding:1px 2px; }
+	.head_count_info .canuse-cps .cp-act {border: 1px dotted #e22335; color: #e22335;}
+	.head_count_info .canuse-cps .cp-used {background: #e22335; border: 1px solid red; color: #FFF; font-weight:600;}
+	.icon-store-f {color: #fc902f;  font-size: 1.4em; text-indent: 0.1em!important; margin-right: 0.5em;}
+	.cart-table-btm .back_buying{ text-decoration: underline; padding: 8px 20px; float: left; border-radius: 0.3em; color: #731585;font-size: 1.1em;}
+	#all_usedcoupon_money {text-align: right; font-size: 0.8em; color: #e40bdc; width:100%;}
+	#all_usedcoupon_money .used-copon-mins{  background: red; color: #FFF; font-size: 0.9em;  padding: 1px 5px;  margin-right: 6em;}
+	.order-confirm-item-bd .total-info .row{min-width:400px;}
+	.addr-list .address-default {  background: #c523e2; padding: 2px 5px; border-radius: 2px; color: #FFF;}
+	.order-confirm-item .total-info .row strong {font-weight: 100; color: #666666; font-size: 12px;}
+	.order-tongyi{height: 26px; line-height: 20px;  padding: 10px 20px;  min-width: 300px;  border: 1px dotted #efefef; background: #f5f5f5; float: right; margin-top: 0px; margin-right: 20px;}
+	.tip_showmsg {color: #ea25da; margin-right: 8px;font-size: 1.5em;}
+	#confirm_submit{font-weight: bold;}
+	#confirm_submit.btn-disabled>span{background: #F3F3F3;   color: #999;  cursor: no-drop; font-weight: bold;}
+
+</style>
+<div id="main" class="main">
+	<div class="wrap-lg">
+		<div class="section">
+			<div class="crumbs" style="padding-top: 1em;">
+				<em class="color1">您当前位置</em>
+				<span>>&nbsp;&nbsp;<a href="#">确认订单</a> </span>
+				<span><a href="<{url action=topc_ctl_cart@index}>" class="order-confirm-item-right">&lt;&nbsp;返回修改购物车</a></span>
+			</div>
+		</div>
+		<form action="<{url action=topc_ctl_trade@create}>" method="post">
+			<input type="hidden" name="checkout" value="1">
+			<input type="hidden" name="mode" value="<{$mode}>">
+			<input type="hidden" name="md5_cart_info" value="<{$md5_cart_info}>">
+			<div class="section">
+				<div class="cart order-confirm ">
+					<div class="order-confirm-title">
+						<span style = "font-size:14px;font-weight:bolder">填写并确认订单信息</span>
+					</div>
+					<div class="order-confirm-item" id="checkout_address">
+						<div class="order-confirm-item-hd">
+							<em id="dzkz"></em>
+							<a href="<{url action=topc_ctl_member@address}>" target="_blank" class="order-confirm-item-right">收货地址管理&nbsp;&nbsp;&nbsp;<i class="tip_showmsg icon  icon-info-a" style="" message="点击管理收货地址信息，在没设置默认选中的情况下收货地址会默认选中第一个"></i></a>
+						</div>
+
+						<div class="order-confirm-item-bd" id="address_edit">
+							<div class="step1-update" style="display:none;"></div>
+							<{include file="topc/checkout/address/addr_list.html"}>
+						</div>
+					</div>
+
+					<!-- 支付及配送方式 -->
+					<div class="order-confirm-item order-verify-paytype">
+						<div class="order-confirm-item-hd" style="height: 18px;line-height: 10px;padding: 0 10px;"><em>支付方式</em>
+							<!-- <a href="#" class="step2-open">修改</a> -->
+						</div>
+						<div class="order-confirm-item-bd">
+							<div class="step2-update" style="display:none;"></div>
+							<ul class="clearfix paytype-item">
+								<li class="form-row" style="border: 1px solid red; padding: 0px 28px; margin-top: 12px;  border-top-right-radius: 7px; border-bottom-left-radius: 6px;">
+									<span class="">
+										<input type="radio" name="payment_type" id="yl" checked value="online">
+										<label for="yl">在线支付</label>
+									</span>
+								</li>
+								<{if $isSelfShop && $ifOpenOffline == "true"}>
+								<li class="form-row">
+				                  <span class="">
+				                    <input type="radio" name="payment_type" id="zub" value="offline" />
+				                    <label for="zub">货到付款</label>
+				                  </span>
+								</li>
+								<{/if}>
+							</ul>
+						</div>
+					</div>
+
+					<!-- 商品循环体 -->
+					<!-- 确认商品清单 -->
+					<{foreach from=$cartInfo.resultCartData key=shop_id item=cart}>
+					<{assign var=current_canuseCopons value=$cart.canuse_copons}><!--当前可用的优惠券信息列表-->
+					<div class="order-confirm-item order-verify-gooditem">
+						<div class="order-confirm-item-hd" style="height:20px;line-height: 10px;padding: 0 10px;"><em>商品清单</em></div>
+						<div class="order-confirm-item-bd">
+							<div class="item-bd item-border clearfix" style="background:#FFF;">
+								<div class="item_store_head" style="">
+									<i class="icon icon-medal icon-store-f"></i>
+									[店铺]&nbsp;&nbsp;&nbsp;<a href="<{url action=topc_ctl_shopcenter@index shop_id=$shop_id}>"><font color="#3849C5" size="2"><b><{$cart.shop_name}></b></font></a>
+									<div class="head_count_info">
+										<!-- 使用中券码 END-->
+										<{if $current_canuseCopons}>
+										<div id="showStore_usecoupon_layer_<{$shop_id}>" class="canuse-cps" >
+											<{foreach from=$current_canuseCopons item=cppo name=cppvb}>
+											<{if ($cppo.is_valid eq '1')}>
+											<{if ($env.foreach.cppvb.first)}>
+											券满金额：<font color="red"><b><{$cppo.orderMoney|cur}></b></font>
+											<{if ($cppo.limit_money >0 && $cppo.orderMoney < $cppo.limit_money)}>(还差<font color="blue"><{($cppo.limit_money-$cppo.orderMoney)|cur}></font> <a href="javascript:void(0)" title="去凑单" style="font-size: 0.8em;color:#e412b5" > 去凑单  &gt; </a>)<{else}>可用券：<{/if}>
+											<{/if}>
+											<{if ($cppo.limit_money >0 && $cppo.orderMoney >= $cppo.limit_money)}>
+											<span data-money="<{$cppo.deduct_money}>" class="cp <{if ($cppo.use_show eq 'succ')}>cp-act<{/if}>"><{$cppo.deduct_money|cur}></span>
+											<{/if}>
+											<{/if}>
+											<{/foreach}>
+										</div>
+										<{/if}>
+										总重量：<span class="price"><{$cart.cartCount.total_weight}>kg </span>
+										店铺总计：<span class="price" data-name="zongji[<{$cart.shop_id}>]"> </span>
+										（子订单数：<span class="price" data-name="total_child[<{$cart.shop_id}>]">￥0</span>）
+										<!--（含运费：<span class="price" data-name="price[<{$cart.shop_id}>]">￥0</span>）-->
+										<input type="hidden" name="zongji[<{$cart.shop_id}>]" value="<{$cart.cartCount.total_fee}>">
+										<input type="hidden" name="jinkou[<{$cart.shop_id}>]" value="<{$cart.cartCount.tax_price}>" />
+										<input type="hidden" name="tax[<{$cart.shop_id}>]" value="<{$cart.cartCount.tax}>" />
+									</div>
+								</div>
+								<div class="gooditem-left" style="background:#FFF;">
+									<div class="left-infos">
+										<ul>
+											<li class="form-row">配送类型</li>
+											<li class="form-row">
+                        <span class="">
+                          <input type="radio" name="distribution[<{$shop_id}>][type]" data-name="distribution[<{$shop_id}>]" id="kdps_<{$shop_id}>" checked value="1" data-shopid="<{$shop_id}>" data-weight="<{$cart.cartCount.total_weight}>">
+                          <label for="kdps_<{$shop_id}>">快递配送</label>
+                        </span>&nbsp;&nbsp;&nbsp;
+												<{if $cart.shop_type === "self" && $isSelfShop && $ifOpenZiti == "true"}>
+												<span class="">
+                          <input type="radio" name="distribution[<{$shop_id}>][type]" data-name="smzq[<{$shop_id}>]" id="smzq_<{$shop_id}>" data-shopid="<{$shop_id}>" value="0">
+                          <label for="smzq_<{$shop_id}>">上门自取</label>
+                        </span>
+												<{/if}>
+											</li>
+
+											<li class="form-row line-bottom clearfix" name="kdps_<{$shop_id}>">
+                        <span class="row-title">
+                        	<i class="tip_showmsg icon  icon-info-a" style="" message="<font color=red>温馨提示：</font> 订单中完税商品可以选择配送快递，而直邮和保税则默认使用平台对接的物流配送，请悉知。"></i>
+
+                        	配送方式  <br />
+                        	<{if ($cart.tax_ids eq '1' or $cart.tax_ids eq '1-3' or $cart.tax_ids eq '1-2' or $cart.tax_ids eq '1-2-3')}>
+	                        	<font color='red'>*&nbsp;&nbsp;</font><font color="#8ab660"><b>完税商品 :</b></font>
+		                        <select name="shipping[<{$shop_id}>][template_id]" data-shopid="<{$shop_id}>">
+		                        </select> &nbsp; <br/>
+		                    <{/if}>
+	                        <{if ($cart.tax_ids eq '2'  or $cart.tax_ids eq '1-2' or $cart.tax_ids eq '2-3' or $cart.tax_ids eq '1-2-3')}>
+	                        	&nbsp;&nbsp;&nbsp;<font color="#200ffe"><b>保税商品 : <font color="#FC902F">国际快递 </b> （包邮）</font></font>&nbsp; <br/>
+	                        <{/if}>
+	                        <{if ($cart.tax_ids eq '3' or $cart.tax_ids eq '1-3' or $cart.tax_ids eq '2-3' or $cart.tax_ids eq '1-2-3')}>
+	                        	&nbsp;&nbsp;&nbsp;<font color="#FC902F"><b>直邮商品 : <font color="red">国际EMS </b> （运费￥20）</font></font>
+							<{/if}>
+							<!--只有保税和直邮时，默认一个隐藏下拉框-->
+	                        <{if ($cart.tax_ids eq '2' or  $cart.tax_ids eq '3' or $cart.tax_ids eq '2-3')}>
+		                        <select name="shipping[<{$shop_id}>][template_id]" data-shopid="<{$shop_id}>" style="visibility: hidden;">
+		                        </select>
+		                    <{/if}>
+                        </span>
+
+											</li>
+											<li class="form-row line-bottom clearfix" name="use_select_ccopon<{$shop_id}>">
+                        <span class="row-title">
+                        	<i class="tip_showmsg icon  icon-info-a" style="" message="<font color=red>温馨提示：</font> 如商品支持使用优惠券，用户也领取过券在使用有效期内可以选择相对应的优惠券参与订单优惠，注意每个店铺每次限用一张优惠券。"></i>
+                        	优惠减免<br />
+                        	<font color="red">*&nbsp;&nbsp;</font><font color="#da1aca"><b>可用优惠券</b></font>：
+                        	<select name="ccoupon_used[<{$shop_id}>][coupon_code]" class="" data-shopid="<{$shop_id}>">
+	                        	<{if $current_canuseCopons}>
+	                        		<option data-money="0" value="-1">不使用优惠券</option>
+									<{foreach from=$current_canuseCopons item=cppo name=cppvb}>
+										<{if ($cppo.is_valid eq '1')}>
+											<{if ($cppo.limit_money >0 && $cppo.orderMoney >= $cppo.limit_money)}>
+												<option money="<{$cppo.deduct_money}>" value="<{$cppo.coupon_code}>"><{$cppo.coupon_name}>(<{$cppo.deduct_money|cur}>)</option>
+											<{/if}>
+										<{/if}>
+									<{/foreach}>
+								<{else}>
+									<option data-money="0" value="-1">不使用优惠券</option>
+								<{/if}>
+							</select>
+											</li>
+											<li class="form-row line-bottom clearfix" name="smzq_<{$shop_id}>" style="display:none;">
+												<input type="hidden" name="ziti[<{$shop_id}>][ziti_id]" class="ziti-id" value="">
+												<span class="row-title">自取地点：<span class="ziti-addr" data-name="ziti-addr[<{$shop_id}>]">请选择自取地点</span></span><a href="javascript:void(0);" class="sp-set takegoods-set" data-shopid="<{$shop_id}>">设置</a>
+											</li>
+
+											<{if ($cart.tax_ids eq '2' or $cart.tax_ids eq '1-2' or $cart.tax_ids eq '3' or $cart.tax_ids eq '1-3' or $cart.tax_ids eq '2-3' or $cart.tax_ids eq '1-2-3')}>
+												<!--新增-->
+												<li class="form-row line-bottom clearfix" name="use_select_ccopon<{$shop_id}>">
+													<span class="row-title">
+														<i class="tip_showmsg icon  icon-info-a" style="" message="<font color=red>温馨提示：</font> 因涉及国家监管部门规定，需要对收货信息实名备案，本网站不会保留相关个人信息，请放心填写"></i>
+														实名认证<br />
+														<font color="red">&nbsp;&nbsp;</font><font color="#FC902F"><b>收货人姓名:</b></font>
+														<span id="name"></span>
+														<input type="hidden" name="name" id="cd_n">
+														<input type="hidden" name="addr_id" id="cd_a">
+														<br><font color="red">&nbsp;&nbsp;</font><font color="#FC902F"><b>身份证号&nbsp;&nbsp;:</b></font>
+														<span id="cd_id"></span>
+													</span>
+												</li>
+											<{/if}>
+										</ul>
+									</div>
+								</div>
+								<div class="gooditem-right" style="padding: 0px;width:68%;">
+									<table class="item-table table-checkout" style="padding: 0px;">
+										<colgroup>
+											<col class="table-col-1">
+											<col width="32%">
+											<col class="table-col-3">
+											<col class="table-col-4">
+											<col class="table-col-5">
+											<col class="table-col-6">
+											<col class="table-col-7">
+											<!--<col class="table-col-8">-->
+										</colgroup>
+
+										<!--拆单开始  使用数据object2 -->
+										<!--遍历所有仓库 START   object2 换成 cart_list  下面的子对象变了-->
+										<!-- foreach from=$cart.object2 item=cangkuObj name=cankujj key=ck_key -->
+										<{if $cart.cart_list}>
+										<{foreach from=$cart.cart_list item=cangkuObj name=cankujj key=ck_key}>
+										<!--TB_HEAD-->
+										<thead>
+										<tr>
+											<td colspan="9" style="border-bottom: 1px solid #DDD;background: #FFF;border-left: 3px solid #fc902f;<{if !$env.foreach.cankujj.first}>border-top: 1px solid #DDD;<{/if}>">
+									<span class="tax_line-layer" data-taxname="<{$cangkuObj.tax|appc_tax}>"><i class="icon icon-bookmark icon-store-f" title ="根据订单的业务类型和发货仓库重新拆成子订单"></i>
+									<span style="font-size:0.9em;color:<{if ($cangkuObj.tax eq '2' or $cangkuObj.tax eq '3')}>red<{else}>#8ab660<{/if}>">
+									<b><{$cangkuObj.tax|appc_tax}></b>&nbsp;( <font color="#4b38e4"><{$cangkuObj.sea_region|appc_region}></font> )</span>
+									<font color="#ff004d">
+									<{if ($cangkuObj.tax eq '3')}>
+										（<i class="icon icon-eye icon-store-f" title ="直邮商品满150包邮"></i>直邮商品满150包邮）
+									<{elseif ($cangkuObj.tax eq '2')}>
+										（<i class="icon icon-eye icon-store-f" title ="保税商品全场包邮"></i>保税商品全场包邮）
+									<{else}>
+										（<i class="icon icon-eye icon-store-f" title ="完税商品满150包邮"></i>完税商品满50包邮）
+									<{/if}></font>
+									</span>
+												<input type="hidden" name="trade_order_ids[<{$cart.shop_id}>][]" value="<{$ck_key}>" />
+												<div style="float:right;">
+													订单金额：<span class="price" data-name="cangku_pay[<{$cart.shop_id}>_<{$ck_key}>]"> </span>
+													（ 邮费：<span class="price"  data-name="cangku_post[<{$cart.shop_id}>_<{$ck_key}>]">￥0</span>）
+												</div>
+											</td>
+										</tr>
+										</thead>
+										<!--TB_TBODY-->
+										<tbody>
+										<tr style="background: #f3ebd4;font-weight: bold;">
+											<td>商品</td>
+											<td>标题 </td>
+											<td><div class="price">实际总价</div></td>
+											<td>单价 </td>
+											<td>数量 </td>
+											<td><span>综合税</span></td>
+											<!--<td><span>消费税</span></td>-->
+											<td class="td-last">库存</td>
+										</tr>
+										<!--TB_TBODY_TR_GOODS ===遍历仓库下所有商品信息START  遍历这个对象 ＝ cangkuObj.0 第一个值[子订单商品列表]-->
+										<{if ($cangkuObj.orderlist)}>
+										<{foreach from=$cangkuObj.orderlist item=goods name=checkoutItemList}>
+										<{if $goods.obj_type=='item'}>
+										<input type="hidden" id="select_region<{$shop_id}>" value="<{$goods.sea_region}>" />
+										<input type="hidden" id="select_tax<{$shop_id}>" value="<{$goods.tax}>" />
+										<tr>
+											<td >
+												<div class="table-goods-pic"><a href="<{url action=topc_ctl_item@index item_id=$goods.item_id}>">
+													<{if $goods.image_default_id}>
+													<img width="64" height="64" src="<{$goods.image_default_id|storager:t}>"></a></div>
+												<{else}>
+												<img width="64" height="64" src="<{$defaultImageId.T.default_image}>" />
+												<{/if}>
+											</td>
+											<td>
+												<a href="<{url action=topc_ctl_item@index item_id=$goods.item_id}>" title="<{$goods.title}>">
+													<{if $goods.activityDetail}><span class="item-describe-tag">[<{$goods.activityDetail.activity_info.activity_tag}>]</span><{/if}><{$goods.title}> </br><{$goods.spec_info}>
+												</a>
+												<{if ($goods.selected_promotion)}>
+												<div style="color:red; margin-right: 2em;float: right;">
+													<{if ($goods.promotions)}>
+													<{foreach from=$goods.promotions item=gp name=gpkv}> <{if ($gp.promotion_id eq $goods.selected_promotion)}><a title="<{$gp.promotion_name}>" href="<{url action=topc_ctl_promotion@getPromotionItem promotion_id=$gp.promotion_id}>" style="color:red;text-decoration: underline;" target="_blank"><{$gp.promotion_name}>&nbsp;<i class="icon icon-star icon-store-f"></i></a><{/if}><{/foreach}>
+													<{/if}>
+												</div>
+												<{/if}>
+												<{if $goods.has_coupon=='1'}>
+												<div style="margin-top: 1em;color:red; margin-right: 2em;float: right;border: 1px dotted red;padding: 1px 2px;">支持优惠券 </div>
+												<{/if}>
+												<{if $goods.tax=='2'}><span class="show-rate-label" data-regrate="<{$goods.tax_rate|default:0}>"> 综合税费：<font color="red"><{$goods.price.zonghe_rate_total|cur}></font><i class="icon icon-eye icon-store-f"></i></span><{/if}>
+											</td>
+											<input type='hidden' name="tax_rate[]" value="<{$goods.tax_rate}>" />
+											<input type='hidden' name="reg_rate[]" value="<{$goods.reg_rate}>" />
+											<input type='hidden' name="price[]" value="<{$goods.price.price}>" />
+											<input type='hidden' name="quantity[]" value="<{$goods.quantity}>" />
+											<td>
+												<div class="price">
+													<{if ($goods.price.discount_price >0)}>
+													<{$goods.quantity*($goods.price.price)-$goods.price.discount_price |cur}>
+													<br/><i class="old-price">(<font color="#8ab660">已减：</font><{$goods.price.discount_price|cur}>)</i>
+													<{else}>
+													<{$goods.quantity*($goods.price.price+$goods.price.zonghe_rate_price)|cur}>
+													<{if ($goods.price.zonghe_rate_price)}><br><span style="font-size:0.9em;color:#999">(含税：<{$goods.price.zonghe_rate_total|cur}>)</span><{/if}>
+													<{/if}>
+												</div>
+											</td>
+											<td> <{$goods.price.price|cur}> </td>
+											<td>  ×<{$goods.quantity}> </td>
+											<td> <span  data-name="post_fee_tax_rate_price[]"><{if $goods.tax=='1'}>免税<{else}><{$goods.price.zonghe_rate_total|cur}><{/if}></span> </td>
+											<!-- <td>
+                                             <span  data-name="post_fee_reg_rate_price[]"><{$goods.price.reg_rate_price|cur}></span>
+                                            </td>-->
+											<td class="td-last"> <{if $goods.store >0}> 有货  <{else}>  缺货  <{/if}> </td>
+										</tr>
+										<{/if}>
+										<{if $goods.obj_type=='package'}>
+										<thead>
+										<tr> <td colspan="9" style="border-bottom: 1px solid #DDD;">对不起，尚未开启此模块。</td>  </tr>
+										</thead>
+										<{/if}>
+										<{/foreach}>
+										<tr>
+											<td colspan="7" class="tr-coupon-info" style="padding: 0px;">
+												<div class="order-confirm-item"><!-- 订单备注 -->
+													<div class="order-confirm-item-bd" style="padding: 0px;padding: 5px 10px">订单备注：
+														<input class="x-input col-8" name="mark[<{$shop_id}>][<{$ck_key}>]" maxlength="85" id="" placeholder="选填：本次交易的补充说明（所填内容建议已经和商家达成一致意见，85字以内）">
+														<span><b class="mark_count">0</b>/85</span>
+													</div>
+												</div>
+											</td>
+										</tr>
+										<tr>
+											<td>&nbsp;</td>
+											<td colspan="6" class="tr-coupon-info hide" style="padding: 0px;">
+												<!-- 优惠券  暂时不使用；by xch  -->
+												<div class="order-confirm-item coupon-item">
+													<div class="order-confirm-item-bd" style="padding：0px;">
+														<!-- 未选择优惠券条件判断开始 -->
+														<div class="coupon-choose" data-shopid="<{$shop_id}>">
+															<i class="icon-add"></i> 使用优惠券
+														</div>
+														<!-- 未选择优惠券条件判断结束 -->
+														<!-- 已选择优惠券条件判断开始 -->
+														<div class="coupon-checked" style="display:none;">
+															<span class="checked-value"></span>
+															<input type="hidden" class="checked-coupon-id" value>
+															<button type="button" class="btn btn-cancel btn-sm coupon-change" data-shopid="<{$shop_id}>"><span><span>修改</span></span></button>
+														</div>
+														<!-- 已选择优惠券条件判断结束 -->
+													</div>
+												</div>
+											</td>
+										</tr>
+										<{else}>
+										<!--TB_TBODY_TR_GOODS ===没有子商品，无效订单数据-->
+										<tr> <td colspan="7">当前订单无效 </td></tr>
+										<{/if}>
+										</tbody>
+										<{/foreach}>
+										<{/if}>
+										<!--遍历所有仓库 END-->
+									</table>
+								</div>
+							</div>
+						</div>
+					</div>
+					<{/foreach}>
+
+					<!-- 发票信息 -->
+					<{if $cart.cartCount.tax==1}>
+					<div class="order-confirm-item order-verify-invoice">
+						<{include file="topc/checkout/invoice.html"}>
+					</div>
+					<{/if}>
+
+					<!-- 使用会员积分 -->
+					<{if $if_open_point_deduction}>
+					<div class="order-confirm-item order-verify-invoice">
+						<div class="order-confirm-item-bd" style="height: 18px;line-height: 10px;padding: 0 10px;">
+							<!-- 当前积分不可用时，需要在use-point 后面加上 disabled 样式 -->
+							<div class="item-border use-point">
+	                <span class="choose-point">
+	                	<input type="checkbox" id="chk_point" /> <label for="chk_point">使用会员积分</label>
+	                	<span class="deduct-content"><i></i>当前积分不可用</span>
+	                </span>
+								<span class="point-info" style="display:none;">
+	                  <span class="point-number"><input type="text" name="use_points" value="" placeholder="0" onkeyup='this.value=this.value.replace(/\D/gi,"")' />&nbsp;点</span>
+	                  <span class="deduct-point"></span>
+	                  <div class="left-point">可用<em>0</em>点积分</div>
+	                </span>
+							</div>
+						</div>
+					</div>
+					<{/if}>
+
+
+					<!-- 订单总计 -->
+					<div class="order-confirm-item verify-total-info">
+						<{include file="topc/checkout/total.html"}>
+					</div>
+
+					<!-- 提交确认按扭-->
+					<div class="cart-table cart-table-ft verify-table" style="background: #FFF;padding: 2px;">
+						<div class="cart-table-btm">
+							<div class="cart-row item-border">
+								<!-- <a href="<{url action=topc_ctl_cart@index}>" title="返回购物车" class="back_buying">购物车</a> -->
+								<div class="cart-col cart-col-right">
+									<div class="row">
+										<button type="submit" class="btn btn-import btn-lg btn-disabled" id="confirm_submit"><span><span>提交订单</span></span></button>
+									</div>
+								</div>
+								<!-- 购物须知 -->
+								<div  class="order-tongyi">
+									<input type="checkbox" onclick = "check()" class="x-checkbox" name="license" id="for_license" data-validate="onerequired" data-caution="<{t}>请选择同意<{/t}>">
+									<label for="for_license">我已阅读并同意<a href="javascript:void(0);" id='license';class="action-open-dialog">《跨境电商商品购物须知》</a></label>
+									<i class="tip_showmsg icon  icon-info-a" style="color: #ea25da; margin-right: 8px;" message="了解《跨境电商商品购物须知》相关事项。"></i>
+								</div>
+
+							</div>
+						</div>
+					</div>
+					<!-- 提交确认按扭 END-->
+
+				</div>
+			</div>
+			<!-- 选择满减弹出层开始 -->
+			<div id="coupon-dialog" style="display:none"></div>
+			<div id="coupon-dialog-bg" style="display:none"></div>
+			<!-- 选择满减弹出层结束 -->
+		</form>
+	</div>
+</div>
+
+<script>
+	//勾选checkbox弹出购物须知
+	function check(){
+		alert("购物须知 :\n\n     为了您更好地选择境外物品，请您在下单前务必认真详细阅读并完全理解本告知书相关内容，对自身风险作出客观判断，同意本告知书内容后再下单。\n\n 1.您通过本网站购买的所有境外物品等同于境外购买。\n\n 2.您购买的所有境外物品适用的品质、健康、安全、卫生、环保、标示等项目标准可能与我国质量安全标准不同，由此可能产生的危害或损失以及法律责任或其他风险，将由您个人承担。\n\n 3.您通过跨境电商平台购买的境外物品可能无中文标签或说明书，请在下单前认真阅读平台提供的物品信息。\n\n 4.建议您对境外物品有一定了解并评估是否适合自己使用后再下单，感谢您的配合。\n\n");
+	}
+
+	//定义checkout步骤类
+	var CheckOut = function(){
+		var self = this;
+		var init = function(){
+			$('#main').on('click','.step1-close',function(e){
+				e.preventDefault();
+				self.step1.close();
+			}).on('click','.step1-open',function(e){
+				e.preventDefault();
+				self.step1.open();
+			}).on('click','.step3-open',function(e){
+				e.preventDefault();
+				self.step3.open();
+			}).on('click','.step3-close',function(e){
+				e.preventDefault();
+				self.step3.close()
+			}).on('click','input[name="invoice[need_invoice]"]',function(){
+				var el = $(this);
+				if(el.val() == "1"){
+					$('.invoice-info').show();
+				}else{
+					$('.invoice-info').hide();
+				}
+			})
+			// .on('click', '.addr-more', function() {
+			// 	var icon_chevron = $(this).find('.icon');
+			// 	if(icon_chevron.attr('data-value') == '0') {
+			// 		icon_chevron.addClass('icon-chevron-up');
+			// 		icon_chevron.removeClass('icon-chevron-down');
+			// 		icon_chevron.attr('data-icon', '\\2847');
+			// 		icon_chevron.attr('data-value', '1');
+			// 		$('.addr-list').css('height', 'auto');
+			// 		$(this).find('span[name="txt-all"]').text('收起');
+			// 	} else {
+			// 		icon_chevron.removeClass('icon-chevron-up');
+			// 		icon_chevron.addClass('icon-chevron-down');
+			// 		icon_chevron.attr('data-icon', '\\2844');
+			// 		icon_chevron.attr('data-value', '0');
+			// 		$('.addr-list').css('height', '186px');
+			// 		$(this).find('span[name="txt-all"]').text('显示所有');
+			// 	}
+			// });
+			//  showAddrMore();
+		};
+
+		self.step3 = {
+			el:$('.step3'),
+			update:$('.step3-update'),
+			open:function(){
+				this.el.show();
+				this.update.hide();
+				this.state = 'open';
+			},
+			close:function(){
+				var html = this.el.find('.invoice-type:checked').parent('label').find('span').text()+'('+this.el.find('select option:selected').text()+') 发票抬头'+$('input[name="invoice[invoice_content]"]').val();
+				this.el.hide();
+				this.update.html(html);
+				this.update.show();
+				this.state = 'close';
+			},
+			state:'open'
+		};
+		init();
+	};
+
+
+	//实例化订单确认页
+	CheckOut = new CheckOut();
+
+
+	$('#main')
+	//选择支付方式 事件
+			.on('click', 'input[name="paytype"]', function() {
+				var el = $(this);
+				if(el.val() == "3") {
+					$('.order-verify-gooditem').each(function(i) {
+						$('li[name="hdfk_' + (i+1) + '"]').show();
+					});
+				}else {
+					$('li[name^="hdfk_').hide();
+				}
+			})
+			//修改、添加地址 事件
+			.on('click', '.action-edit-address', function (e) {
+				var el = $(this),
+						dataEl = el.parent().find('label');
+				$.dialog.ajax('<{url action=topc_ctl_cart@addr_dialog}>', {
+					width: 500,
+					title:'收货地址',
+					modal:true,
+					asyncOptions:{
+						type: 'post',
+						callback: function(xhr) {
+							new AreaWidget({
+								dataUrl:"<{$env.base_url}>/app/ectools/statics/scripts/region.json",
+								select:this.body.find('.area-select'),
+								initData:dataEl.data('region-id')
+							});
+							this.body.find('form').attr('action','<{url action=topc_ctl_cart@saveAddress}>');
+							this.body.find('input[name=addr]').val(dataEl.data('addr'));
+							this.body.find('input[name=zip]').val(dataEl.data('zip'));
+							this.body.find('input[name=name]').val(dataEl.data('name'));
+							this.body.find('input[name=mobile]').val(dataEl.data('mobile'));
+							this.body.find('input[name=addr_id]').val(dataEl.data('addrId'));
+							this.body.find('form').data('validateConfig', {
+								tips:{
+									form: 'block'
+								}
+							}).find('[type=submit]').data('ajaxConfig', {
+								update: '#address_edit .step1',
+								callback: $.proxy(function(rs) {
+									e.preventDefault();
+									if(rs.success){
+									//	$('#name').val(dataEl.data('name'));
+										Message.success('保存成功');
+										this.hide();
+									}
+									var areaid;
+									$(rs.responseText).find('input[name="addr"]').each(function(){
+										if($(this).prop('checked')){
+											areaid = $(this).next('label').attr('data-region-id');
+										}
+										history.go(0);
+									});
+								//	chooseDistributionType(areaid);
+									total();
+								}, this)
+							});
+						}
+					}
+				});
+			})
+			//选择自提点 事件
+			.on('click', '.takegoods-set', function() {
+				var areaid;
+				var ele = $(this);
+				var shop_id = $(this).attr('data-shopid');
+				$('input[name="addr"]').each(function(){
+					if($(this).prop('checked')){
+						areaid = $(this).next('label').attr('data-addr-id');
+					}
+				});
+				if(!areaid){
+					alert('请先选择收货地址！');
+					return false;
+				}
+				var ziti_id = $('input[name="ziti[' + shop_id + '][ziti_id]"]').val();
+				var dialog = new Dialog('<{url action=topc_ctl_cart@getZitiList}>', {
+					width: 780,
+					title: '选择自提地点',
+					modal:true,
+					async: 'ajax',
+					component: {
+						container: 'dialog takegoods-dialog'
+					},
+					asyncOptions: {
+						type: 'post',
+						data:{
+							addr_id:areaid,
+							ziti_id: ziti_id
+						},
+						callback: function(xhr) {
+							$('.item-addr').on('click', function(e) {
+								$(this).find('.takegoods-addr').addClass('active');
+								$(this).siblings().find('.takegoods-addr').removeClass('active');
+							});
+							$('.ziti-save').on('click', function(e) {
+								var flag = false;
+								$('.takegoods-addr').each(function() {
+									if($(this).hasClass('active')){
+										flag = true;
+									}
+								});
+								if(!flag) {
+									alert('请选择自取地点！');
+									return false;
+								} else {
+									var data_id = $('.active').parent().attr('data-id');
+									var data_addr = $('.active').parent().attr('data-addr');
+									ele.parent().find('span[data-name="ziti-addr[' + shop_id + ']"]').html(data_addr);
+									ele.parent().find('input[name="ziti[' + shop_id + '][ziti_id]"]').val(data_id);
+									dialog.hide();
+									total();
+								}
+							});
+						}
+					}
+				});
+			})
+			//选择快递配送方式事件
+			.on('change', 'input[name^="distribution"]', function() {
+				//快递配送费事件
+				var shop_id = $(this).attr('data-shopid');
+				var distributionType = $(this).val();
+				if(distributionType == "1") { //快递配送
+					expressDefault($('select[name="shipping['+shop_id+'][template_id]"]'));
+				}else if(distributionType == "0") { //上门自取
+					ziTiDefault(shop_id);
+				}
+				total();
+			})
+			//选择使用优惠券事件
+			.on('change', 'select[name^="ccoupon_used"]', function() {
+				//变更选择使用优惠券的事件
+				var thatObj = $(this);
+				var fastbuyMode = '<{$mode}>';
+				var shop_id = thatObj.attr('data-shopid');
+				var couponCode = thatObj.val();
+				var coup_money = 0;
+				var ql_uri = "<{url action=topc_ctl_cart@useCoupon}>";     //调使用的操作；
+				var query_data = 'mode='+fastbuyMode+'&shop_id='+ shop_id;
+				if(null == couponCode || couponCode == "" || parseFloat(couponCode)==0 || parseFloat(couponCode)==-1){
+					//这个优惠券有效； 把头部的优惠券加上used选中状态；
+					ql_uri = "<{url action=topc_ctl_cart@cancelCoupon}>";     //调取消券的操作；
+					couponCode ="-1";
+				}else{
+					thatObj.find("option").each(function(ks,vv){ //选中值
+						if($(vv).val()== couponCode){
+							coup_money = $(vv).attr("money");
+						}
+					});
+				}
+				query_data = query_data + '&coupon_code='+couponCode ;
+				//后台处理优惠券的使用
+				$.post(ql_uri , query_data ,function(rs){
+					if(rs.error==true){
+						thatObj.val('-1');   //出错了，则选择不使用
+						showShopCoupon(shop_id,0);
+						Message.error(rs.message);  return;
+					}else{
+						showShopCoupon(shop_id,coup_money);//在头部展示已使用的券
+						total(); //重新计算总价
+					}
+				});
+			})
+			//选择配送方式改变相应快递运费
+			.on('change','select[name^="shipping"]',function(){
+
+				expressDefault($(this));
+				total(); //改变统计总数
+				if($('#chk_point').is(':checked')){
+					$('#chk_point').attr('checked',false);
+					$('#chk_point').change();
+				}
+			})
+			//配送类型选择
+			.on('click','.left-infos input[name^="distribution"]', function() {
+				var id = $(this).attr('data-shopid');
+				if($(this).val() == '1') {
+					$('li[name="kdps_' + id + '"]').show();
+					$('li[name="smzq_' + id + '"]').hide();
+				} else {
+					$('li[name="kdps_' + id + '"]').hide();
+					$('li[name="smzq_' + id + '"]').show();
+				}
+			})
+			/*相关税的提示消息*/
+			.on("mouseover",".show-rate-label",function(){
+				$(".jq_tips_box").remove(); //清空之后再显示
+				var reg_rate = $(this).data("regrate");
+				if(reg_rate&& Number(reg_rate)!="NaN" && Number(reg_rate)>0 && Number(reg_rate)<=1 ){
+					reg_rate = Number(reg_rate)* 100 ;
+				}else{reg_rate = 0;}
+				var currentRate = '根据海关规定，本商品适用的关税税率为0%，增值税率'+ reg_rate.toFixed(2) +'%，消费税率0.0% ；（其中当商品总价小于2000时，关税税率按0%计算，增值税与消费税享受70%折扣）';
+				var showTipC = '<div class="show-rate－content">综合税费  = 完税价 *电商综合税率<br>完税价 = 商品优惠后单价*数量 + 运费 <br>电商综合税率  =(消费税率+增值税率）/(1-消费税率）*0.7；<br>'
+						+ currentRate + '<br>注：不同品类商品的税率不同  ，详细请<a href="//help.aomygod.com/help_172.html" target="_blank" style="margin-left:10px;">了解相关税率</a></div>';
+				$(this).tips({   //selector 为jquery选择器
+					msg: showTipC,   //你的提示消息  必填
+					side:2,//提示窗显示位置  1，2，3，4 分别代表 上右下左 默认为1（上） 可选
+					color:'#333333', //提示文字色 默认为白色 可选
+					bg:'#FFFFFF',//提示窗背景色 默认为红色 可选
+					bgtip:'#999999',//提示窗三角色 默认为红色 可选
+					time:3,//自动关闭时间 默认2秒 设置0则不自动关闭 可选
+					x:0,//横向偏移  正数向右偏移 负数向左偏移 默认为0 可选
+					y:0,//纵向偏移  正数向下偏移 负数向上偏移 默认为0 可选
+				});
+			}).on("mouseover",".tax_line-layer",function(){
+		$(".jq_tips_box").remove(); //清空之后再显示
+		var titleobj = $(this).find(".icon-eye");
+		var taxName = $(this).data("taxname");
+		var taxDesc = "";
+		var rateDesc = "";
+		if(titleobj){
+			taxDesc = titleobj.parent().text();
+		}
+		if(taxName=="保税"){
+			rateDesc = '综合税费  = 商品单价  * 电商综合税率<br>电商综合税率  = (消费税率+增值税率）/ (1-消费税率）*0.7 （其中当商品总价小于2000时，关税税率按0%计算，增值税与消费税享受70%折扣）；<br>注：不同品类商品的税率不同  ，详细请<a href="//help.aomygod.com/help_172.html" target="_blank" style="margin-left:10px;">了解相关税率</a><br>';
+		}
+		var currentRate = '当前业务类型：<b>'+ taxName +'</b>&nbsp;&nbsp;' + taxDesc ;
+		var showTipC = '<div class="show-rate－content">温馨提示: <br>' + currentRate + '<br>'+ rateDesc +'</div>';
+		$(this).tips({   //selector 为jquery选择器
+			msg: showTipC,   //你的提示消息  必填
+			side:1,//提示窗显示位置  1，2，3，4 分别代表 上右下左 默认为1（上） 可选
+			color:'#333333', //提示文字色 默认为白色 可选
+			bg:'#FFFFFF',//提示窗背景色 默认为红色 可选
+			bgtip:'#999999',//提示窗三角色 默认为红色 可选
+			time:3,//自动关闭时间 默认2秒 设置0则不自动关闭 可选
+			x:0,//横向偏移  正数向右偏移 负数向左偏移 默认为0 可选
+			y:0,//纵向偏移  正数向下偏移 负数向上偏移 默认为0 可选
+		});
+	}).on("mouseover",".tip_showmsg",function(){
+		//通用的显示消息内容的弹出层  message才生效果
+		var thismsg = $(this).attr("message") || "";
+		if(thismsg !=null && thismsg != ""){
+			$(this).tips({   //selector 为jquery选择器
+				msg: thismsg, side:4, color:'#333333', bg:'#FFFFFF',//提示窗背景色 默认为红色 可选
+				bgtip:'#999999',time:1, x:0, y:0,//纵向偏移  正数向下偏移 负数向上偏移 默认为0 可选
+			});
+		}
+	});
+	//选择配送方式改变相应快递运费
+	$('select[name^="shipping"]').eq(0).change();
+
+	<{if ($current_canuseCopons)}>
+	//	$('select[name^="ccoupon_used"]').eq(0).change(); //默认使用第一张优惠券；
+	<{/if}>
+
+	//预先加载配送方式选择
+	chooseDistributionType("-1");
+	//显示店铺的已使用的优惠券
+	function showShopCoupon(shopid, couponMoney){
+		if(!shopid) return false;
+		var targetPara = $("#showStore_usecoupon_layer_" + shopid).find(".cp");
+		//console.dir(targetPara)
+		if(null != couponMoney && parseFloat(couponMoney) >0 ){
+			//console.dir(couponMoney)
+			targetPara.removeClass("cp-used");
+			targetPara.each(function(kk,kev){
+				var mtt = $(kev).attr("data-money")||0;
+				if("NaN" != Number(mtt) && Number(mtt) >0 &&  Number(mtt) == Number(couponMoney)){
+					$(kev).addClass("cp-used");
+				}
+			});
+		}else{
+			targetPara.removeClass("cp-used");
+		}
+	}
+	//店铺的默认配置方式选择快递方式
+	function chooseDistributionType(areaId) {
+		//多个店铺
+		$('input[data-name^="distribution["]').each(function() {
+			getDistributionType($(this), areaId);
+		});
+	}
+	//配送方式加载
+	function getDistributionType(ele, areaId){
+		var shop_id = ele.attr('data-shopid'); //修改哪个店铺的配送类型
+		var weight = ele.attr('data-weight');
+		var areaid;
+		var countArea_num = 0;
+		if(areaId == '-1') {
+			$('input[name="addr"]').each(function(){
+				var thisval = $(this).val();
+				if(null != thisval && parseInt(thisval) > 0 ) countArea_num ++ ;//有效的地址ID >0
+				if($(this).prop('checked')){ areaid = $(this).next('label').attr('data-region-id'); }
+			});
+		}else{
+			areaid = areaId;
+		}
+		if(typeof(areaid) == 'undefined' || parseInt(areaid) == 0 || parseInt(areaid) == -1) {
+			if(countArea_num < 1){ $("#for_newaddr").trigger("click"); }
+			return Message.error('请先配置商品的收货地址',1) ;
+		}
+		var select_tax = $('#select_tax'+shop_id).val(); //获取业务模式
+		var select_region = $('#select_region'+shop_id).val();//获取业务区域
+		var select_zfee='<{$cartInfo.totalCart.totalPrice}>';
+		$.ajax({
+			url: '<{url action=topc_ctl_cart@getDtyList}>',
+			type: 'post',
+			datatype: 'json',
+			data: {
+				shop_id:shop_id,
+				areaId:areaid,
+				select_tax:select_tax,
+				select_region:select_region,
+				weight:weight
+			},
+			success: function(res){
+				var selStr = '<option value="-1" data-post-fee="0" selected>--请选择快递公司--</option>';
+				$(res).each(function(i) {
+					var str= '(' + priceControl.format(res[i].post_fee) + ')';
+					if(select_tax==1 && select_zfee>=50)str='';
+					selStr += '<option value="' + res[i].template_id + '" data-post-fee="' + res[i].post_fee + '">' + res[i].name +str+'</option>';
+				});
+				$('select[name="shipping[' + shop_id + '][template_id]"]').html(selStr);
+			}
+		});
+	}
+	/*单个店铺订单配送费用选择事件*/
+	function expressDefault(ele) {
+		var post_fee = ele.find('option:selected').attr('data-post-fee');
+		var total_price = $('input[name^="zongji[' + ele.attr('data-shopid') + ']"]').val();
+		//只获取获取综合税  不区分其它税  //var post_fee_reg_rate_price = $('span[data-name^="post_fee_reg_rate_price[]"]');
+		var post_fee_zonghe_rate_price = $('span[data-name^="post_fee_tax_rate_price[]"]');
+		var tax = $('input[name^="tax[' + ele.attr('data-shopid') + ']"]').val();
+		var tax_rate = $('input[name="tax_rate[]"]');  //消费税
+		var reg_rate = $('input[name="reg_rate[]"]');  //数量
+		var price = $('input[name="price[]"]');        //价格
+		var quantity = $('input[name="quantity[]"]');  //数量
+		var rate=0;
+		var reg=0;
+		var ordersobj = $('input[name^="trade_order_ids[' + ele.attr('data-shopid') + ']"]');  //获取店铺的订单数
+		var count_or_num = 0;
+		if(ordersobj && "undefined" != typeof(ordersobj.length) && ordersobj.length >0){
+			count_or_num = ordersobj.length;
+		}
+		if(post_fee) {
+			//重新计算消费税，和增值税。
+			if(tax>1){
+				for( var i = 0; i < tax_rate.length; i++ ) {
+					var  prices =price.eq(i).val();
+					var  quantityes =quantity.eq(i).val();
+					var  tax_rates =tax_rate.eq(i).val();  //增值税tax_rates
+					var  reg_rates =reg_rate.eq(i).val(); //消费税reg_rates
+					var item_rate=(((prices*quantityes)+(prices*quantityes)/total_price*post_fee)/(1-reg_rates))*reg_rates*0.7;  //消费税
+					//console.dir(item_rate);
+					//post_fee_zonghe_rate_price.eq(i).text(priceControl.format(item_rate));  //消费税
+					rate = Number(rate) + Number(item_rate);
+					var item_reg=(((prices*quantityes)+(prices*quantityes)/total_price*post_fee)+item_rate)*tax_rates*0.7;  //增值税
+					//post_fee_reg_rate_price.eq(i).text(priceControl.format(item_reg)); //增值税
+					reg = Number(reg) + Number(item_reg);
+				}
+				total_price = Number(total_price) + Number(post_fee)+Number(rate)+Number(reg);
+			}else{
+				if(count_or_num > 0){
+					total_price = Number(total_price) + (Number(post_fee) * count_or_num);
+				}else{
+					total_price = Number(total_price) + Number(post_fee);
+				}
+			}
+		}else{	//运费不存在的时候
+			if(tax>1){
+				for( var i = 0; i < tax_rate.length; i++ ) {
+					var  prices =price.eq(i).val();
+					var  quantityes =quantity.eq(i).val();
+					var  tax_rates =tax_rate.eq(i).val();  //消费税 2016/5/2 雷成德
+					var  reg_rates =reg_rate.eq(i).val(); //  增值税 2016/5/2 雷成德
+					var item_rate=((prices*quantityes)/(1-reg_rates))*reg_rates*0.7;  //消费税 2016/5/2 雷成德
+					rate = Number(rate) + Number(item_rate);
+					var item_reg=((prices*quantityes)+item_rate)*tax_rates*0.7;  //增值税 2016/5/2 雷成德
+					reg = Number(reg) + Number(item_reg);
+				}
+				total_price = Number(total_price) +Number(rate)+Number(reg);
+			}else{
+				total_price = Number(total_price);
+			}
+		}
+		var pppostfeechar = ele.find('option:selected') ? priceControl.format(post_fee) : "￥0.00";
+		if(post_fee && parseInt(post_fee)>0 && parseInt(count_or_num) > 1){	//显示单个订单的邮费信息
+			pppostfeechar = pppostfeechar + "&nbsp;&nbsp;<b>*</b>&nbsp;&nbsp;<font color='#8AB660'>订单数：</font>"+ count_or_num;
+		}
+		//总计数据统计  ；总税，总商品订单金额；总邮费；总支付金额
+		$('span[data-name^="xiaofei[' + ele.attr('data-shopid') + ']"]').text(priceControl.format(rate));
+		$('span[data-name^="zengzhi[' + ele.attr('data-shopid') + ']"]').text(priceControl.format(reg));
+		$('span[data-name^="zongji[' + ele.attr('data-shopid') + ']"]').text(priceControl.format(total_price));
+		$('span[data-name^="price[' + ele.attr('data-shopid') + ']"]').html(pppostfeechar);
+	}
+	//选择自提方式没有快递费
+	function ziTiDefault(shioId) {
+		var total_price = Number($('input[name^="zongji[' + shioId + ']"]').val());
+		$('span[data-name^="zongji[' + shioId + ']"]').text(priceControl.format(total_price));
+		$('span[data-name^="price[' + shioId + ']"]').text('￥0.00');
+	}
+	// 备注的到计数
+	$('input[name^="mark"]').on('input',function(){
+		var cur = $(this).next().find('.mark_count'), max = 85;
+		if(this.value.length > max) {
+			this.value = this.value.substr(0, max);
+		}
+		cur.text(this.value.length);
+	});
+	//选取地址改变事件
+	$('#checkout_address').on('change', 'input[name="addr"]', function() {
+		chooseDistributionType("-1");
+		total();
+		//设置默认
+		//身份证信息显示  17/08/21 start
+		$('#name').text($('input[name="addr"]:checked').attr('cdname')).css({"font-weight":"bold","font-size":"14px"});//17/08/21
+		$('#cd_a').val($('input[name="addr"]:checked').val());
+		if($('input[name="addr"]:checked').attr('cdpd')!=0){
+			var dd=$('input[name="addr"]:checked').attr('cdid');
+			var cc="<input type='text' name='card_id' id='cdid' required value="+dd+'>';
+			$('#cd_id').html(cc);
+			$('#cd_n').val($('input[name="addr"]:checked').attr('cdname'));
+		}else{
+			$('#cd_id').text($('input[name="addr"]:checked').attr('cardpd')).css({"font-weight":"bold","font-size":"12px",'color':'red'});
+		}
+		//身份证信息显示  17/08/21 end
+		if($('input[name="addr"]:checked').val()!=-1){
+			$('#dzkz').prop('atid','1');
+			$('#dzkz').html('收货地址列表展开'+'<img src="..\\images\\00\\00\\00\\xl.png">');
+			$(".addr-list li").hide();
+			$(".addr-list li").find('input[type=radio]:checked').parents('li').show();
+		}
+	});
+	//地址列表
+	$('#dzkz').on('click',function(){
+		var atid=$('#dzkz').prop('atid');
+		if(atid==1){
+			$('#dzkz').prop('atid','2');
+			$('#dzkz').html('收货地址列表收起'+"<img src='..\\images\\00\\00\\00\\sq.png'>");
+			$(".addr-list li").each(function(){
+				$(this).show();
+			});
+		}else if(atid==2){
+			$('#dzkz').prop('atid','1');
+			$('#dzkz').html('收货地址列表展开'+'<img src="..\\images\\00\\00\\00\\xl.png">');
+			$(".addr-list li").hide();
+			$(".addr-list li").find('input[type=radio]:checked').parents('li').show();
+		}
+	});
+	$('#for_license').click(function(){
+		//	alert($('#for_license').val());
+		if($('#for_license').val()=='on'){
+			$('#for_license').val('checked');
+			$('#confirm_submit').removeClass('btn-disabled');
+		}else{
+			$('#for_license').val('on');
+			$('#confirm_submit').addClass('btn-disabled');
+		};
+	});
+
+	$('#license').click(function(){
+		var dialog2 = new Dialog('<{url action=topc_ctl_cart@shoppingnotes}>', {
+			width: 780,
+			title: '购物须知',
+			modal:true,
+			async: 'ajax',
+			component: {
+				container: 'dialog takegoods-dialog'
+			},
+			asyncOptions: {
+				type: 'post',
+			}
+		});
+	});
+	// 价格更新
+	function total(){
+		var form_action = '<{url action=topc_ctl_cart@total}>';
+		var fastbuyMode = '<{$mode}>';
+		var addr_id = $('input[name="addr"]:checked').val();
+		// 处理配送方式
+		var shipping = $('select[name^="shipping"]');
+		var dlytmpl = '';
+		$.each(shipping,function(i,n){
+			if(n.name && $(this).val()){
+				dlytmpl += '&'+n.name+'='+$(this).val();
+			}else
+				dlytmpl += '&'+n.name+'= -1';
+		});
+		//自提
+		var ziti = $('span[data-name^="ziti-addr"]');
+		var zitiAddr = '';
+		$.each(ziti, function(i, n) {
+			var ziti_value = $(this).parent().parent().find('input[name^="distribution"]').val();
+			if($(this).html() != '请选择自取地点')
+				zitiAddr += '&' + $(this).html() + '=' + ziti_value;
+		});
+		//支付方式
+		var payment_type = $('input[name="payment_type"]:checked').val();
+		//配送类型
+		var distribution = $('input[name^="distribution"]:checked');
+		var disb = '';
+		$.each(distribution,function(i,n){
+			if(n.name && $(this).val()){
+				disb += '&'+n.name+'='+$(this).val();
+			}
+		});
+		//优惠券的选择类型
+		var selected_coups = $('select[name^="ccoupon_used"]');
+		var disb_cstr = '';
+		$.each(selected_coups,function(i,n){
+			if(n.name && $(this).val()){
+				disb_cstr += '&'+n.name+'='+$(this).val();
+			}else{
+				disb_cstr += '&'+n.name+'= -1';
+			}
+		});
+		var data='addr_id='+addr_id+'&payment_type='+payment_type + dlytmpl + disb + disb_cstr + '&mode='+fastbuyMode+'&checkout=1';
+		$.post(form_action,data,function(rs){
+			var post_fee = 0;//总运费
+			var weight = 0; //总重量
+			var total_fee = 0;//商品总金额
+			var reduction = 0;//减免
+			var totalTax_rate_price = 0;//综合税  2016/3/23tax_price雷成德
+			var totalTax_rate_v = 0;//综合税率  2016/3/23tax_price雷成德
+			var tax = 0;  				//税  2016/3/23tax_price雷成德
+			var lastshop_id = 0;//只要最后一个店铺id 2016/3/23tax_price雷成德
+			rs.shop && $.each(rs.shop, function(k, v) {
+				var child_post_num  = 1; //当前店铺统计子订单数量
+				weight += v.totalWeight;
+				total_fee += Number(v.total_fee);
+				reduction += Number(v.discount_fee);
+				totalTax_rate_price += Number(v.zonghe_ratemoney);
+				totalTax_rate_v = v.zonghe_rate;
+				//totalTeg_rate_price += v.reg_rate_price;  //2016/3/23 lcd
+				lastshop_id = v.shop_id;  //2016/3/23 lcd
+				post_fee += Number(v.post_fee);
+
+
+				if("undefined" != typeof(v.child_post_num) && parseInt(v.child_post_num) >0){
+					child_post_num = parseInt(v.child_post_num); //统计 子订单数量
+				}
+				if(v.tax>0){
+					tax = v.tax  //业务模式，如果订单确认页面是多个店铺，那么肯定是完税模式
+				}
+				//店铺总计;
+				$('span[data-name^="zongji[' +lastshop_id + ']"]').text(priceControl.format(v.total_fee));
+				$('span[data-name^="total_child[' +lastshop_id + ']"]').text(child_post_num); //子订单数；
+
+				//拆分子订单
+				var sea_riid ="";
+
+				if("undefined" != typeof(v.clist) && v.clist ){
+					//遍历子订单；
+					$.each(v.clist, function( m, chik ){
+						sea_riid = lastshop_id + "_" + m;
+						//显示子订单的统计数据console.dir(sea_riid);	实付＝总金额－优惠价
+						var realTatal = chik.total_fee; 		//总金额
+						var showpp ="";
+						var show_zh_rate = "";
+						if(Number(chik.zonghe_ratemoney)!="NaN" && Number(chik.zonghe_ratemoney)>0){
+							show_zh_rate = ' <font color="green">+ 税：' + Number(chik.zonghe_ratemoney) +'</font>';
+						}
+
+						if("undefined" != typeof(chik.discount_fee) && chik.discount_fee != "" && parseFloat(chik.discount_fee)>0){
+							realTatal = parseFloat(realTatal) -  parseFloat(chik.discount_fee);
+							showpp = "(<font color='#60ab18'>已减<b>"+ priceControl.format(chik.discount_fee) +  "</b>)</font>";
+						}
+						$('span[data-name^="cangku_pay[' +sea_riid + ']"]').html(priceControl.format(realTatal) + show_zh_rate +  showpp );
+						var pp2 = chik.post_fee;	//取运费；
+						//console.dir(chik.shipping_free);
+						if("undefined" != typeof(chik.shipping_free) && chik.shipping_free != ""){
+							var ttiiid = '<font color="#FC902F">' + chik.shipping_freedesc + '</font>';
+							$('span[data-name^="cangku_post[' +sea_riid + ']"]').html(ttiiid); //子订单运费；
+						}else{
+							$('span[data-name^="cangku_post[' +sea_riid + ']"]').text(priceControl.format(pp2)); //子订单运费；
+						}
+					});
+				}
+			});
+			var allPayment_data= Number(rs.allPayment);
+			var coupon_money = Number(rs.allCouponMoney);
+			if("NaN"!=Number(coupon_money) && Number(coupon_money) >0 ){
+				var all_copmoneyhtml =  '温馨提醒：订单金额已使用 <span class="used-copon-mins">'+  priceControl.format(coupon_money) + '优惠券</span>';
+				$("#all_usedcoupon_money").html(all_copmoneyhtml);
+			}else{
+				$("#all_usedcoupon_money").html("")
+			}
+
+			//console.dir(totalTax_rate_price);
+			$('#total_fee').html(priceControl.format(allPayment_data)); //总价lcd 2016/3/23
+			totalPrice = Number($("#total_fee").text().substr(1));
+			$('.shop-weight').html(weight+'&nbsp;kg');
+			$('.shop-total_fee').html(priceControl.format(total_fee)); //总订单额
+			$('.shop-post_fee').html(priceControl.format(post_fee));	 //总邮费额
+			$('.shop-reduction').html('-'+priceControl.format(reduction));
+			//$('.shop-totalTax_rate_price').html(priceControl.format(totalTax_rate_price));  //tax_price雷成德2016/3/23
+			$('.shop-totalTeg_rate_price').html(priceControl.format(totalTax_rate_price));  // 综合税 计算
+			shopReduction = Number($(".shop-reduction").text().substr(2));
+			shopPostTee = Number($(".shop-post_fee").text().substr(1));
+			if(tax>1){
+				var   zongji  = $('span[data-name^="zongji[' +lastshop_id + ']"]').text();
+				var   zengzhi = $('span[data-name^="zengzhi[' +lastshop_id + ']"]').text();
+				var   xiaofei = $('span[data-name^="xiaofei[' +lastshop_id + ']"]').text();
+				$('#total_fee').html(priceControl.format(allPayment_data)); 					//总价lcd 2016/3/23
+				//$('.shop-totalTax_rate_price').html(priceControl.format(xiaofei));  //tax_price雷成德2016/3/23
+				//$('.shop-totalTeg_rate_price').html(priceControl.format(zengzhi));  //tax_price雷成德2016/3/23
+			}
+		});
+		return false;
+	}
+
+	// 临时提交订单js
+	$('#confirm_submit').click(function(){
+		var isclick = $(this).hasClass("btn-disabled");
+		if(isclick) return false;
+		if($('input[name="addr"]:checked').val() == '-1'){
+			Message.error('请先选择收货信息');
+			return false;
+		}
+		var form_action = '<{url action=topc_ctl_trade@create}>';
+		var fastbuyMode = '<{$mode}>';
+		var addr_id = $('input[name="addr"]:checked').val();
+		var shipping = $('select[name^="shipping"]');
+
+
+		//订单备注
+		var makr = $('input[name^="mark"]');
+		//发票信息
+		var invoice = $.param( $('input[name^="invoice"]').serializeArray() );
+		var invoice_title = $('select[name="invoice[invoice_title]"]').val();
+		//自提信息
+		var ziti = $('input[name^="ziti"]');
+		//使用积分
+		var use_points = $('input[name="use_points"]').val() ? $('input[name="use_points"]').val() : 0;
+		//配送类型
+		var distribution = $('input[name^="distribution"]:checked');
+		var disb = '';
+		$.each(distribution,function(i,n){
+			if(n.name && $(this).val()){
+				disb += '&'+n.name+'='+$(this).val();
+			}
+		})
+		var dlytmpl = '';
+		$.each(shipping,function(i,n){
+			if(n.name && $(this).val()){
+				dlytmpl += '&'+n.name+'='+$(this).val();
+			}
+		})
+		var zitiAddr = '';
+		$.each(ziti,function(i,n){
+			if(n.name && $(this).val()){
+				zitiAddr += '&'+n.name+'='+$(this).val();
+			}
+		})
+		var trade_memo = '';
+		$.each(makr,function(i,n){
+			if(n.name && $(this).val()){
+				trade_memo += '&'+n.name+'='+$(this).val();
+			}
+		});
+		var  buycard_val =$('#buycard_val').val();
+		var license          =$('#for_license').val();
+		if(!addr_id){ alert("请选择收货地址！");location.href="#";return false;}
+		if(license=='on'){ Message.error("请阅读并同意购物须知！");return false;}
+		var payment_type = $('input[name="payment_type"]:checked').val();
+
+		//身份证信息相关 17/08/21 start
+		if($('input[name="addr"]:checked').attr('cdpd') !=0 ){
+			var name=$('input[name="addr"]:checked').attr('cdname');
+			var card_id=$('#cdid').val();alert(check_identity(card_id));return;
+			var data = 'addr_id='+addr_id+'&payment_type='+payment_type+disb+dlytmpl+zitiAddr+'&use_points='+use_points+'&mode='+fastbuyMode+'&md5_cart_info=<{$md5_cart_info}>'+'&name='+name+'&card_id='+card_id;
+		}else{
+			var data = 'addr_id='+addr_id+'&payment_type='+payment_type+disb+dlytmpl+zitiAddr+'&use_points='+use_points+'&mode='+fastbuyMode+'&md5_cart_info=<{$md5_cart_info}>';
+		}
+		//身份证信息相关 17/08/21 end
+		var data = data+trade_memo+'&'+invoice+'&invoice[invoice_title]='+invoice_title+'&invoice='+invoice_title;
+		$.post(form_action,data,function(rs){
+			// rs = $.parseJSON(rs);
+			if(rs.success){
+				Message.success(rs.message);
+				location.href = rs.redirect;
+			}else{
+				Message.error(rs.message);
+			}
+		})
+		return false;
+	});
+
+	function showCouponDialog(cid, selectId){
+		$.post('<{url action=topc_ctl_cart@getCoupons}>','shop_id=' + cid,function(rs){
+			$('#coupon-dialog').html(rs).show();
+			$('#coupon-dialog-bg').show();
+			var boxHeight = $('#coupon-dialog').height();
+			$('#coupon-dialog').css('margin-top',-boxHeight/2);
+			var radiolist = $('#coupon-dialog').find('input[type="radio"]');
+			if(selectId){
+				$(radiolist).each(function(){
+					if($(this).val()==selectId){
+						$(this).prop('checked',true);
+					}
+				})
+			}
+		});
+	};
+
+	function hideCouponDialog(){
+		$('#coupon-dialog').hide();
+		$('#coupon-dialog-bg').hide();
+	};
+
+	var resultDom, valueDom, that, thet, shopId;
+
+	$('.table-checkout').on('click','.coupon-choose',function() {
+		that = $(this);
+		shopId = that.attr('data-shopid');
+		showCouponDialog(shopId);
+		resultDom = that.parent().find('.coupon-checked');
+		valueDom = that.parent().find('.checked-value');
+	}).on('click','.coupon-change',function() {
+		var select_input = $(this).parent().find('.checked-coupon-id');
+		var select_id = $(select_input).val();
+		shopId = $(this).attr('data-shopid');
+		showCouponDialog(shopId, select_id);
+		that = $(this).parent();
+		valueDom = that.find('.checked-value');
+		resultDom = that.parent().find('.coupon-choose');
+	});
+
+	$('#coupon-dialog').on('click','#check_coupon',function(e) {
+		hideCouponDialog();
+		var couponInput = $(this).parent().parent().find('input[type="radio"]:checked');
+		var couponCode = couponInput.val();
+		var fastbuyMode = '<{$mode}>';
+		var data = 'mode='+fastbuyMode+'&shop_id='+ shopId +'&coupon_code='+ couponCode;
+
+		if(couponCode!='-1') {
+			$.post('<{url action=topc_ctl_cart@useCoupon}>',data,function(rs){
+				if(rs.error==true){
+					Message(rs.message);
+					return;
+				}else{
+					if(that.hasClass('coupon-choose')){
+						resultDom.show();
+						valueDom.text(couponInput.attr('data-coupon-desc'));
+						// 赋值优惠券号码
+						that.hide();
+						resultDom.find('.checked-coupon-id').val(couponCode);
+						total();
+					}else{
+						resultDom.hide();
+						valueDom.text(couponInput.attr('data-coupon-desc'));
+						// 赋值优惠券号码
+						that.show();
+						resultDom.parent().find('.checked-coupon-id').val(couponCode);
+						total();
+						if($('#chk_point').is(':checked')){
+							$('#chk_point').attr('checked',false);
+							$('#chk_point').change();
+						}
+					}
+				}
+			});
+		}else{
+			// 赋值优惠券号码为空
+			$.post('<{url action=topc_ctl_cart@cancelCoupon}>',data,function(rs){
+				if(rs.error==true){
+					Message(rs.message);
+					return;
+				}else{
+					if(that.hasClass('coupon-choose')){
+						resultDom.parent().find('.checked-coupon-id').val('');
+						resultDom.hide();
+						that.show();
+						total();
+					}else{
+						resultDom.parent().find('.checked-coupon-id').val('');
+						resultDom.show();
+						that.hide();
+						total();
+					}
+				}
+			});
+		}
+	});
+
+	$('#coupon-dialog').on('click','.btn-cancel',function(e) {
+		hideCouponDialog();
+	});
+
+	function placeholderSupport() {
+		return 'placeholder' in document.createElement('input');
+	}
+	if(!placeholderSupport()){   // 判断浏览器是否支持 placeholder
+		$('[placeholder]').focus(function() {
+			var input = $(this);
+			if (input.val() == input.attr('placeholder')) {
+				input.val('');
+				input.removeClass('placeholder');
+			}
+		}).blur(function() {
+			var input = $(this);
+			if (input.val() == '' || input.val() == input.attr('placeholder')) {
+				input.addClass('placeholder');
+				input.val(input.attr('placeholder'));
+			}
+		}).blur();
+	}
+
+	//积分使用
+	var propertion = 0;
+	var canUserPoints = 0;
+	var totalPrice = Number($("#total_fee").text().substr(1));//总金额
+	var shopReduction = Number($(".shop-reduction").text().substr(2));//减免
+	var shopPostTee = Number($(".shop-post_fee").text().substr(1));//总运费
+	$('#chk_point').on('change', function() {
+		$('.left-point em').text('');
+		$('input[name="use_points"]').val('');
+		$('.deduct-point').text('');
+		if($(this).is(':checked')) {
+			$.post('<{url action=topc_ctl_member_point@ajaxGetUserPoint}>',{'total_price':totalPrice,'post_fee':shopPostTee},function(rs) {
+				if(rs) {
+					if(rs.open_point_deduction == "1" && rs.points !=0 && rs.point_deduction_max !=0 ){ //积分可用
+						propertion = rs.point_deduction_rate;//换算比率
+						var maxpoints = rs.point_deduction_max; //最大积分
+						var points = rs.points; //总积分
+						var totalPricePoints = totalPrice * propertion;
+						if(maxpoints <= points) {
+							canUserPoints = maxpoints
+						}else {
+							canUserPoints = points;
+						}
+						if(canUserPoints > totalPricePoints) {
+							canUserPoints = totalPricePoints;
+						}
+						$('.left-point em').text(canUserPoints);
+						$('.point-info').show();
+						if($('.use-point').hasClass('disabled'))
+							$('.use-point').removeClass('disabled');
+					}else { //积分不可用
+						$('.point-info').hide();
+						if(!$('.use-point').hasClass('disabled'))
+							$('.use-point').addClass('disabled');
+					}
+				}
+			});
+		}else {
+			$('.point-info').hide();
+			$("#total_fee").text(priceControl.format(totalPrice));
+			$('.shop-reduction').html('-'+priceControl.format(shopReduction));
+		}
+	});
+	$('input[name="use_points"]').on('keyup', function() {
+		if(parseInt($(this).val()) > canUserPoints)
+			$(this).val(canUserPoints);
+		var deductionPoint = $.trim($(this).val()) ? Number(parseInt($.trim($(this).val()))/propertion).toFixed(2) : 0;
+		$('.deduct-point').text("-￥" + deductionPoint);
+		$("#total_fee").text(priceControl.format(totalPrice - deductionPoint));
+		$('.shop-reduction').html('-'+priceControl.format(shopReduction+deductionPoint));
+	});
+
+	//保留两位小数并四舍五入
+	Number.prototype.toFixed=function(len)
+	{
+		var add = 0;
+		var s,temp;
+		var s1 = this + "";
+		var start = s1.indexOf(".");
+		if(s1.substr(start+len+1,1)>=5)add=1;
+		var temp = Math.pow(10,len);
+		s = Math.floor(this * temp) + add;
+		return s/temp;
+	}
+</script>
+

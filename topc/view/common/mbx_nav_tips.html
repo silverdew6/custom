@@ -1,0 +1,26 @@
+<!--公共区域 面包屑   mbx_nav_tips.html  
+	说明：只要引入了文件就是要展示功能的。
+	参数：
+	$top_navTip_status = true 
+	$top_navTips  = array(面包屑里面要展示的菜单功能，以及文字内容；默认为text 文本，link =加链接地址) 
+Start-->
+<{if ($top_navTips.status AND $top_navTips.menus)}>
+	<div class="bread-nav">
+	  <span class="nowlocation">
+	  	&nbsp;&nbsp;<i class="icon icon-home-a" style="font-size:1.3em"></i> 
+	  	<a href="/" title="返回商城首页" style="margin-right: 8px;">首页</a>
+	  	&nbsp;>&nbsp;
+	  </span>
+	  <!--面包屑  功能菜单 -->
+	  <{if ($top_navTips.menus)}>
+  			<{foreach from=$top_navTips.menus item=tipobj key=tpkey name=tpoba}>
+  				<{if ($env.foreach.tpoba.last)}>
+  					<span><{$tipobj.text}></span>
+  				<{else}>
+				  <a href="<{if ($tipobj.linksrc)}><{$tipobj.linksrc}><{else}>javascript:void(0);<{/if}>" target="_self"><{$tipobj.text}></a>&nbsp;>&nbsp;
+				<{/if}>
+  			<{/foreach}>
+	  <{/if}>
+	  <!--面包屑  功能菜单  -->
+	</div>
+<{/if}>

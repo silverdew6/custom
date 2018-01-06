@@ -1,0 +1,50 @@
+<style type="text/css">
+	.main .wrap-lg {box-shadow: 0px 0px 1px #d0d0d0;}
+	.mod-bottom .box .side-box .bd .icon-arrow-forward {  margin-left: 20px; }
+	.row .col-lg-13{    border-left: 1px solid #DDD;}
+	.row .col-lg-3 .side-box .hd:first-child { margin-left: 4px; padding: 6px 10px; background: #bb1ada; box-shadow: -1px 0px 2px #f6f6f6; margin-bottom: 2px; border-right: 1px solid #ccc; color: #FFF; }
+	.row .col-lg-13 .sortbar2{box-shadow: 0px 0px 1px #FFF;  margin-bottom: 5px;  padding: 3px;background:#bb1ada;}
+	.row .itemslist li{margin-bottom: 8px;box-shadow: 0px 0px 1px #555555; position: relative;}
+</style>
+
+<!-- main container -->
+<div class="row mod-bottom">
+  <div class="col-lg-3 box">
+    <{include file="topc/shop/cat.html"}>
+  </div>
+  <div class="col-lg-13 box">
+    <div class="mod-bottom"  style="padding: 0;">
+      <div class="sortbar2">
+        <a href="<{url action=topc_ctl_shopcenter@search _params=$filter  r_sort='sold_quantity desc' operationtype=replace}>" class="btn btn-tab is-desc <{if $activeFilter.orderBy == 'sold_quantity desc' || !$activeFilter.orderBy}>on<{/if}>"><span><span>销量<i class="icon icon-arrow-down-a"></i><i class="icon icon-arrow-up-a"></i></span></span></a>
+        <{if $activeFilter.orderBy == 'price asc' }>
+        <a href="<{url action=topc_ctl_shopcenter@search _params=$filter  r_sort='price desc' operationtype=replace }>" class="btn btn-tab is-asc <{if $activeFilter.orderBy == 'price asc' }>on<{/if}>"><span><span>价格<i class="icon icon-arrow-down-a"></i><i class="icon icon-arrow-up-a"></i></span></span></a>
+        <{else}>
+        <a href="<{url action=topc_ctl_shopcenter@search  _params=$filter r_sort='price asc' operationtype=replace }>" class="btn btn-tab is-desc <{if $activeFilter.orderBy == 'price desc' }>on<{/if}>"><span><span>价格<i class="icon icon-arrow-down-a"></i><i class="icon icon-arrow-up-a"></i></span></span></a>
+        <{/if}>
+        <a href="<{url action=topc_ctl_shopcenter@search  _params=$filter r_sort='list_time desc' operationtype=replace }>" class="btn btn-tab is-desc <{if $activeFilter.orderBy == 'list_time desc' }>on<{/if}>"><span><span>上架时间<i class="icon icon-arrow-down-a"></i><i class="icon icon-arrow-up-a"></i></span></span></a>
+      </div>
+
+      <ul class="itemslist mod-bottom">
+        <{foreach from=$items item=goods}>
+        <li>
+          <div class="item">
+            <div class="pic">
+              <a href="<{url action=topc_ctl_item@index item_id=$goods.item_id}>" class="jmalltax_<{$goods.tax|default:0}>">
+                <{if $goods.image_default_id}>
+                <img width="210" height="230" src="<{$goods.image_default_id|storager:'m'}>" alt="">
+                <{else}>
+                <img width="210" height="230" src="<{$defaultImageId.M.default_image}>">
+                <{/if}>
+              </a>
+            </div>
+            <a class="name" href="<{url action=topc_ctl_item@index item_id=$goods.item_id}>"><{if $goods.activity.activity_tag}><span class="item-describe-tag"><{$goods.activity.activity_tag}></span><{/if}><{$goods.title}></a>
+            <div class="price"><{$goods.price|cur}></div>
+          </div>
+        </li>
+        <{/foreach}>
+      </ul>
+
+      <{pagers data=$pages}>
+    </div>
+  </div>
+</div>

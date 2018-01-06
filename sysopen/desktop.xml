@@ -1,0 +1,24 @@
+<desktop>
+    <permissions>
+        <permission id="openShop" display='true' parent='0' workground='sysopen.shop.open'>开放平台</permission>
+		<permission id="openShop_enter" display='true' workground='sysopen.shop.open'>跨境企业</permission>
+    </permissions>
+
+    <workground name="开放" id="sysopen.shop" app="sysopen" controller="admin_shop" action="index" order='90'>
+        <menugroup name="商家开放">
+            <menu controller='admin_shop' action='index' permission='sellerList' display='true' order='10'>商家列表</menu>
+        </menugroup>
+		<menugroup name="跨境企业">
+            <menu controller='admin_pay' action='index' permission='openShop_enter' display='true' order='10'>支付企业</menu>
+            <menu controller='admin_pay' action='creat' permission='openShop_enter' display='false' order='1'>支付企业添加</menu>
+			<menu controller='admin_log' action='index' permission='openShop_enter' display='true' order='10'>物流企业</menu>
+            <menu controller='admin_log' action='creat' permission='openShop_enter' display='false' order='1'>物流企业添加</menu>
+			<menu controller='admin_import' action='index' permission='openShop_enter' display='true' order='10'>报关企业</menu>
+            <menu controller='admin_import' action='creat' permission='openShop_enter' display='false' order='1'>报关企业添加</menu>
+			<menu controller='admin_sign' action='index' permission='openShop_enter' display='true' order='10'>承运企业</menu>
+            <menu controller='admin_sign' action='creat' permission='openShop_enter' display='false' order='1'>承运企业添加</menu>
+			<menu controller='admin_ebp' action='index' permission='openShop_enter' display='true' order='10'>电商平台</menu>
+            <menu controller='admin_ebp' action='creat' permission='openShop_enter' display='false' order='1'>电商平台添加</menu>
+        </menugroup>
+    </workground>
+</desktop>

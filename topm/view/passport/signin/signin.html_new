@@ -1,0 +1,113 @@
+﻿<div class="signin">
+  <header style="position: inherit;margin-top: 1.3em;margin-bottom: -3em;">
+    <div class="list-hd" style="color: #444;">
+      <div class="backto icon-back ">
+        <input type="button" name="returnBcak" onclick="history.back()">
+      </div>
+      <div class="tit">用户登录</div>
+      <div class="clicks">
+        <a href="<{url action=topm_ctl_passport@signup}>" style="color: #444;">注册</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- main container -->
+  <div class="main" style="background:#FFF;">
+    <div class="form-in">
+      <form action="<{url action=topm_ctl_passport@login}>" method="post" id="form_signin" class="form-vertical">
+        <input type="hidden" name="next_page" value="<{$next_page}>">
+        <input type="hidden" name="key" value="topm_signin">
+        <ul>
+          <li class="form-row">
+            <label class="form-label">账号:</label>
+            <input type="text" class="input-block action-account-check" name="account" id="" value="<{$uname}>" placeholder="用户名/邮箱地址/已验证手机号" required data-caution="请填写登录帐号" autofocus> <i class="icon-user input-figure"></i>
+          </li>
+          <li class="form-row">
+            <label class="form-label">密码:</label>
+            <input type="password" class="input-block" name="password" id="" placeholder="填写密码" required data-caution="请填写密码">
+              <!-- <i class="icon-lock input-figure"></i> -->
+          </li>
+          <li class="form-row">
+            <{if $isShowVcode}>
+            <label class="form-label">验证码:</label>
+            <input type="text" class="verify-input input-st" name="verifycode" id="iptlogin" required size="4" maxlength="4" data-caution="请填写验证码" placeholder="点击验证码可刷新">
+            <img align="absmiddle" class="auto-change-verify-handle"  src="<{url action=toputil_ctl_vcode@gen_vcode key=topm_signin width=120 height=35}>" alt="" width="100" height="30">
+            <{/if}>
+          </li>
+          <li class="form-row  auto-in">
+            <input type="checkbox" id="auto" name="remember_name">
+            <label class="form-label" for="auto">
+              记住用户名
+              <span class="spot"></span>
+            </label>
+            <a class="link-color" href="<{url action=topm_ctl_passport@findPwd}>">忘记密码？</a>
+          </li>
+          <li class="form-row in">
+            <!-- <label class="form-label">&nbsp;</label> -->
+            <button type="submit" class="ui-btn-warning action-signin-submit" style="cursor: pointer;">登录</button>
+          </li>
+        </ul>
+      </form>
+    </div>
+    <div class="cop-account" style="background: #eee;border: 1px solid #FFF;border-radius: 3px;padding: 10px 0 20px;">
+    	<fieldset style="border-color:#E2DED6;border-width:1px;border-style:Solid;text-align: center;padding: 10px;">
+		    <legend style="color:#999;font-size:0.8em;font-weight:bold;">
+		    &nbsp;&nbsp;&nbsp;或者&nbsp;&nbsp;&nbsp;
+		    </legend>
+		    <div style="">
+		         <button id="wx_quick_login" type="button" class="ui-btn-warning" style="width: 100%;background: #e32235; font-size: 1.2em;cursor: pointer;border: 1px solid;border-radius: 4px;">微信快捷登录</button>
+		    </div>
+		    <div style="display:none;">
+		    	<a id="cop">
+			       	 合作账号登录
+			        <i class="icon-down"></i>
+			      </a>
+			      <div class="ui-dropmenu">
+			        <ul class="ui-dropmenu-items">
+			          <{if $trustInfoList}>
+				          <{foreach from=$trustInfoList item=trust_info}>
+				          <li>
+				            <a title="<{$trust_info.name}>
+				              " href="
+				              <{$trust_info.url}>
+				              ">
+				              <img src="<{$trust_info.image}>" alt="" width="30" height="30"></a>
+				          </li>
+				          <{/foreach}>
+			          <{/if}>
+			          </ul>
+			      </div>
+		    </div>
+		</fieldset>
+      <script type="text/javascript">
+        $('#cop').click(
+            function(){
+              $('.cop-account .ui-dropmenu').toggleClass('cur');
+              if($('.ui-dropmenu').hasClass('cur')){
+                $('#cop i').removeClass('icon-down').addClass('icon-up');
+              }else{
+                $('#cop i').removeClass('icon-up').addClass('icon-down');
+              }
+            }
+            );
+         $("#wx_quick_login").click(function(){
+         		var next_url = $('input[name=next_page]').val();
+         		
+         		window.location.href="<{url action=topm_ctl_passport@wechat}>?w=login&rui=" + $.trim(next_url);
+         });
+      </script>
+    </div>
+  </div>
+</div>
+
+<script>
+$('.action-signin-submit').data('ajaxCallback', function(rs) {
+    var isShowVcode = "<{$isShowVcode}>"
+    if(rs.error && isShowVcode) {
+        changeCode($('.auto-change-verify-handle'));
+    }
+    if(rs.redirect) {
+      location.href = rs.redirect;
+    }
+});
+</script>

@@ -1,0 +1,165 @@
+<div class=''>
+    <form id='create-open-key' action='?app=sysopen&ctl=admin_import&act=toEdit' method='post'>
+        <!--<{$shop_import.import_id}>-->
+
+        <table>
+            <{if !empty($shop_import.import_id)}>
+            <tr>
+                <th>
+                    <label> 报关企业id: </label>
+                </th>
+                <td>
+                    <input type='text' name="import[import_id]" id='import_id' readonly='readonly' value='<{$shop_import.import_id}>'>
+                </td>
+            </tr>
+            <{/if}>
+            <tr>
+                <th>
+                    <label> 企业组织机构代码: </label>
+                </th>
+                <td>
+                    <input type='text' name="import[OrgCode]" id='OrgCode' required  <{if !empty($shop_import.OrgCode)}> value='<{$shop_import.OrgCode}>' <{/if}>>
+                </td>
+            </tr>
+
+            <tr>
+                <th>
+                    <label> 企业海关注册码: </label>
+                </th>
+                <td>
+                    <input type='text'  name="import[CopCode]" id='CopCode' required  <{if !empty($shop_import.CopCode)}> value='<{$shop_import.CopCode}>' <{/if}>>
+                </td>
+            </tr>
+
+            <tr>
+                <th>
+                    <label> 企业海关注册名称: </label>
+                </th>
+                <td>
+                    <input type='text' name="import[CopName]" id='CopName' required  <{if !empty($shop_import.CopName)}> value='<{$shop_import.CopName}>' <{/if}>>
+                </td>
+            </tr>
+
+            <tr>
+                <th>
+                    <label> 发送方: </label>
+                </th>
+                <td>
+                    <input type='text' name="import[SenderID]" id='SenderID' required placeholder="发送方" <{if !empty($shop_import.SenderID)}> value='<{$shop_import.SenderID}>' <{/if}>>
+                </td>
+            </tr>
+
+            <tr>
+                <th>
+                    <label> 接收部门: </label>
+                </th>
+                <td>
+                    <input type='text' name="import[ReceiverDepartment]" id='ReceiverDepartment' required  <{if !empty($shop_import.ReceiverDepartment)}> value='<{$shop_import.ReceiverDepartment}>' <{/if}>>
+                </td>
+            </tr>
+
+            <tr>
+                <th>
+                    <label> 海关注册登记编号: </label>
+                </th>
+                <td>
+                    <input type='text' name="import[agentCode]" id='agentCode' required  <{if !empty($shop_import.agentCode)}> value='<{$shop_import.agentCode}>' <{/if}>>
+                </td>
+            </tr>
+
+            <tr>
+                <th>
+                    <label> 海关注册登记名称: </label>
+                </th>
+                <td>
+                    <input type='text'  name="import[agentName]" id='agentName' required  <{if !empty($shop_import.agentName)}> value='<{$shop_import.agentName}>' <{/if}>>
+                </td>
+            </tr>
+
+            <tr>
+                <th>
+                    <label> 报送类型: </label>
+                </th>
+                <td>
+                    <input type='text' name="import[appType]" id='appType' required  <{if !empty($shop_import.appType)}> value='<{$shop_import.appType}>' <{/if}>>&nbsp;&nbsp;<label class="label_club">(1-新增 2-变更,默认为1)</label>
+                </td>
+            </tr>
+
+            <tr>
+                <th>
+                    <label> 业务状态: </label>
+                </th>
+                <td>
+                    <input type='text' name="import[appStatus]" id='appStatus' required  <{if !empty($shop_import.appStatus)}> value='<{$shop_import.appStatus}>' <{/if}>>&nbsp;&nbsp;<label class="label_club">(1-暂存，2-申报，默认为2)</label>
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    <label> 担保企业编号: </label>
+                </th>
+                <td>
+                    <input type='text' name="import[assureCode]" id='assureCode' required  <{if !empty($shop_import.assureCode)}> value='<{$shop_import.assureCode}>' <{/if}>>
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    <label> 电商账册编号: </label>
+                </th>
+                <td>
+                    <input type='text' name="import[emsNo]" id='emsNo' required  <{if !empty($shop_import.emsNo)}> value='<{$shop_import.emsNo}>' <{/if}>>
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    <label> 区内企业代码: </label>
+                </th>
+                <td>
+                    <input type='text' name="import[areaCode]" id='areaCode' required  <{if !empty($shop_import.areaCode)}> value='<{$shop_import.areaCode}>' <{/if}>>
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    <label> 区内企业名称: </label>
+                </th>
+                <td>
+                    <input type='text' name="import[areaName]" id='areaName' required  <{if !empty($shop_import.areaName)}> value='<{$shop_import.areaName}>' <{/if}>>
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    <label> 口岸海关代码: </label>
+                </th>
+                <td>
+                    <input type='text' name="import[portCode]" id='portCode' required  <{if !empty($shop_import.portCode)}> value='<{$shop_import.portCode}>' <{/if}>>
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    <label> 主管检验检疫机构代码: </label>
+                </th>
+                <td>
+                    <input type='text' name="import[ciqCode]" id='ciqCode' required  <{if !empty($shop_import.ciqCode)}> value='<{$shop_import.ciqCode}>' <{/if}>>
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    <label> 主管海关代码: </label>
+                </th>
+                <td>
+                    <input type='text' name="import[customsCode]" id='customsCode' required  <{if !empty($shop_import.customsCode)}> value='<{$shop_import.customsCode}>' <{/if}>>
+                </td>
+            </tr>
+
+            <tr>
+                <td colspan='2'>
+                    <div class="table-action">
+                        <!--<{button id='not-allow-pass' type="button"  label="禁止通过"}>-->
+                        <input type="submit" name="sb" value="确定">
+                        <!--<{button id='submit-create-open-key' type="submit" label="确定"}>-->
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </form>
+</div>
+

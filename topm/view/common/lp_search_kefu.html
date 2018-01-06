@@ -1,0 +1,53 @@
+<!-- header -->
+    <header style="height: 80px;position: relative;">
+    	<div id="top_layer">
+            <!------------- 公共的头部导航，固定位置------------>
+            <{require file="block/lp_top.html"}>
+            <!------------- 公共的头部导航，固定位置------------>
+            <div class="liping-d">
+			  	<ul class="liping-ul">
+			  		<{if ($topnav_list)}>
+			  			<{foreach from=$topnav_list item=navl key=lvk}>
+			  				<li><a style="<{if ($current_default_id>0 and $lvk==$current_default_id)}>color:#bd1ce4;<{/if}>" href="<{url action=topm_ctl_topic@lpsearch cid=$lvk}>" title="<{$navl}>"><{$navl}></a></li>
+			  			<{/foreach}>
+			  		<{else}>
+				  		<li><a href="<{url action=topm_ctl_topic@lpsearch cid=781}>">母嬰</a></li>
+				  		<li><a href="<{url action=topm_ctl_topic@lpsearch cid=786}>">美食</a></li>
+				  		<li><a href="<{url action=topm_ctl_topic@lpsearch cid=827}>">保健</a></li>
+				  		<li><a href="<{url action=topm_ctl_topic@lpsearch cid=797}>">美妝</a></li>
+				  		<li><a href="<{url action=topm_ctl_topic@lpsearch cid=705}>">轻奢</a></li>
+			  		<{/if}>
+			  	</ul>
+			</div>
+    	</div>
+	</header>
+	<!-- header -->
+		<div class="home" style="margin: 0 auto;width: 100%;margin-top:3em;">
+			<!-- nav -->
+			<div class="main" style=""> 
+				 <div style="background:#FFF;border:1px solid #DDD;width: 220px;  position: fixed; top: 19%; right: 4%; height: 170px;text-align: center;border-radius: 2px;line-height: 2.2em;">
+                    	精茂城公众号<hr size="1" style="border-top: 1px solid #DDD;"/><img style="width: 100%;" src="http://www.gojmall.com/themes/jmcmall/images/images/footer_b/weixin.png"/>
+                 </div>
+                 <!--客服；start-->
+					<iframe id="current_kefupage" style="width:95%;min-height:500px;display: block;margin: 5px auto;" src="http://v2.live800.com/live800/chatClient/chatbox.jsp?companyID=597185&configID=125648&jid=4127524804" ></iframe>
+				 <!--客服；end-->
+			</div>
+		</div>
+<!-- 商品滑动切换脚本 -->
+<script>
+	$(function(){
+		var mySwiper = new Swiper('.swiper-container', {
+			//autoplay: 3000,/*自动播放间隔 ms*/
+			slidesPerView : 3,/*每行显示的商品数量*/
+			slidesPerGroup : 6,/*3个商品一组*/
+			//slidesPerColumn : 2,/*多行布局里面每列的slide数量*/
+			slidesPerColumnFill : 'column',/*多行布局中以行形式填充*/
+			prevButton:'.swiper-button-prev',/*左边上一页按钮*/
+			nextButton:'.swiper-button-next',/*右边下一页按钮*/
+			lazyLoading : true,
+			lazyLoadingInPrevNext : true,
+			lazyLoadingInPrevNextAmount :5,
+		});
+		//images/jmall_loading.png
+	});
+</script> 

@@ -1,0 +1,134 @@
+<style>
+	#wara_model_content .form-group {display: flex; width: 100%;}
+	#wara_model_content .col-sm-3 {width: 50%;}
+</style>
+<form id="newWareForm" action="<{url action=topshop_ctl_areaware@saveWare}>" method="post" onsubmit="return ajaxSubmit(event)">
+	 <div class="modal-header">
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+      <h4 class="modal-title" id="myModalLabel">完善仓库信息</h4>
+    </div>
+	<div class="modal-body">
+		<!-- 完善仓库信息 -->				 
+	    <div class="panel panel-default">
+		  <div class="panel-heading">配置信息</div>
+			<div class="panel-body" id="wara_model_content">
+				<!-- 仓库模式start -->
+				 <div class="form-group">
+					<label for="" class="col-sm-2 control-label">所属业务类型：</label>
+					<div class="col-sm-3">
+						<{foreach from=$tax_list item=mtax }>
+						<label class="checkbox-inline">
+							<input type="radio" class="act-ware_tax" name="ware_tax" value="<{$mtax.id}>" <{if ($mtax.id eq $editTax.tax)}>checked="checked"<{/if}> />&nbsp;&nbsp;<{$mtax.name}>
+						</label>		
+						<{/foreach}>
+					</div>
+				</div>											
+				<div class="form-group for_tax">
+				  <label for="" class="col-sm-2 control-label">仓库名称：</label>
+				  <div class="col-sm-3">
+				  	<label class="checkbox-inline">
+						<input type="text" name="ware_name" value="<{$editTax.name}>" id="ware_name" onblur="" class="form-control" placeholder="输入仓库名称">
+					</label>
+				  </div>
+				</div> 
+				<div class="form-group has-feedback">
+				  <label for="" class="col-sm-2 control-label">运费模板：</label>
+				  <div class="col-sm-3" style="padding-left:35px;">
+				  	<{foreach from=$all_shippList item=ship}>
+				  		<input type="checkbox" class="checkbox" name="ware_shipping[]" value="<{$ship.template_id}>" <{if !$ship.template_id}>disabled<{/if}> />&nbsp;<{$ship.name}>&nbsp;&nbsp;
+				  	<{/foreach}>
+					<i class="form-control-feedback" data-validate-icon-for="item[area_id]" style="display: none;"></i>
+				  	<ins class="help-block" data-validate-validator="required" data-validate-for="item[area_id]" data-validate-result="NOT_VALIDATED" style="display: none;">
+				  	请填写必填项目</ins></div>
+				</div>
+				<div class="form-group has-feedback" id="region_status_layer_sea" style="display:none;">
+				  <label for="" class="col-sm-2 control-label">对接海关：</label>
+				  <div class="col-sm-3">
+				  	<{foreach from=$all_seaList item=seea}>
+				  		<label class="checkbox-inline">
+				  			<input type="radio" class="checkbox" name="ware_shipping[]" value="<{$seea.id}>" />&nbsp;<{$seea.name}>
+				  		</label>
+				  	<{/foreach}>
+				  </div>
+				</div>
+				<div class="form-group has-feedback" id="region_status_layer_sea" style="">
+				  <label for="" class="col-sm-2 control-label">可用支付组件：</label>
+				  <div class="col-sm-3">
+				  		<label class="checkbox-inline">
+				  			 平台所有支付组件
+				  		</label>
+				  </div>
+				</div>
+				<div class="form-group">
+					<label for="" class="col-sm-2 control-label">初始状态：</label>
+					<div class="col-sm-3" style="width:80%" id="r-status">
+						<{foreach from=$all_status item=sttt key=skii}>
+					  		<label id="r_status_<{$skii}>" class="checkbox-inline" style="<{if ($skii==0 and $editTax.tax eq '2')}>display:none;<{else}>display:inline-block;<{/if}>">
+					  			<input type="radio" class="checkbox <{if ($skii neq '2')}>s-status-disable<{/if}>" name="ware_status" value="<{$skii}>"
+					  			<{if ($skii eq $editTax.state)}>checked="checked"<{/if}> />&nbsp;<{$sttt}>
+					  			<{if ($skii eq '2')}><font color="red">（保税类型需要审核）</font><{/if}> 
+					  		</label>
+					  	<{/foreach}>
+					</div>
+				</div> 
+				<!-- 仓库模式end -->
+			</div>
+		</div>				 
+	  </div>
+	  <div class="modal-footer">
+		<button type="button" class="btn btn-primary">保存</button>
+		<button id = "close_layer_btn" type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+		<input type="hidden" id="editware_id" name="editware_id" value="<{$editTax.id}>" />
+	  </div>
+	</form>
+	<script type="text/javascript">
+	//提交表单
+	function ajaxSubmit (e) {
+	    var form = e.target;
+		var dumnd = $("#wara_model_content").find('input[name=ware_tax]:checked'); 	
+	    e.preventDefault();
+	    if( dumnd.length <= 0 ){
+	        return $('#messagebox').message('必须选择一项业务类型');
+	    }
+		if($.trim($("#ware_name").val())=="" ){				 
+			return $('#messagebox').message('仓库名称不能为空');
+		}    
+		console.dir(form.action); 
+	    //request remote url 后台保存数据
+	    $.post(form.action,$(form).serialize(), function(rs) {
+	        if(rs.success) {
+	            window.onbeforeunload = null;
+	            $('#messagebox').message(rs.message, 'success');
+	            window.location.reload();
+	        }else{
+	        	$('#messagebox').message(rs.message); return ;
+	        }
+	        if(rs.redirect){
+	            setTimeout(function(){location.href=rs.redirect;}, 800);
+	        }
+	    },"json");
+	    return false;
+	}
+	
+	//业务类型事件；
+	$('.form-group').on('change','.act-ware_tax', function(){
+			$(".btn-primary").removeAttr("disabled");
+			var t_value = $(this).val();
+			if(t_value && parseInt(t_value) == 2){
+				//保税区数据完善； 需要审核才能正常上线；
+				$('#r_status_2').fadeIn();
+				$('#r-status .s-status-disable').attr("disabled",true);
+				$('#region_status_layer_sea').fadeIn();
+			}else{
+				$('#r_status_2').fadeOut();
+				$('#r-status .s-status-disable').removeAttr("disabled");
+				$('#region_status_layer_sea').fadeOut();
+			}
+	});
+	
+	//提交表单事件
+	$(".btn-primary").on('click',function(e){ 
+		$("#newWareForm").submit();		//提交表单
+	});	
+
+</script>

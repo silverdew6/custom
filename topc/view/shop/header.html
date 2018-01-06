@@ -1,0 +1,94 @@
+<!--shop header 显示店招和店铺相关信息-->
+<style type="text/css">
+	.shopheader-bg {min-height:120px;max-height:200px;background-repeat: no-repeat;  background-position: center;}
+	.shop-logo { margin-top:10px; width: 80px;box-shadow: 0px -1px 4px #e8e8e8; border-radius: 5px;position: relative;}
+	.shop-logo .shopname{position: absolute;  top: 1px;  left: 90px; width: 200px; font-size: 16px;}
+	.shop-logo .shopname a {font-weight: bold; color: #731585;    font-family: "微软雅黑"; }
+	.shop-logo .shopname a:hover {font-weight: bold; color: red;    font-family: "微软雅黑";  }
+	.shop-logo .shop-slogan {position: absolute;  top: 30px;  left: 90px; width: 300px; font-size: 12px; max-height: 52px; overflow: hidden;}
+</style>
+
+<div class="shopheader">
+  <div class="wrap-lg shopheader-content" >
+    <div class="row">
+    	<!--显示店招背景图-->
+    	<div class="shopheader-bg" style="background-image:url(<{$background_image.image_id|storager}>);">
+    		<div class="col-lg-4 shop-logo" style="margin-left:3%; ">
+		        <{if $background_image.show_shop_logo != 'off' }>
+			        <a href="<{url action=topc_ctl_shopcenter@index shop_id=$shopdata.shop_id}>">
+			          <img src="<{$shopdata.shop_logo|storager}>" style="width:100%" />
+			        </a>
+		        <{/if}>
+		        <!--显示店名 start-->
+		        <{if $background_image.show_shop_name != 'off'}>
+		        	<div class="shopname"><a href="<{url action=topc_ctl_shopcenter@index shop_id=$shopdata.shop_id}>" title="查看店铺"><{$shopdata.shop_id|shopname}></a></div>
+		        <{/if}>
+		        <!--显示店描述 start -->
+		        <div class="col-lg-9 shop-slogan">
+		        	<{if $background_image.show_shop_desc != 'off'}><{$shopdata.shop_descript}><{/if}>
+		        </div>
+		        <!--显示店描述 END-->
+		     </div>
+		     <!--收藏店铺和 联系我们-->
+		     <div style="float:right;margin:15px 10px;">
+		     		<{if $nologin!=1}>
+			      		<a href="<{url action=topc_ctl_passport@signin next_page=$next_page}>" class="shop-favorite" ><i class="icon icon-star"></i>收藏店铺</a>
+			      	<{else}>
+			      		<a href="<{url action=topc_ctl_collect@ajaxFavshop}>" data-ajax-data="shop_id=<{$shopdata.shop_id}>" class="shop-favorite" rel='_request'><i class="icon icon-star"></i>收藏店铺</a>
+			      	<{/if}>
+			      	<br /><br />
+			      	<{im qq=$shopdata.qq wangwang=$shopdata.wangwang}>
+		     </div>
+		     <!--收藏店铺和 联系我们 END-->
+    	</div>
+    </div>
+  </div>
+</div>
+
+<!-- nav -->
+<div id="nav" class="nav">
+  <div class="wrap-lg">
+    <div class="row shop-nav" style="background: #f3f3f3;">
+      <div class="col-lg-13 nav-main">
+        <div class="menu">
+          <div class="shop-category">
+            <a href="<{url action=topc_ctl_shopcenter@search shop_id=$shopdata.shop_id}>" class="on">店铺首页</a>
+          </div>
+          <{foreach from=$navdata item=item}>
+          <div class="shop-category">
+            <{if $item.menu}>
+            <a class="link" href="<{url action=topc_ctl_shopcenter@search shop_id=$shopdata.shop_id shop_cat_id=$item.cat_id}>"><{$item.menu}></a>
+            <{else}>
+            <a class="link" href="<{$item.url}>"><{$item.name}></a>
+            <{/if}>
+            <{if $item.children}>
+            <i class="icon icon-arrow-down-b" data-icon="\2808"></i>
+            <div class="category4 category4-col1">
+              <div class="category-item">
+                <div class="category-item">
+                  <div class="category-sub">
+                    <div class="category-sub-col">
+                      <{foreach from=$item.children item=cat}>
+                      <a class="link" href="<{url action=topc_ctl_shopcenter@search shop_id=$shopdata.shop_id shop_cat_id=$cat.cat_id}>"><{$cat.menu}></a>
+                      <{/foreach}>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <{/if}>
+          </div>
+          <{/foreach}>
+        </div>
+      </div>
+      <div class="col-lg-3 searchbar-small">
+        <form action="<{url action=topc_ctl_shopcenter@search}>" method="get" id="shop_search" data-async="false">
+          <input type="text" name="n" id="item_title" required>
+          <input type="hidden" id="shop_id" name="shop_id" value="<{$shopdata.shop_id}>">
+          <button type="submit" class="btn icon icon-search-a shop-search"></button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+

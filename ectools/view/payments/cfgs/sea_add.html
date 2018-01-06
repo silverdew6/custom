@@ -1,0 +1,76 @@
+<div class="tableform">
+  <form  id="pay-edit-form" action="<{url route='shopadmin' app='ectools' ctl='payment_sea' act='sea_add'}>"  method="post">
+    <div class="division">
+
+      <table width="100%" border="0" cellspacing="0" cellpadding="0">
+	                 <tr>
+		        <th><label for="dom_el_pay_type">接口名称：</label></th>
+		           <td>
+                  <em class="red">*</em><input type="text" id="dom_el_ea78c911"  vtype="required"  name="name" value="<{$region.name}>">
+                   </td>
+               </tr>
+	 
+               <tr>
+		        <th><label for="dom_el_pay_type">电商平台代码：</label></th>
+		           <td>
+                  <em class="red">*</em><input type="text" id="dom_el_ea78c921"  vtype="required"  name="ebpCode" value="<{$region.ebpCode}>">
+                   </td>
+               </tr>
+
+		  <tr>
+				<th><label for="dom_el_pay_type">电商平台名称：</label></th>
+		               <td>
+				                  <em class="red">*</em><input type="text" id="dom_el_ea78c922"  vtype="required"  name="ebpName" value="<{$region.name}>">
+                       </td>
+         </tr>
+		 <tr>
+					   <th><label for="dom_el_pay_type">电商平台简写：</label></th>
+					  <td>
+				                   <em class="red">*</em><input type="text" id="dom_el_ea78c923"  vtype="required"  name="ebpshorthand" value="<{$region.name}>">
+					 </td>
+         </tr>
+
+		 <tr>
+					<th><label for="dom_el_pay_type">是否开启</label></th>
+					<td>
+													<input type="radio" value="1" includebase="1" name="ebptype" title="支付类型(是否在线支付)" id="dom_el_pay_type-false" onchange="(this)"><label for="dom_el_pay_type-false">否</label>&nbsp;
+													<input type="radio" value="0" includebase="1" name="ebptype" title="支付类型(是否在线支付)" id="dom_el_pay_type-true" onchange="(this)"><label for="dom_el_pay_type-true">是</label>&nbsp;
+											</td>
+				</tr>
+    </table>   
+	</div>
+    <div class="table-action">
+      <button class="btn" type="submit"  id='pay-form-submit'  ><span><span><{t}>保存<{/t}></span></span></button>
+    </div>
+  </form>
+</div>
+
+<script >
+
+	var _form = $('pay-edit-form');
+	var btn =$('pay-form-submit');
+	var finder = finderGroup['<{$env.get.finder_id}>'];
+	_form.store('target',{
+	  onComplete:function(){
+	  },
+	  onSuccess:function(response){
+		var hash_res_obj = JSON.decode(response);
+		if (hash_res_obj.success != undefined && hash_res_obj.success != ""){
+		  try{
+			var _dialogIns = btn.getParent('.dialog').retrieve('instance');
+		  }catch(e){}
+
+		  if(_dialogIns){
+			_dialogIns.close();
+
+		  }
+		}
+	  }
+	});
+
+	btn.addEvent('click',function(){
+	  _form.fireEvent('submit',{stop:$empty});
+	});
+
+
+</script>

@@ -1,0 +1,151 @@
+﻿<div class="signup">
+  <header>
+    <div class="list-hd">
+      <div class="backto icon-back ">
+        <input type="button" name="returnBcak" onclick="history.back()">
+      </div>
+      <div class="tit">微信登录关联</div>
+    </div>
+  </header>
+<style type="text/css">
+.form-row_first {color: #999; text-align: left!important;  padding-left: 2em; font-size: 1.1em;border-top: 0!important;; border-bottom: 2px solid #efefef;}
+.signup .main .form-up form ul li.u-line{}
+.signup .main .form-up form ul li.u-line input.input-block { font-size: 1.1em;width:100%;padding-left:7em; line-height:2em;}
+#form_signup .psw_show {background: #FFF; margin: 0 auto;border-left: 3px solid #FF9800; border-radius: 1px; border-right: 1px solid #CCC; display:block!important;}
+</style>
+  <!-- main container -->
+  <div class="main" style="margin-top:0;">
+    <div class="form-up">
+      <form action="<{url action=topm_ctl_passport@wechatUser}>" method="post" id="form_signup" class="form-tips-horizontal">
+        <input type="hidden" name="key" value="topm_signup" />
+        <input type="hidden" name="userbase_data" value="<{$userbase_data}>" />
+        <ul>
+          <li class="form-row u-line form-row_first">还差一步，完善信息与你联系 </li>
+          <!--
+          <li class="form-row u-line">
+            <label class="form-label">手机号：</label>
+            <input type="input" class="input-block action-account-check" name="pam_user[account]" id="for_account" placeholder="绑定手机号" required minlength="11" data-caution="请输入有效的手机号" data-remote="<{url action=topm_ctl_passport@checkLoginAccount}>" style="ime-mode:disabled;" autofocus="autofocus" />
+          </li>-->
+          <li class="form-row u-line" style="background: #FFF;">
+            <label class="form-label">手机号：</label>
+            <input type="tel" class="input-block action-account-check" name="pam_user[account]" id="for_account" placeholder="绑定手机号" required minlength="11" data-caution="请输入有效的手机号" data-remote="<{url action=topm_ctl_passport@checkLoginAccount}>" style="ime-mode:disabled;background: #FFF;" autofocus="autofocus"  />
+          </li>
+          <li class="form-row u-line action-vb-pwd hide">
+            <label class="form-label">设置密码：</label>
+            <input type="password" class="input-block auto-password-check-handle" name="pam_user[password]" placeholder="请输入新密码，6~20位" required minlength="6" maxlength="20" data-caution="请填写密码，6-20个字符&&输入不正确，最少6个字符&&输入不正确，最多20个字符">
+          </li>
+          <li class="form-row u-line action-vb-pwd2 hide">
+            <label class="form-label">确认密码：</label>
+            <input type="password" class="input-block" name="pam_user[pwd_confirm]" id="" maxlength="20" placeholder="再次填写密码" required data-equalto="pam_user[password]" data-caution="密码与确认密码不相符，请重新填写">
+          </li>
+          <li class="form-row verify-code action-mobile-verify hide u-line">
+            <label class="form-label">短信验证码:</label>
+              <input type="text" name="vcode" id="" class="verify-input">
+              <a href="<{url action=topm_ctl_passport@sendVcode}>" class="ui-btn action-get-verifycode">发送验证码</a>
+          </li>
+          <li class="form-row" style="padding-top:2em;">
+            <label class="form-label">&nbsp;</label>
+            <button type="submit" class="ui-btn-warning" rel="_request">确认绑定</button>
+          </li>
+        </ul>
+      </form>
+      <a href="<{url action=topm_ctl_passport@signin}>" class="in-link">已有账号，使用<i>账号密码登录</i></a>
+    </div>
+  </div>
+
+</div>
+
+<script>
+var form = $('#form_signup');
+var account = form.find('.action-account-check');
+var Message = new gmu.Message();
+form.find('button[type=submit]').data('ajaxConfig', {
+    callback: function(rs) {
+    	console.dir(rs); return;
+        if(rs.error) {
+            changeCode($('img.auto-change-verify-handle'));
+        }
+    }
+});
+
+account.data('remoteCallback', function(rs) {
+    var parent = this.closest('.form-row');
+    var Message = new gmu.Message();
+    if(rs.error) {
+        parent.removeClass('has-success').addClass('has-error');
+        form.find('.action-vb-pwd').removeClass('psw_show');
+        form.find('.action-vb-pwd2').removeClass('psw_show');
+        form.find('.action-mobile-verify').addClass('hide');	
+        form.find('.action-account-check').focus();	
+        return Message.error(rs.message);
+    }
+    else {
+        parent.removeClass('has-error');
+        if(rs.success) {
+            parent.addClass('has-success');
+            Message.success(rs.message);
+        }
+		//添加短信验证码
+        form.find('.action-mobile-verify').removeClass('hide');
+        //如果当前用户是新用户 则需要提供密码
+        if("undefined"!= typeof(rs.alerady_uid) && parseInt(rs.alerady_uid)>0){
+        	form.find('.action-vb-pwd').removeClass('psw_show');
+        	form.find('.action-vb-pwd2').removeClass('psw_show');
+        }else{
+        	form.find('.action-vb-pwd').addClass('psw_show');
+        	form.find('.action-vb-pwd2').addClass('psw_show');
+        }
+    }
+},"json");
+/*微信发送短信验证*/
+$(document).on('click', '.action-get-verifycode', function(e) {
+    e.preventDefault();
+    if($(this).hasClass('disabled')) return false;
+    sendVerify(this, 'uname=' + account[0].value + '&type=signup'+ '&verifycode=&verifycodekey=topm_signup');
+});
+
+function sendVerify(el, data) {
+    var url = el.href;
+    var textCont = $(el);
+    $(el).addClass('disabled');
+    textCont.html($(el).text() + '(<i>0</i>)');
+    var cd = new countdown(textCont.find('i'), {
+        start: 120,
+        secondOnly: true,
+        callback: function(e) {
+            $(el).removeClass('disabled');
+            textCont.html('重发验证码');
+        }
+    });
+    $.post(url, data, function(rs) {
+        if(rs.error) {
+            cd.stop();
+            Message.error(rs.message);
+            $(el).removeClass('disabled');
+            textCont.html('重发验证码');
+        }
+        else if(rs.redirect) {
+            Message.success(rs.message, {
+                hide: function() {
+                    location.href = rs.redirect;
+                }
+            });
+        }
+    });
+}
+
+  $('#tabs').tabs({
+        ajax: {
+            dataType: 'json'
+        },
+        beforeRender: function(e, response, panel, index){
+            var html = '';
+            $.each(response, function(){
+                html += '<p>'+this.text+'</p>';
+            });
+            panel.html(html);
+            //需要阻止，否则会把response原文写入到div里面。
+            e.preventDefault();
+        }
+    });
+</script>

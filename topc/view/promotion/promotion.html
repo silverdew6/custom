@@ -1,0 +1,79 @@
+<div class="section">
+  <div class="row">
+    <div class="col-lg-16 box">
+    	<!--活动是否过期-->
+    	<{if ($prom_laststatus eq 'fail' && $promotionInfo)}>
+    	
+    		<div class="section">
+			    <div class="coupon-img">
+			      <img width="1190" height="180" src="http://www.mjm.net/themes/demo_xch/images/demo_coupon_goods.jpg" alt="">
+			      <div class="txt">
+			        <h3 style="color:#999;"><{$promotionInfo.promotion_name}>
+			        	<font size="3" color="#FFF">[活动已过期或已结束]</font>
+			        </h3>
+			        <p class="content" style="font-size:16px"><{$promotionInfo.promotion_desc}></p>
+			        <p class="time">活动时间：<{$promotionInfo.start_time|cdate}> 至 <{$promotionInfo.end_time|cdate}></p>
+			      </div>
+			    </div>
+			</div>
+    	<{else}>
+    		<!--有效活动-->
+		      <{if $promotiontype=='fullminus'}>
+		        <{include file="topc/promotion/fullminus.html"}>
+		      <{/if}>
+		
+		      <{if $promotiontype=='coupon'}>
+		        <{include file="topc/promotion/coupon.html"}>
+		      <{/if}>
+		
+		      <{if $promotiontype=='fulldiscount'}>
+		        <{include file="topc/promotion/fulldiscount.html"}>
+		      <{/if}>
+		
+		      <{if $promotiontype=='freepostage'}>
+		        <{include file="topc/promotion/freepostage.html"}>
+		      <{/if}>
+		
+		      <{if $promotiontype=='xydiscount'}>
+		        <{include file="topc/promotion/xydiscount.html"}>
+		      <{/if}>
+		
+		      <{if $promotiontype=='package'}>
+		        <{include file="topc/promotion/package.html"}>
+		      <{/if}>
+      	<{/if}>
+      
+      <{*<div class="section">
+        <div class="sortbar">
+          <div class="left">
+            排序：&nbsp;&nbsp;
+            <a href="" class="btn btn-flat is-desc on"><span><span>销量<i class="icon icon-arrow-down-a"></i><i class="icon icon-arrow-up-a"></i></span></span></a>
+            <a href="" class="btn btn-flat is-asc"><span><span>价格<i class="icon icon-arrow-down-a"></i><i class="icon icon-arrow-up-a"></i></span></span></a>
+            <a href="" class="btn btn-flat"><span><span>上架时间<i class="icon icon-arrow-down-a"></i><i class="icon icon-arrow-up-a"></i></span></span></a>
+          </div>
+          <div class="right">
+            <span class="num">共<em><{$count}></em>件商品</span>
+              <{pagers data=$pagers type="mini"}>
+          </div>
+        </div>
+      </div>*}>
+      <div class="section">
+        <ul class="itemslist">
+          <{foreach from=$promotionItemList item=item}>
+          <li>
+            <div class="item">
+              <div class="pic">
+                <a href="<{url action=topc_ctl_item@index item_id=$item.item_id}>">
+                  <img width="210" height="230" src="<{$item.image_default_id|default:$image_default_id.M.default_image|storager:'m'}>" data-haszoom="700">
+                </a>
+              </div>
+              <a class="name" href="<{url action=topc_ctl_item@index item_id=$item.item_id}>"><{$item.title}></a>
+              <div class="price"><{$item.price|cur}></div>
+            </div>
+          </li>
+          <{/foreach}>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>

@@ -131,7 +131,8 @@ class sysshop_xml_else
         $else['SenderID']=$res_infor[0]['SenderID'];//企业客户端 ID 号
         $else['ReceiverDepartment']=$res_infor[0]['ReceiverDepartment'];//填写本报文发送的监管单位
 
-        $else['appType']=$res_infor[0]['appType'];//企业报送类型
+//        $else['appType']=$res_infor[0]['appType'];//企业报送类型
+        $else['appType'] = 2;  //变更
         $else['appStatus']=$res_infor[0]['appStatus'];//业务状态
         $else['ebcCode']=$res_infor[0]['ebcCode'];//电商企业海关注册登记编号
         $else['ebcName']=$res_infor[0]['ebcName'];//电商企业的海关注册登记名称
@@ -154,22 +155,34 @@ class sysshop_xml_else
         $object_pay=app::get('sysshop')->model('shop_pay');
         $res_pay=$object_pay->getList('*',['pay_id'=>$pay_id]);//二维数组
 
-        $pay['OrgCode']=$res_pay[0]['OrgCode'];//企业组织机构代码或统 一社会信息代码
-        $pay['CopCode']=$res_pay[0]['CopCode'];//企业海关注册代码
-        $pay['CopName']=$res_pay[0]['CopName'];//报文传输的企业海关注册名称
-        $pay['SenderID']=$res_pay[0]['SenderID'];//企业客户端 ID 号
+//        $pay['OrgCode']=$res_pay[0]['OrgCode'];//企业组织机构代码或统 一社会信息代码
+        $pay['OrgCode']= '91310000680985471T';
+//        $pay['CopCode']=$res_pay[0]['CopCode'];//企业海关注册代码
+//        $pay['CopName']=$res_pay[0]['CopName'];//报文传输的企业海关注册名称
+        $pay['CopCode']='312226T003';//企业海关注册代码
+        $pay['CopName']='通联支付网络服务股份有限公司';//报文传输的企业海关注册名称
+        $pay['SenderID']='DXPENT0000013751';//企业客户端 ID 号
+//        $pay['SenderID']=$res_pay[0]['SenderID'];//企业客户端 ID 号
         $pay['ReceiverDepartment']=$res_pay[0]['ReceiverDepartment'];//填写本报文发送的监管单位
 
-        $pay['appType']=$res_pay[0]['appType'];//报送类型
+//        $pay['appType']=$res_pay[0]['appType'];//报送类型
+        $pay['appType'] = 2;
         $pay['appStatus']=$res_pay[0]['appStatus'];//业务状态
-        $pay['payCode']=$res_pay[0]['payCode'];//支付企业代码
-        $pay['payName']=$res_pay[0]['payName'];//支付企业名称
+//        $pay['payCode']=$res_pay[0]['payCode'];//支付企业代码
+//        $pay['payName']=$res_pay[0]['payName'];//支付企业名称
+//
+//        $else['payCode']=$res_pay[0]['payCode'];//支付企业的海关注册登记编号
+//        $else['payName']=$res_pay[0]['payName'];//支付企业在海关注册登记的企业名称。
 
-        $else['payCode']=$res_pay[0]['payCode'];//支付企业的海关注册登记编号
-        $else['payName']=$res_pay[0]['payName'];//支付企业在海关注册登记的企业名称。
+
+        $pay['payCode']='312226T003';//支付企业代码
+        $pay['payName']='通联支付网络服务股份有限公司';//支付企业名称
+        $else['payCode']='312226T003';//支付企业的海关注册登记编号
+        $else['payName']='通联支付网络服务股份有限公司';//支付企业在海关注册登记的企业名称。
 
         $else_m['tid']=$tid;
-        $else_m['payTransactionId']=$res_infor[0]['ebcCode'].'ICBC'.$res2[0]['trade_no'];
+//        $else_m['payTransactionId']=$res_infor[0]['ebcCode'].'ICBC'.$res2[0]['trade_no'];
+        $else_m['payTransactionId']=$res2[0]['trade_no'];
         //物流单号
         $row_del='logi_no';
         $project_del=app::get('syslogistics')->model('delivery');
@@ -361,7 +374,8 @@ class sysshop_xml_else
         $row_p='trade_no';
         $project_p=app::get('ectools')->model('payments');
         $res_p=$project_p->getList($row_p,['payment_id'=>$res_pb[0]['payment_id']]);
-        $import['payNo']=$res_infor[0]['ebcCode'].'ICBC'.$res_p[0]['trade_no'];//支付交易编号
+//        $import['payNo']=$res_infor[0]['ebcCode'].'ICBC'.$res_p[0]['trade_no'];//支付交易编号
+        $import['payNo']=$res_p[0]['trade_no'];
 
         //sysshop_shop_import
         $project_import=app::get('sysshop')->model('shop_import');

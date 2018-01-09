@@ -82,7 +82,7 @@ class ectools_api_payment_tlpay{
                     'money'         => $money,
                     'time'          => time(),
                     'merId'         => $paydata["outtrxid"],    //商户号
-                    'paymentOrd'    => $paydata['chnltrxid'],   //渠道交易单号
+                    'paymentOrd'    => $paydata['trxid'],   //渠道交易单号
                     'type'          => $type                 //交易类型
                 );
             }else{

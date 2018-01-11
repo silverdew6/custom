@@ -158,7 +158,7 @@ class sysshop_xml_else
         $else_m['tid']                      = $tid;
         $else_m['payTransactionId']         = $payTransactionId;
         $else_m['logisticsNo']              = $res_del['logi_no'];
-        $else_m['copNo']                    = $payment_id;
+        $else_m['copNo']                    = substr($payment_id, 0, -1);
 
         $guids[0]                           = $else['MessageID'];
         $guids[1]                           = $pay['MessageID'];
@@ -297,6 +297,7 @@ class sysshop_xml_else
         $time                           = date('YmdHis',time());
         $str1                           = substr(strval(rand(100000,999999)),1,5);
         $preEntryNo                     = 'IQJMJK'.$time.$str1;//???企业申报单号
+        $copNo                          = substr($payment_id, 0, -1);
         //物流
         $log['MessageID']           = $this->getGuid();
 
@@ -346,11 +347,10 @@ class sysshop_xml_else
         $import['logisticsName']    = $logisticsName;//物流企业名称
 //        $import['payNo']=$res_infor[0]['ebcCode'].'ICBC'.$res_p[0]['trade_no'];//支付交易编号
         $import['payNo']            = $res_p[0]['trade_no'];
-        $import['copNo']            = $tid;//$payment_id;
+        $import['copNo']            = $copNo;
         $import['preEntryNo']       = $preEntryNo;//???企业申报单号
         $import['assureCode']       = $res_import[0]['assureCode'];//担保企业编号
         $import['emsNo']            = $res_import[0]['emsNo'];//电商账册编号
-        //$import['copNo']=$tid;//企业内部编号
         $import['declTime']         = date('Ymd',time());//申报日期
         $import['customsCode']      = $res_import[0]['customsCode'];//主管海关代码
         $import['ciqCode']          = $res_import[0]['ciqCode'];//主管检验检疫机构代码
@@ -381,7 +381,7 @@ class sysshop_xml_else
         $else_m['tid']              = $tid;
         $else_m['payTransactionId'] = $res2[0]['trade_no'];//--cur_money  支付金额
         $else_m['logisticsNo']      = $logisticsNo;
-        $else_m['copNo']            = $payment_id;
+        $else_m['copNo']            = $copNo;
 
         $arr[0]                     = $log;
         $arr[1]                     = $import;
